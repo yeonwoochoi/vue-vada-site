@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row justify="space-between" align="center" class="pa-4">
-      <v-col cols="3" align="left">
+      <v-col cols="3" align="left" class="mb-5">
         <CompanyLogoBtn :logo-src="companyLogo"/>
       </v-col>
-      <v-col cols="7" align="right">
+      <v-col cols="7" align="right" class="mb-5">
         <a
             v-for="(info, i) in footerBtnInfo"
             :key="i"

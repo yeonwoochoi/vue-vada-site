@@ -3,7 +3,8 @@
       app
       absolute
       padless
-      color="primary lighten-1"
+      color="#171717"
+      :height="isMobile ? 180 : 280"
   >
     <Mobile v-if="isMobile" />
     <Pc v-if="!isMobile" />

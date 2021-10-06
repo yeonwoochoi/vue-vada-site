@@ -1,14 +1,15 @@
 const state = {
     company: 'Vada Partners',
-    companyDefaultLogo: require('@/assets/logo/logo_vada_blue.png'),
+    companyDefaultLogo: require('@/assets/logo/logo_vada_black.png'),
     companyWhiteLogo: require('@/assets/logo/logo_vada_white.png'),
     drawer: false,
     headerStyle: {
         'home': {
             'image': require('@/assets/header/image_home.jpg'),
             'contents':  [
-                { content: '초간편 기술 가치평가 시스템', style: 'font-weight-bold text-center white--text animate__animated animate__zoomIn'},
-                { content: '기술의 숨겨진 가치를 찾아드립니다.', style: 'ma-3 font-weight-bold text-center white--text animate__animated animate__zoomIn' },
+                { content: 'Technology', style: 'font-weight-regular display-4 white--text animate__animated animate__zoomIn'},
+                { content: 'Valuation System', style: 'font-weight-regular display-4 white--text animate__animated animate__zoomIn'},
+                { content: 'We will find the hidden value of technology.', style: 'ma-3 font-weight-medium display-1 white--text py-2 animate__animated animate__zoomIn' },
             ]
         },
 
@@ -55,9 +56,14 @@ const state = {
         },
     ],
     toolbarItems: [
-        { title: 'About', link: '/about'},
-        { title: 'Service', link: '/service'},
-        { title: 'Support', link: '/support'},
+        { title: 'About', link: '/about', items: []},
+        { title: 'Service', link: '/service', items: []},
+        { title: 'Support', link: '/support', items: [
+                { title: '공지사항', link: '/support'},
+                { title: 'FAQ', link: '/support/faq'},
+                { title: '문의하기', link: '/support/qna'},
+            ]
+        },
     ],
     footerBtnInfo: [
         {

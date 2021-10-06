@@ -4,9 +4,9 @@
         app
         flat
         fixed
-        :color="isScrolled ? 'rgba(255, 255, 255, 255)' : 'rgba(255, 255, 255, 0)'"
+        :color="isScrolled || isHovered ? 'rgba(255, 255, 255, 255)' : 'rgba(255, 255, 255, 0)'"
         v-scroll="onScroll"
-        height="80px"
+        height="90px"
     >
       <v-container fluid>
         <v-row
@@ -15,34 +15,70 @@
             justify="center"
         >
           <v-col cols="3" align="left">
-            <CompanyLogoBtn v-if="!isScrolled" :logo-src="companyWhiteLogo"/>
-            <CompanyLogoBtn v-if="isScrolled" :logo-src="companyDefaultLogo"/>
+            <CompanyLogoBtn v-if="!(isScrolled || isHovered)" :logo-src="companyWhiteLogo"/>
+            <CompanyLogoBtn v-else :logo-src="companyDefaultLogo"/>
           </v-col>
 
           <v-col cols="8" align="right">
-            <v-btn
-                id="no-background-hover"
-                v-for="(content, i) in toolbarItems"
-                :key="i"
-                :class="`elevation-0 title ${isScrolled ? 'indigo--text' : 'white--text'} font-weight-light`"
-                active-class="font-weight-bold"
-                :ripple="false"
-                :to="content.link"
-                height="100%"
-                text
+            <v-menu
+              open-on-hover
+              bottom
+              tile
+              offset-y
+              v-for="(content, i) in toolbarItems"
+              :key="i"
+              content-class="elevation-0 tab-content"
             >
-              {{content.title}}
-            </v-btn>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    id="no-background-hover"
+                    :class="`elevation-0 title ${isScrolled || isHovered ? 'black--text' : 'white--text'} font-weight-light`"
+                    :active-class="`font-weight-bold ${isScrolled || isHovered ? 'tab-selected-content1' : 'tab-selected-content2'}`"
+                    :ripple="false"
+                    :to="content.link"
+                    v-bind="attrs"
+                    v-on="on"
+                    style="height: 90px;"
+                    text
+                    tile
+                    @mouseenter="setIsHovered(true)"
+                    @mouseleave="setIsHovered(false)"
+                >
+                  {{content.title}}
+                </v-btn>
+              </template>
+
+              <v-list-item
+                v-for="(item, i) in content.items"
+                :key="i"
+                style="background-color: white;"
+                @mouseenter="setIsHovered(true)"
+                @mouseleave="setIsHovered(false)"
+              >
+                <v-btn
+                    id="no-background-hover"
+                    :class="`elevation-0 title font-weight-light`"
+                    active-class="font-weight-bold"
+                    :ripple="false"
+                    :to="item.link"
+                    height="100%"
+                    text
+                >
+                  {{item.title}}
+                </v-btn>
+              </v-list-item>
+            </v-menu>
           </v-col>
         </v-row>
         <v-row
             v-if="isMobile"
         >
-          <v-app-bar-nav-icon @click="drawer = !drawer"  style="color: white"/>
+          <v-app-bar-nav-icon @click="drawer = !drawer"  :style="`${isScrolled || isHovered ? 'color: black' : 'color: white'}`"/>
         </v-row>
       </v-container>
     </v-app-bar>
-    <app-bar-sheet-view :header-style="getHeader()" :is-mobile="isMobile"/>
+    <app-bar-sheet-view v-if="this.$route.path !== '/'" :header-style="getHeader()" :is-mobile="isMobile"/>
+    <app-bar-sheet-particle-view v-else :header-style="getHeader()" :is-mobile="isMobile"/>
   </v-card>
 </template>
 
@@ -50,15 +86,18 @@
 import { mapState } from 'vuex'
 import CompanyLogoBtn from "@/components/CompanyLogoBtn";
 import AppBarSheetView from "@/components/AppBarSheetView";
+import AppBarSheetParticleView from "@/components/AppBarSheetParticleView";
 
 export default {
   name: "DefaultBar",
   components: {
     AppBarSheetView,
+    AppBarSheetParticleView,
     CompanyLogoBtn
   },
   data: () => ({
     isScrolled: false,
+    isHovered: false,
   }),
   computed: {
     ...mapState('app', {
@@ -100,6 +139,9 @@ export default {
         default:
           return this.headerStyle.home
       }
+    },
+    setIsHovered (flag) {
+      this.isHovered = flag
     }
   }
 }
@@ -108,5 +150,25 @@ export default {
 <style scoped>
   #no-background-hover::before {
     background-color: transparent !important;
+  }
+  .tab-selected-content1 {
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    border-bottom-width: thin;
+  }
+  .tab-selected-content2 {
+    border-bottom-style: solid;
+    border-bottom-color: white;
+    border-bottom-width: thin;
+  }
+  .tab-content {
+    border-style: solid;
+    border-color: #DCDCDC;
+    border-width: thin;
+  }
+  .app-bar-underline {
+    border-bottom-style: solid;
+    border-bottom-color: #DCDCDC;
+    border-bottom-width: thin;
   }
 </style>
