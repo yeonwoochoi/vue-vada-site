@@ -16,24 +16,26 @@ const state = {
         'about': {
             'image': require('@/assets/header/image_about.jpg'),
             'contents':  [
-                { content: 'The BEST TEAMS', style: 'font-weight-medium text-center white--text animate__animated animate__backInDown'},
-                { content: 'MAKE THE BEST SERVICE', style: 'font-weight-medium text-center white--text animate__animated animate__backInUp', },
+                { content: 'About Us', style: 'font-weight-light text-h1 white--text animate__animated animate__backInDown'},
+                { content: 'We will find the hidden value of technology.', style: 'font-weight-light display-1 white--text px-1 animate__animated animate__backInUp', },
             ]
         },
 
         'service': {
             'image': require('@/assets/header/image_service.jpg'),
             'contents':  [
-                { content: 'Apps', style: 'font-weight-medium text-center white--text animate__animated animate__backInLeft'},
-                { content: 'Run-i, etc!', style: 'font-weight-light text-center white--text animate__animated animate__backInRight', },
+                { content: 'Services', style: 'font-weight-light text-h1 white--text animate__animated animate__zoomIn'},
+                { content: 'We are a technology valuation agency', style: 'font-weight-light display-1 white--text px-1 animate__animated animate__zoomIn', },
+                { content: 'that evaluates the value of technology in real time.', style: 'font-weight-light display-1 white--text px-1 animate__animated animate__zoomIn', },
             ]
         },
 
         'support': {
             'image': require('@/assets/header/image_support.jpg'),
             'contents':  [
-                { content: 'Apps', style: 'font-weight-medium text-center white--text animate__animated animate__zoomIn'},
-                { content: 'Run-i, etc!', style: 'font-weight-light text-center white--text animate__animated animate__zoomIn', },
+                { content: 'Contact Us', style: 'font-weight-light text-h1 white--text animate__animated animate__zoomIn'},
+                { content: 'Wanna get in touch with the guys and girls at Vada Partners?', style: 'font-weight-light display-1 white--text px-2 animate__animated animate__zoomIn', },
+                { content: 'You\'re in the right spot!', style: 'font-weight-light display-1 white--text px-2 animate__animated animate__zoomIn', },
             ]
         }
     },

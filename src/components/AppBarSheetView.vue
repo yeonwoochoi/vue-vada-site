@@ -5,7 +5,7 @@
         <v-row align="center" justify="start" style="height: 100%;">
           <v-col ref="scrollTarget" cols="12">
             <div v-for="(item, i) in headerStyle.contents" :key="i">
-              <p :class="`${item.style} ${!isMobile ? 'display-2' : 'display-1'}`">{{ item.content }}</p>
+              <p :class="`${item.style}`">{{ item.content }}</p>
             </div>
           </v-col>
         </v-row>

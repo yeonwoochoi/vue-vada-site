@@ -2,7 +2,7 @@
   <v-sheet
     style="position:relative;"
     height="700"
-    color="#171717"
+    color="#001229"
   >
     <v-card-text style="height: 100%; position: absolute;">
       <v-container style="height: 100%;" v-if="!isMobile">

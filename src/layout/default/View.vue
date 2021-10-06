@@ -9,6 +9,7 @@
     <v-btn
         v-show="isScrolled"
         v-scroll="onScroll"
+        class="ma-6"
         fab
         dark
         fixed
