@@ -4,7 +4,7 @@
         app
         flat
         fixed
-        :color="isScrolled || isHovered ? 'rgba(255, 255, 255, 255)' : 'rgba(255, 255, 255, 0)'"
+        :color="isActive ? 'rgba(255, 255, 255, 255)' : 'rgba(255, 255, 255, 0)'"
         v-scroll="onScroll"
         height="90px"
     >
@@ -15,7 +15,7 @@
             justify="center"
         >
           <v-col cols="3" align="left">
-            <CompanyLogoBtn v-if="!(isScrolled || isHovered)" :logo-src="companyWhiteLogo"/>
+            <CompanyLogoBtn v-if="!isActive" :logo-src="companyWhiteLogo"/>
             <CompanyLogoBtn v-else :logo-src="companyDefaultLogo"/>
           </v-col>
 
@@ -32,8 +32,8 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                     id="no-background-hover"
-                    :class="`elevation-0 title ${isScrolled || isHovered ? 'black--text' : 'white--text'} font-weight-light`"
-                    :active-class="`font-weight-bold ${isScrolled || isHovered ? 'tab-selected-content1' : 'tab-selected-content2'}`"
+                    :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
+                    :active-class="`font-weight-bold ${isActive ? 'tab-selected-content1' : 'tab-selected-content2'}`"
                     :ripple="false"
                     :to="content.link"
                     v-bind="attrs"
@@ -68,12 +68,39 @@
                 </v-btn>
               </v-list-item>
             </v-menu>
+            <v-btn
+                id="no-background-hover"
+                :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
+                :ripple="false"
+                to="/authentication/sign-in"
+                style="width: 100px;"
+                text
+                tile
+                @mouseenter="setIsHovered(true)"
+                @mouseleave="setIsHovered(false)"
+            >
+              <v-divider class="mr-6" vertical :style="`border-width: 1px; background-color: ${isActive ? 'black' : 'white'};`"/>
+              LOGIN
+            </v-btn>
           </v-col>
         </v-row>
         <v-row
             v-if="isMobile"
+            align="center"
+            justify="space-between"
         >
-          <v-app-bar-nav-icon @click="drawer = !drawer"  :style="`${isScrolled || isHovered ? 'color: black' : 'color: white'}`"/>
+          <v-app-bar-nav-icon @click="drawer = !drawer"  :style="`${isActive ? 'color: black' : 'color: white'}`"/>
+          <v-btn
+              id="no-background-hover"
+              :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
+              :ripple="false"
+              to="/authentication/sign-in"
+              style="border-width: 1px; background-color: transparent; width: 100px;"
+              text
+              tile
+          >
+            LOGIN
+          </v-btn>
         </v-row>
       </v-container>
     </v-app-bar>
@@ -106,6 +133,9 @@ export default {
       companyDefaultLogo: 'companyDefaultLogo',
       companyWhiteLogo: 'companyWhiteLogo'
     }),
+    isActive () {
+      return this.isScrolled || this.isHovered;
+    },
     isMobile () {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs': return true
@@ -165,10 +195,5 @@ export default {
     border-style: solid;
     border-color: #DCDCDC;
     border-width: thin;
-  }
-  .app-bar-underline {
-    border-bottom-style: solid;
-    border-bottom-color: #DCDCDC;
-    border-bottom-width: thin;
   }
 </style>
