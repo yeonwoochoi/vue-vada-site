@@ -5,6 +5,7 @@
         flat
         fixed
         :color="isActive ? 'rgba(255, 255, 255, 255)' : 'rgba(255, 255, 255, 0)'"
+        style="transition: all 0.6s ease;"
         v-scroll="onScroll"
         height="90px"
     >
@@ -49,8 +50,8 @@
               </template>
 
               <v-list-item
-                v-for="(item, i) in content.items"
-                :key="i"
+                v-for="(item, index) in content.items"
+                :key="index"
                 style="background-color: white;"
                 @mouseenter="setIsHovered(true)"
                 @mouseleave="setIsHovered(false)"

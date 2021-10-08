@@ -15,6 +15,7 @@
         fixed
         bottom
         right
+        color="#162740"
         @click="goTop"
     >
       <v-icon>mdi-menu-up</v-icon>
