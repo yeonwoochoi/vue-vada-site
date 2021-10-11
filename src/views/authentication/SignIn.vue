@@ -113,12 +113,13 @@ export default {
     password: null,
     showPass: false,
     rmCheck: false,
-
   }),
+
   components: {
     ValidationProvider,
     ValidationObserver
   },
+
   mounted() {
     let emailLocal = localStorage.username;
     if (emailLocal) {
@@ -126,11 +127,13 @@ export default {
       this.rmCheck = localStorage.checkbox;
     }
   },
+
   computed: {
     aspectRatio: function () {
       return this.$vuetify.breakpoint.width / this.$vuetify.breakpoint.height;
     }
   },
+
   methods: {
     async submit() {
       const valid = await this.$refs.observer.validate()
@@ -140,11 +143,13 @@ export default {
         this.$router.push('/');
       }
     },
+
     clear() {
       this.email = ''
       this.password = null
       this.$refs.observer.reset()
     },
+
     rememberMe() {
       if (this.rmCheck && this.email !== "") {
         localStorage.username = this.email;
