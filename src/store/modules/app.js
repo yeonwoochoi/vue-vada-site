@@ -10,6 +10,11 @@ const state = {
                 { content: 'Technology', style: 'font-weight-regular display-4 white--text animate__animated animate__zoomIn'},
                 { content: 'Valuation System', style: 'font-weight-regular display-4 white--text animate__animated animate__zoomIn'},
                 { content: 'We will find the hidden value of technology.', style: 'ma-3 font-weight-medium display-1 white--text py-2 animate__animated animate__zoomIn' },
+            ],
+            'mobileContents': [
+                { content: 'Technology', style: 'font-weight-regular text-h2 white--text animate__animated animate__zoomIn'},
+                { content: 'Valuation', style: 'font-weight-regular text-h2 white--text animate__animated animate__zoomIn'},
+                { content: 'System', style: 'font-weight-regular text-h2 white--text animate__animated animate__zoomIn'},
             ]
         },
 
@@ -18,6 +23,9 @@ const state = {
             'contents':  [
                 { content: 'About Us', style: 'font-weight-light text-h1 white--text animate__animated animate__backInDown'},
                 { content: 'We will find the hidden value of technology.', style: 'font-weight-light display-1 white--text px-1 animate__animated animate__backInUp', },
+            ],
+            'mobileContents': [
+                { content: 'About Us', style: 'font-weight-light text-h1 white--text animate__animated animate__backInDown'},
             ]
         },
 
@@ -27,6 +35,9 @@ const state = {
                 { content: 'Services', style: 'font-weight-light text-h1 white--text animate__animated animate__zoomIn'},
                 { content: 'We are a technology valuation agency', style: 'font-weight-light display-1 white--text px-1 animate__animated animate__zoomIn', },
                 { content: 'that evaluates the value of technology in real time.', style: 'font-weight-light display-1 white--text px-1 animate__animated animate__zoomIn', },
+            ],
+            'mobileContents': [
+                { content: 'Services', style: 'font-weight-light text-h1 white--text animate__animated animate__zoomIn'},
             ]
         },
 
@@ -36,6 +47,9 @@ const state = {
                 { content: 'Contact Us', style: 'font-weight-light text-h1 white--text animate__animated animate__zoomIn'},
                 { content: 'Wanna get in touch with the guys and girls at Vada Partners?', style: 'font-weight-light display-1 white--text px-2 animate__animated animate__zoomIn', },
                 { content: 'You\'re in the right spot!', style: 'font-weight-light display-1 white--text px-2 animate__animated animate__zoomIn', },
+            ],
+            'mobileContents': [
+                { content: 'Contact Us', style: 'font-weight-light text-h1 white--text animate__animated animate__zoomIn'},
             ]
         }
     },

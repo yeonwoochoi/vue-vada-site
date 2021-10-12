@@ -75,7 +75,7 @@ const actions = {
     refreshToken: ({commit}) => {
         // accessToken 재요청
         return new Promise((resolve, reject) => {
-            axios.post('/auth/certify').then(res => {
+            axios.post('/auth/check').then(res => {
                 commit('refreshToken', res.data.auth_info);
                 resolve(res.data.auth_info);
             }).catch(err => {
