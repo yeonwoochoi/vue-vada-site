@@ -136,11 +136,23 @@ export default {
 
   methods: {
     async submit() {
-      const valid = await this.$refs.observer.validate()
+      const valid = await this.$refs.observer.validate();
       if (valid) {
-        console.log('login success')
+        let user = {
+          "id": this.email,
+          "pwd": this.password
+        }
         this.rememberMe();
-        this.$router.push('/');
+        this.$store.dispatch("user/login", user).then(
+            () => {
+              console.log('login success')
+              this.$router.push('/');
+            },
+            () => {
+              console.log('login failure')
+              this.$router.go(this.$router.currentRoute);
+            }
+        );
       }
     },
 

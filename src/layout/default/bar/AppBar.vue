@@ -73,7 +73,7 @@
                 id="no-background-hover"
                 :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
                 :ripple="false"
-                to="/authentication/sign-in"
+                @click="onClickLogIn"
                 style="width: 100px;"
                 text
                 tile
@@ -81,7 +81,7 @@
                 @mouseleave="setIsHovered(false)"
             >
               <v-divider class="mr-6" vertical :style="`border-width: 1px; background-color: ${isActive ? 'black' : 'white'};`"/>
-              LOGIN
+              {{ loginBtnText }}
             </v-btn>
           </v-col>
         </v-row>
@@ -95,12 +95,12 @@
               id="no-background-hover"
               :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
               :ripple="false"
-              to="/authentication/sign-in"
+              @click="onClickLogIn"
               style="border-width: 1px; background-color: transparent; width: 100px;"
               text
               tile
           >
-            LOGIN
+            {{ loginBtnText }}
           </v-btn>
         </v-row>
       </v-container>
@@ -115,6 +115,7 @@ import { mapState } from 'vuex'
 import CompanyLogoBtn from "@/components/CompanyLogoBtn";
 import AppBarSheetView from "@/components/AppBarSheetView";
 import AppBarSheetParticleView from "@/components/AppBarSheetParticleView";
+import VueCookies from "vue-cookies";
 
 export default {
   name: "DefaultBar",
@@ -126,7 +127,11 @@ export default {
   data: () => ({
     isScrolled: false,
     isHovered: false,
+    loginBtnText: "LOGIN",
   }),
+  mounted() {
+    this.loginBtnText = this.isLogin ? "LOGOUT" : "LOGIN";
+  },
   computed: {
     ...mapState('app', {
       toolbarItems: 'toolbarItems',
@@ -143,6 +148,9 @@ export default {
         case 'sm': return true
         default: return false
       }
+    },
+    isLogin () {
+      return VueCookies.get("accessToken") !== null;
     },
     drawer: {
       get () {
@@ -173,6 +181,22 @@ export default {
     },
     setIsHovered (flag) {
       this.isHovered = flag
+    },
+    onClickLogIn(){
+      console.log(this.isLogin)
+      if (this.isLogin) {
+        this.$store.dispatch("user/logout").then(
+            () => {
+              this.$router.push('/');
+            },
+            () => {
+              this.$router.push('/');
+            }
+        );
+      }
+      else {
+        this.$router.push('/authentication/sign-in')
+      }
     }
   }
 }

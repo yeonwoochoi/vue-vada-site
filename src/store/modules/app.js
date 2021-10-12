@@ -56,11 +56,6 @@ const state = {
     drawerItems: [
         { title: 'Home', icon: 'mdi-view-dashboard', to: '/' },
         { title: 'About', icon: 'mdi-menu', to: '/about'},
-        { title: 'Authentication', icon: 'mdi-login', items: [
-                { title: 'SignIn', to: '/authentication/sign-in' },
-                { title: 'SignUp', to: '/authentication/sign-up' },
-            ]
-        },
         { title: 'Service', icon: 'mdi-grid', to: '/service' },
         { title: 'Support', icon: 'mdi-table-settings', items: [
                 { title: 'Notice', to: '/support' },

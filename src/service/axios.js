@@ -1,11 +1,9 @@
 import axios from 'axios'
 import VueCookies from "vue-cookies";
-import { store } from '@/store'
-
 
 axios.interceptors.request.use(async function (config){
     if (config.retry === undefined) {
-        config.url = store.state["user/host"] + config.url; //host 및 url 방식 수정필요
+        config.url = this.$store.getters["user/getHost"] + config.url; //host 및 url 방식 수정필요
     }
     //헤더 셋팅
     config.timeout = 10000;
@@ -32,7 +30,9 @@ axios.interceptors.response.use(
             const errorAPI = error.response.config;
             if (error.response.status === 401 && errorAPI.retry === undefined && VueCookies.get('refreshToken') !== null) {
                 errorAPI.retry = true;
-                await store.dispatch("user/refreshToken");
+                await this.$store.dispatch("user/requestRefreshToken").then(
+
+                );
                 return await axios(errorAPI);
             }
         } catch (e) {

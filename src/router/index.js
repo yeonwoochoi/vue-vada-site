@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueCookies from "vue-cookies";
 
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -103,10 +102,13 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   console.log(`${from.name} => ${to.name}`)
   if (VueCookies.get('accessToken') === null && VueCookies.get('refreshToken') !== null) {
-    await this.$store.dispatch('user/refreshToken')
+    await this.$store.dispatch('user/requestRefreshToken')
   }
   if (VueCookies.get('accessToken') !== null) {
     return next();
+  }
+  if (VueCookies.get('accessToken') === null && VueCookies.get('refreshToken') === null && to.name !== 'SignIn') {
+    return next('authentication/sign-in');
   }
   return next();
 })
