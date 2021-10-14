@@ -160,7 +160,6 @@ export default {
             () => {
               console.log('login failure')
               this.isShowAlert = true;
-              // this.$router.go(this.$router.currentRoute);
             }
         );
       }

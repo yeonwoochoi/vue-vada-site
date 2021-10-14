@@ -99,18 +99,42 @@ const router = new VueRouter({
   routes
 })
 
+import store from '@/store/index'
+
 router.beforeEach(async (to, from, next) => {
   console.log(`${from.name} => ${to.name}`)
-  if (VueCookies.get('accessToken') === null && VueCookies.get('refreshToken') !== null) {
-    await this.$store.dispatch('user/requestRefreshToken')
-  }
-  if (VueCookies.get('accessToken') !== null) {
+
+  let accessToken = VueCookies.get('accessToken');
+  let refreshToken = VueCookies.get('refreshToken');
+
+  const authenticatedPages = ["Qna", "Faq"];
+
+  if (authenticatedPages.indexOf(to.name) > -1) {
+    if (accessToken === null && refreshToken !== null) {
+      console.log(1)
+      await store.dispatch('user/requestRefreshToken').then(
+          () => {
+            console.log("Reissue access token");
+            return next();
+          },
+          () => {
+            console.log("Reissue access token failure")
+            return next('authentication/sign-in');
+          }
+      )
+    }
+    if (accessToken !== null) {
+      console.log(2)
+      return next();
+    }
+    if (refreshToken === null && to.name !== 'SignIn') {
+      console.log(3)
+      return next('authentication/sign-in');
+    }
+  } else {
+    console.log(4)
     return next();
   }
-  if (VueCookies.get('accessToken') === null && VueCookies.get('refreshToken') === null && to.name !== 'SignIn') {
-    return next('authentication/sign-in');
-  }
-  return next();
 })
 
 export default router

@@ -31,7 +31,12 @@ axios.interceptors.response.use(
             if (error.response.status === 401 && errorAPI.retry === undefined && VueCookies.get('refreshToken') !== null) {
                 errorAPI.retry = true;
                 await this.$store.dispatch("user/requestRefreshToken").then(
-
+                    () => {
+                        console.log('[axios.interceptors.response] reissue : reissue access token', )
+                    },
+                    e => {
+                        console.error('[axios.interceptors.response] error : ', e.message);
+                    }
                 );
                 return await axios(errorAPI);
             }

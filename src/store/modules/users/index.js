@@ -25,24 +25,25 @@ const getters = {
 
 const mutations = {
     setLoginToken (state, payload) {
-        VueCookies.set('accessToken', payload.accessToken, '60s');
-        VueCookies.set('refreshToken', payload.refreshToken, '1h');
+        VueCookies.set('accessToken', payload.data.accessToken, '60s');
+        VueCookies.set('refreshToken', payload.data.refreshToken, '1h');
 
-        state.id = payload.id;
-        state.role = payload.role;
-        state.accessToken = payload.token;
-        state.refreshToken = payload.token;
+        state.id = payload.data.id;
+        state.role = payload.data.role;
+        state.accessToken = payload.data.accessToken;
+        state.refreshToken = payload.data.refreshToken;
     },
     setRefreshToken(state, payload) {
         // accessToken resetting
-        VueCookies.set('accessToken', payload.token, '60s');
-        VueCookies.set('refreshToken', payload.token, '1h');
+        VueCookies.set('accessToken', payload.data.accessToken, '60s');
 
-        state.id = payload.id;
-        state.role = payload.role;
-        state.accessToken = payload.token;
+        state.id = payload.data.id;
+        state.role = payload.data.role;
+        state.accessToken = payload.data.accessToken;
     },
     removeToken () {
+        state.accessToken = null;
+        state.refreshToken = null;
         VueCookies.remove('accessToken');
         VueCookies.remove('refreshToken');
     },
@@ -80,7 +81,7 @@ const actions = {
     requestRefreshToken: ({commit}) => {
         // accessToken 재요청
         return new Promise((resolve, reject) => {
-            axios.post(state.host + '/auth/check').then(res => {
+            axios.get(state.host + '/auth/check').then(res => {
                 console.log('accessToken 재요청 결과')
                 console.log(`${res.status} : ${res.msg}`)
                 commit('setRefreshToken', res.data);
@@ -93,7 +94,7 @@ const actions = {
     },
     logout: ({commit}) => {
         commit('removeToken');
-        location.reload();
+        //location.reload();
     }
 }
 

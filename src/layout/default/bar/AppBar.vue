@@ -128,8 +128,14 @@ export default {
     isScrolled: false,
     isHovered: false,
     loginBtnText: "LOGIN",
+    isLogin: false
   }),
   mounted() {
+    this.isLogin = VueCookies.get('accessToken') !== null;
+    this.loginBtnText = this.isLogin ? "LOGOUT" : "LOGIN";
+  },
+  beforeUpdate() {
+    this.isLogin = VueCookies.get('accessToken') !== null;
     this.loginBtnText = this.isLogin ? "LOGOUT" : "LOGIN";
   },
   computed: {
@@ -148,9 +154,6 @@ export default {
         case 'sm': return true
         default: return false
       }
-    },
-    isLogin () {
-      return VueCookies.get("accessToken") !== null;
     },
     drawer: {
       get () {
@@ -183,14 +186,15 @@ export default {
       this.isHovered = flag
     },
     onClickLogIn(){
-      console.log(this.isLogin)
       if (this.isLogin) {
+        this.isLogin = false;
         this.$store.dispatch("user/logout").then(
             () => {
-              this.$router.push('/');
-            },
-            () => {
-              this.$router.push('/');
+              if (this.$router.currentRoute.path === '/') {
+                this.$router.go(this.$router.currentRoute);
+              } else {
+                this.$router.push('/')
+              }
             }
         );
       }
