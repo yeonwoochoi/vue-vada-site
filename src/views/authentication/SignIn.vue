@@ -5,14 +5,21 @@
       :src="require('@/assets/bg_login.jpg')"
   >
     <v-row align="center" justify="center" class="ma-0" style="height: 100%;">
-      <v-card width="700px" height="600px" class="pt-12 mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
-        <v-row align="center" justify="center" style="width: 100%; height: 100%;">
-          <v-col cols="10" class="text-center">
+      <v-card width="700px" height="600px" class="mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
+        <v-alert
+            :value="isShowAlert"
+            type="error"
+            transition="slide-y-transition"
+        >
+          {{ message }}
+        </v-alert>
+        <v-row align="center" justify="center" :class="`${isShowAlert ? 'pt-0' : 'pt-12'}`" style="width: 100%; height: 100%;">
+          <v-col cols="10" class="text-center pb-0 mb-0">
             <p class="white--text display-1">
               LOGIN
             </p>
           </v-col>
-          <v-col cols="9" align="center" class="pb-0 mb-0">
+          <v-col cols="9" align="center" class="py-0 my-0">
             <validation-observer ref="observer">
               <v-form @submit.prevent="submit">
                 <validation-provider v-slot="{ errors }" name="email" rules="required|email">
@@ -45,23 +52,22 @@
                 </validation-provider>
               </v-form>
             </validation-observer>
+            <div style="display: flex; justify-content: space-between; height: 30px;">
+              <v-checkbox
+                  v-model="rmCheck"
+                  label="Remember me"
+                  dark
+                  class="pa-0 ma-0"
+              />
+              <a
+                  style="text-decoration: none; align-items: center; display: flex"
+                  href="/"
+              >
+                Forget Password?
+              </a>
+            </div>
           </v-col>
-          <v-col cols="4" align="start" class="mt-0 pt-0">
-            <v-checkbox
-              v-model="rmCheck"
-              label="Remember me"
-              dark
-            />
-          </v-col>
-          <v-col cols="5" align="end" class="mt-0 pt-0">
-            <a
-                style="text-decoration: none;"
-                href="/"
-            >
-              Forget Password?
-            </a>
-          </v-col>
-          <v-col cols="9" class="my-0 py-0">
+          <v-col cols="9" class="mb-0 pb-0">
             <v-btn
                 @click="submit"
                 type="submit"
@@ -73,7 +79,7 @@
               LOGIN
             </v-btn>
           </v-col>
-          <v-col cols="9" align="center" class="subtitle-1 mt-12">
+          <v-col cols="9" align="center" class="subtitle-1">
             <p class="white--text">
               Need an account?
               <a
@@ -85,6 +91,7 @@
               </a>
             </p>
           </v-col>
+          <v-col cols="12" v-if="isShowAlert"/>
         </v-row>
       </v-card>
     </v-row>
@@ -113,6 +120,8 @@ export default {
     password: null,
     showPass: false,
     rmCheck: false,
+    message: 'You have entered incorrect password',
+    isShowAlert: false
   }),
 
   components: {
@@ -150,7 +159,8 @@ export default {
             },
             () => {
               console.log('login failure')
-              this.$router.go(this.$router.currentRoute);
+              this.isShowAlert = true;
+              // this.$router.go(this.$router.currentRoute);
             }
         );
       }
