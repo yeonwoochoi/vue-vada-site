@@ -26,7 +26,7 @@ const routes = [
             )
       },
       {
-        path: '/service',
+        path: '/api',
         name: 'Service',
         component: () => import(
             '@/views/default/service/Service'
@@ -119,7 +119,7 @@ router.beforeEach(async (to, from, next) => {
           },
           () => {
             console.log("Reissue access token failure")
-            return next('authentication/sign-in');
+            return next('/authentication/sign-in');
           }
       )
     }
@@ -129,7 +129,7 @@ router.beforeEach(async (to, from, next) => {
     }
     if (refreshToken === null && to.name !== 'SignIn') {
       console.log(3)
-      return next('authentication/sign-in');
+      return next('/authentication/sign-in');
     }
   } else {
     console.log(4)

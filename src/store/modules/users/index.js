@@ -1,5 +1,5 @@
-import axios from 'axios';
 import VueCookies from "vue-cookies";
+import { instance, instanceWithAuth } from "@/api/index";
 
 const state = {
     host: 'http://127.0.0.1:3000',
@@ -17,9 +17,6 @@ const getters = {
             access: ac,
             refresh: rf
         };
-    },
-    getHost() {
-        return state.host;
     }
 }
 
@@ -52,7 +49,7 @@ const mutations = {
 const actions = {
     register: ({commit}, params) => {
         return new Promise((resolve, reject) => {
-            axios.post(state.host + '/users', params).then(res => {
+            instance.post(state.host + '/users', params).then(res => {
                 console.log('회원가입 요청 결과');
                 console.log(`${res.status}: ${res.msg}`);
                 commit('setLoginToken', res.data);
@@ -66,7 +63,7 @@ const actions = {
     },
     login: ({commit}, params) => {
       return new Promise((resolve, reject) => {
-          axios.post(state.host + '/auth/login', params).then(res => {
+          instance.post(state.host + '/auth/login', params).then(res => {
               console.log('login 요청 결과')
               console.log(`${res.status} : ${res.msg}`)
               commit('setLoginToken', res.data);
@@ -81,7 +78,7 @@ const actions = {
     requestRefreshToken: ({commit}) => {
         // accessToken 재요청
         return new Promise((resolve, reject) => {
-            axios.get(state.host + '/auth/check').then(res => {
+            instanceWithAuth.get(state.host + '/auth/check').then(res => {
                 console.log('accessToken 재요청 결과')
                 console.log(`${res.status} : ${res.msg}`)
                 commit('setRefreshToken', res.data);

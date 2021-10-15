@@ -56,7 +56,7 @@ const state = {
     drawerItems: [
         { title: 'Home', icon: 'mdi-view-dashboard', to: '/' },
         { title: 'About', icon: 'mdi-menu', to: '/about'},
-        { title: 'Service', icon: 'mdi-grid', to: '/service' },
+        { title: 'Service', icon: 'mdi-grid', to: '/api' },
         { title: 'Support', icon: 'mdi-table-settings', items: [
                 { title: 'Notice', to: '/support' },
                 { title: 'FAQ', to: '/support/faq' },
@@ -68,7 +68,7 @@ const state = {
     ],
     toolbarItems: [
         { title: 'About', link: '/about', items: []},
-        { title: 'Service', link: '/service', items: []},
+        { title: 'Service', link: '/api', items: []},
         { title: 'Support', link: '/support', items: [
                 { title: '공지사항', link: '/support'},
                 { title: 'FAQ', link: '/support/faq'},
