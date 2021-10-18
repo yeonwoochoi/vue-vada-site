@@ -24,7 +24,7 @@
             />
           </v-col>
           <v-col cols="11" align="center" class="white--text py-0 my-0">
-            <p class="pa-3 subtitle-2 text-start" style="height: 150px; width: 100%; overflow-y: scroll;">
+            <p class="pa-3 subtitle-2 text-start" style="height: 150px; width: 100%; overflow-y: scroll; white-space: pre-wrap;">
               {{ termsOfUse }}
             </p>
             <v-checkbox
@@ -35,7 +35,7 @@
             />
           </v-col>
           <v-col cols="11" align="center" class="white--text py-0 my-0">
-            <p class="pa-3 subtitle-2 text-start" style="height: 150px; width: 100%; overflow-y: scroll;">
+            <p class="pa-3 subtitle-2 text-start" style="height: 150px; width: 100%; overflow-y: scroll; white-space: pre-wrap;">
               {{ privacyPolicy }}
             </p>
             <v-checkbox
