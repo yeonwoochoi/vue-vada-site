@@ -5,7 +5,7 @@
       :src="require('@/assets/bg_login.jpg')"
   >
     <v-row align="center" justify="center" class="ma-0" style="height: 100%;">
-      <v-card width="700px" height="600px" class="mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
+      <v-card :style="`width: ${cardWidth}%; height: 65%;`" class="mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
         <v-alert
             :value="isShowAlert"
             type="error"
@@ -63,7 +63,7 @@
                   style="text-decoration: none; align-items: center; display: flex"
                   href="/"
               >
-                Forget Password?
+                Forgot Password?
               </a>
             </div>
           </v-col>
@@ -84,7 +84,7 @@
               Need an account?
               <a
                   style="text-decoration: none;"
-                  href="/"
+                  :href="'/authentication/signup-agreement'"
                   class="ml-2"
               >
                 Sign up
@@ -115,6 +115,7 @@ extend('email', {
 })
 
 export default {
+  name: "SignIn",
   data: () => ({
     email: '',
     password: null,
@@ -140,7 +141,17 @@ export default {
   computed: {
     aspectRatio: function () {
       return this.$vuetify.breakpoint.width / this.$vuetify.breakpoint.height;
-    }
+    },
+    cardWidth () {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xl": return 36
+        case "lg": return 40
+        case "md": return 55
+        case 'sm': return 80
+        case 'xs': return 90
+        default: return false
+      }
+    },
   },
 
   methods: {

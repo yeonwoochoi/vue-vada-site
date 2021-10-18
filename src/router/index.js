@@ -88,6 +88,20 @@ const routes = [
         component: () => import(
             '@/views/authentication/SignUp'
             )
+      },
+      {
+        path: 'forgot-password',
+        name: 'ForgotPassword',
+        component: () => import(
+            '@/views/authentication/ForgotPassword'
+            )
+      },
+      {
+        path: 'signup-agreement',
+        name: 'SignUpAgreement',
+        component: () => import(
+            '@/views/authentication/SignUpAgreement'
+            )
       }
     ]
   }
