@@ -87,6 +87,8 @@ const state = {
         }
     ],
     copyright: 'COPYRIGHT 바다파트너스 2020. ALL RIGHTS RESERVED',
+    termsOfUseCheckBox: false,
+    privacyPolicyCheckBox: false,
     termsOfUse: '<h3>이용 약관</h3>\n' +
         '제 1 장 총 칙\n' +
         '제 1 조 (목 적)\n' +
@@ -400,6 +402,12 @@ const getters = {
 const mutations = {
     setDrawer (state, data){
         state.drawer = data
+    },
+    setTermsOfUse(state, data){
+        state.termsOfUseCheckBox = data
+    },
+    setPrivacyPolicy(state, data){
+        state.privacyPolicyCheckBox = data
     }
 }
 

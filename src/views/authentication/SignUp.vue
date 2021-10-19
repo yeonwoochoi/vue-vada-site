@@ -176,6 +176,7 @@
 import { required, email, between, confirmed, alpha_dash, integer, min, max } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from "vee-validate";
 import SignUpHeaderIcons from "@/components/SignUpHeaderIcons";
+import { mapState } from "vuex";
 
 setInteractionMode('eager')
 
@@ -222,6 +223,11 @@ extend('max', {
 
 export default {
   name: "SignUp",
+  mounted() {
+    if (!this.termsOfUse && !this.privacyPolicy) {
+      this.$router.push('/authentication/signup-agreement')
+    }
+  },
   data: () => ({
     email: '',
     password: null,
@@ -242,6 +248,10 @@ export default {
     SignUpHeaderIcons
   },
   computed: {
+    ...mapState('app', {
+      termsOfUse: 'termsOfUseCheckBox',
+      privacyPolicy: 'privacyPolicyCheckBox'
+    }),
     aspectRatio () {
       return this.$vuetify.breakpoint.width / this.$vuetify.breakpoint.height;
     },

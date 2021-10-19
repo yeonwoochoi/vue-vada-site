@@ -71,7 +71,7 @@
 
 <script>
 import SignUpHeaderIcons from "@/components/SignUpHeaderIcons";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "SignUpAgreement",
@@ -111,6 +111,10 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('app', {
+      setTermsOfUse: 'setTermsOfUse',
+      setPrivacyPolicy: 'setPrivacyPolicy'
+    }),
     onClickNextBtn() {
       if (this.totalCheckBox) {
         this.$router.push('/authentication/sign-up')
@@ -129,12 +133,16 @@ export default {
       if (val) {
         this.termsOfUseCheckBox = true;
         this.privacyPolicyCheckBox = true;
+        this.setTermsOfUse(true);
+        this.setPrivacyPolicy(true);
       }
     },
     termsOfUseCheckBox (val) {
+      this.setTermsOfUse(val);
       this.totalCheckBox = val && this.privacyPolicyCheckBox;
     },
     privacyPolicyCheckBox (val) {
+      this.setPrivacyPolicy(val);
       this.totalCheckBox = val && this.termsOfUseCheckBox;
     }
   }
