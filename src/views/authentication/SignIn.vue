@@ -7,13 +7,13 @@
     <v-row align="center" justify="center" class="ma-0" style="height: 100%;">
       <v-card :style="`width: ${cardWidth}%; height: 65%;`" class="mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
         <v-alert
-            :value="isShowAlert"
+            :value="showAlert"
             type="error"
             transition="slide-y-transition"
         >
-          {{ message }}
+          {{ alertMessage }}
         </v-alert>
-        <v-row align="center" justify="center" :class="`${isShowAlert ? 'pt-0' : 'pt-12'}`" style="width: 100%; height: 100%;">
+        <v-row align="center" justify="center" :class="`${showAlert ? 'pt-0' : 'pt-12'}`" style="width: 100%; height: 100%;">
           <v-col cols="10" class="text-center pb-0 mb-0">
             <p class="white--text display-1">
               LOGIN
@@ -22,7 +22,7 @@
           <v-col cols="9" align="center" class="py-0 my-0">
             <validation-observer ref="observer">
               <v-form @submit.prevent="submit">
-                <validation-provider v-slot="{ errors }" name="email" rules="required|email">
+                <validation-provider v-slot="{ errors }" name="Email" rules="required|email">
                   <v-text-field
                       v-model="email"
                       :error-messages="errors"
@@ -34,27 +34,26 @@
                       dark
                   />
                 </validation-provider>
-                <validation-provider v-slot="{ errors }" name="password" rules="required">
+                <validation-provider v-slot="{ errors }" name="Password" rules="required">
                   <v-text-field
                       v-model="password"
                       :error-messages="errors"
                       label="Password"
-                      :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="showPass = !showPass"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="showPassword = !showPassword"
                       required
                       outlined
                       dense
                       filled
                       dark
-                      :type="showPass ? 'text' : 'password'"
-
+                      :type="showPassword ? 'text' : 'password'"
                   />
                 </validation-provider>
               </v-form>
             </validation-observer>
             <div style="display: flex; justify-content: space-between; height: 30px;">
               <v-checkbox
-                  v-model="rmCheck"
+                  v-model="rememberCheck"
                   label="Remember me"
                   dark
                   class="pa-0 ma-0"
@@ -91,7 +90,7 @@
               </a>
             </p>
           </v-col>
-          <v-col cols="12" v-if="isShowAlert"/>
+          <v-col cols="12" v-if="showAlert"/>
         </v-row>
       </v-card>
     </v-row>
@@ -119,10 +118,10 @@ export default {
   data: () => ({
     email: '',
     password: null,
-    showPass: false,
-    rmCheck: false,
-    message: 'You have entered incorrect password',
-    isShowAlert: false
+    showPassword: false,
+    rememberCheck: false,
+    alertMessage: 'You have entered incorrect password',
+    showAlert: false
   }),
 
   components: {
@@ -134,7 +133,7 @@ export default {
     let emailLocal = localStorage.username;
     if (emailLocal) {
       this.email = emailLocal;
-      this.rmCheck = localStorage.checkbox;
+      this.rememberCheck = localStorage.checkbox;
     }
   },
 
@@ -170,7 +169,7 @@ export default {
             },
             () => {
               console.log('login failure')
-              this.isShowAlert = true;
+              this.showAlert = true;
             }
         );
       }
@@ -183,12 +182,12 @@ export default {
     },
 
     rememberMe() {
-      if (this.rmCheck && this.email !== "") {
+      if (this.rememberCheck && this.email !== "") {
         localStorage.username = this.email;
-        localStorage.checkbox = this.rmCheck;
+        localStorage.checkbox = this.rememberCheck;
       } else {
         localStorage.username = "";
-        localStorage.checkbox = this.rmCheck;
+        localStorage.checkbox = this.rememberCheck;
       }
     }
   }
