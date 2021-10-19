@@ -132,14 +132,10 @@ export default {
       }
     },
     termsOfUseCheckBox (val) {
-      if (val && this.privacyPolicyCheckBox) {
-        this.totalCheckBox = true;
-      }
+      this.totalCheckBox = val && this.privacyPolicyCheckBox;
     },
     privacyPolicyCheckBox (val) {
-      if (val && this.termsOfUseCheckBox) {
-        this.totalCheckBox = true;
-      }
+      this.totalCheckBox = val && this.termsOfUseCheckBox;
     }
   }
 }
