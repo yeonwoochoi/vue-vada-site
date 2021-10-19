@@ -283,7 +283,7 @@ export default {
         this.$store.dispatch('user/register', user).then(
             () => {
               console.log('register success')
-              this.$router.push('/')
+              this.$router.push('/authentication/signup-done')
             },
             (msg) => {
               console.log(`register failure : ${msg}`)

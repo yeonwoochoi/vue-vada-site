@@ -66,7 +66,8 @@
               </a>
             </div>
           </v-col>
-          <v-col cols="9" class="mb-0 pb-0">
+
+          <v-col cols="9" align="start" class="mb-0 pb-0">
             <v-btn
                 @click="submit"
                 type="submit"
@@ -77,6 +78,18 @@
             >
               LOGIN
             </v-btn>
+            <!--
+            <v-btn
+                @click="cancel"
+                type="cancel"
+                large
+                rounded
+                class="text-center black--text ml-3 font-weight-bold subtitle-1 #DCDCDC"
+                style="width: 120px;"
+            >
+              CANCEL
+            </v-btn>
+            -->
           </v-col>
           <v-col cols="9" align="center" class="subtitle-1">
             <p class="white--text">
@@ -172,7 +185,13 @@ export default {
               this.showAlert = true;
             }
         );
+        this.clear();
       }
+    },
+
+    cancel() {
+      this.clear();
+      this.$router.push('/')
     },
 
     clear() {

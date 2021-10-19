@@ -5,7 +5,7 @@
       :src="require('@/assets/bg_login.jpg')"
   >
     <v-row align="center" justify="center" class="ma-0" style="height: 100%;">
-      <v-card :style="`width: ${cardWidth}%; height: 85%;`" class="mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
+      <v-card :style="`width: ${cardWidth}%; height: fit-content;`" class="my-9 pb-9 elevation-10" :img="require('@/assets/bg_login.jpg')">
         <v-row align="center" justify="center" style="width: 100%; height: 100%;">
           <v-col cols="11" class="text-center pb-0 mb-0 mt-12">
             <p class="white--text display-1">

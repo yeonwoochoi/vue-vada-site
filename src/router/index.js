@@ -102,6 +102,13 @@ const routes = [
         component: () => import(
             '@/views/authentication/SignUpAgreement'
             )
+      },
+      {
+        path: 'signup-done',
+        name: 'SignUpDone',
+        component: () => import(
+            '@/views/authentication/SignUpDone'
+            )
       }
     ]
   }
