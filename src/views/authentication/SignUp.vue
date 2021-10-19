@@ -19,6 +19,9 @@
               회원가입
             </p>
           </v-col>
+          <v-col cols="11" align="center" class="py-3 my-0">
+            <sign-up-header-icons :active-icon-index="1"></sign-up-header-icons>
+          </v-col>
           <v-col cols="9" align="center" class="py-0 my-0">
             <validation-observer ref="observer">
               <v-form @submit.prevent="submit">
@@ -172,6 +175,7 @@
 <script>
 import { required, email, between, confirmed, alpha_dash, integer, min, max } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from "vee-validate";
+import SignUpHeaderIcons from "@/components/SignUpHeaderIcons";
 
 setInteractionMode('eager')
 
@@ -234,7 +238,8 @@ export default {
   }),
   components: {
     ValidationObserver,
-    ValidationProvider
+    ValidationProvider,
+    SignUpHeaderIcons
   },
   computed: {
     aspectRatio () {
@@ -256,26 +261,24 @@ export default {
   },
   methods: {
     async submit() {
-      this.showAlert = true;
-
       const valid = await this.$refs.observer.validate();
       if (valid && this.phone) {
         let user = {
           "id": this.email,
           "pwd": this.password,
-          "name": this.name,
+          "name": this.username,
           "phone": this.phone,
           "organization": this.organization
         }
         this.$store.dispatch('user/register', user).then(
             () => {
               console.log('register success')
-              this.$router.push('/authentication/sign-in')
+              this.$router.push('/')
             },
-            () => {
-              console.log('register failure')
+            (msg) => {
+              console.log(`register failure : ${msg}`)
               this.showAlert = true;
-              this.$router.push('/authentication/sign-in')
+              //this.$router.push('/authentication/sign-in')
             },
         )
       }

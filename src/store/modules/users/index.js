@@ -49,7 +49,7 @@ const mutations = {
 const actions = {
     register: ({commit}, params) => {
         return new Promise((resolve, reject) => {
-            instance.post(state.host + '/users', params).then(res => {
+            instance.post(state.host + '/users/register', params).then(res => {
                 console.log('회원가입 요청 결과');
                 console.log(`${res.status}: ${res.msg}`);
                 commit('setLoginToken', res.data);

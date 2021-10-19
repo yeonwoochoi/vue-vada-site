@@ -167,8 +167,8 @@ export default {
               console.log('login success')
               this.$router.push('/');
             },
-            () => {
-              console.log('login failure')
+            (err) => {
+              console.log(`login failure : ${err}`)
               this.showAlert = true;
             }
         );
