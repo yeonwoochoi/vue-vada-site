@@ -188,13 +188,16 @@ export default {
     onClickLogIn(){
       if (this.isLogin) {
         this.isLogin = false;
-        this.$store.dispatch("user/logout").then(
+        this.$store.dispatch("user/logout", { "id": localStorage.id }).then(
             () => {
               if (this.$router.currentRoute.path === '/') {
                 this.$router.go(this.$router.currentRoute);
               } else {
                 this.$router.push('/')
               }
+            },
+            () => {
+                this.$router.go(this.$router.currentRoute);
             }
         );
       }

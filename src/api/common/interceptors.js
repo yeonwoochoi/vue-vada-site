@@ -12,7 +12,6 @@ export function setInterceptors(instance) {
             //헤더 셋팅
             // config.timeout = 10000;
             config.headers["x-access-token"] = VueCookies.get("accessToken");
-            config.headers["x-refresh-token"] = VueCookies.get("refreshToken");
             config.headers["Content-Type"] = "application/json";
 
             return config;
@@ -34,9 +33,12 @@ export function setInterceptors(instance) {
         async error => {
             try {
                 const errorAPI = error.response.config;
-                if (error.response.status === 401 && errorAPI.retry === undefined && VueCookies.get('refreshToken') !== null) {
+                if (error.response.status === 401 && errorAPI.retry === undefined && !VueCookies.get("accessToken")) {
                     errorAPI.retry = true;
-                    await this.$store.dispatch("user/requestRefreshToken").then(
+                    let params = {
+                        "id" : localStorage.id
+                    };
+                    await this.$store.dispatch("user/requestRefreshToken", params).then(
                         () => {
                             console.log('[axios.interceptors.response] reissue : reissue access token', )
                         },

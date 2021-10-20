@@ -130,6 +130,7 @@ export default {
   name: "SignIn",
   data: () => ({
     email: '',
+    emailChecking: false,
     password: null,
     showPassword: false,
     rememberCheck: false,

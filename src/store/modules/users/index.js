@@ -4,45 +4,26 @@ import { instance, instanceWithAuth } from "@/api/index";
 const state = {
     host: 'http://127.0.0.1:3000',
     accessToken: null,
-    refreshToken: null,
-    id: '',
     role: '',
 }
 
 const getters = {
-    getToken () {
-        let ac = VueCookies.get('accessToken');
-        let rf = VueCookies.get('refreshToken');
-        return {
-            access: ac,
-            refresh: rf
-        };
-    }
 }
 
 const mutations = {
     setLoginToken (state, payload) {
         VueCookies.set('accessToken', payload.data.accessToken, '60s');
-        VueCookies.set('refreshToken', payload.data.refreshToken, '1h');
 
-        state.id = payload.data.id;
-        state.role = payload.data.role;
-        state.accessToken = payload.data.accessToken;
-        state.refreshToken = payload.data.refreshToken;
-    },
-    setRefreshToken(state, payload) {
-        // accessToken resetting
-        VueCookies.set('accessToken', payload.data.accessToken, '60s');
-
-        state.id = payload.data.id;
+        localStorage.id = payload.data.id;
         state.role = payload.data.role;
         state.accessToken = payload.data.accessToken;
     },
     removeToken () {
-        state.accessToken = null;
-        state.refreshToken = null;
         VueCookies.remove('accessToken');
-        VueCookies.remove('refreshToken');
+
+        localStorage.id = null;
+        state.role = null;
+        state.accessToken = null;
     },
 }
 
@@ -75,13 +56,13 @@ const actions = {
               })
       })
     },
-    requestRefreshToken: ({commit}) => {
+    requestRefreshToken: ({commit}, params) => {
         // accessToken 재요청
         return new Promise((resolve, reject) => {
-            instanceWithAuth.get(state.host + '/auth/check').then(res => {
+            instanceWithAuth.post(state.host + '/auth/check', params).then(res => {
                 console.log('accessToken 재요청 결과')
                 console.log(`${res.status} : ${res.msg}`)
-                commit('setRefreshToken', res.data);
+                commit('setLoginToken', res.data);
                 resolve(res.data);
             }).catch(err => {
                 console.log('refreshToken error : ', err.config);
@@ -89,9 +70,19 @@ const actions = {
             })
         })
     },
-    logout: ({commit}) => {
-        commit('removeToken');
-        //location.reload();
+    logout: ({commit}, params) => {
+        return new Promise((resolve, reject) => {
+            instance.post(state.host + '/users/logout', params).then(res => {
+                console.log('logout 결과')
+                console.log(`${res.status} : ${res.msg}`)
+                commit('removeToken');
+                resolve()
+            }).catch(err => {
+                console.log(`logout error : ${err.config}`);
+                commit('removeToken');
+                reject(err.config.data)
+            })
+        })
     }
 }
 

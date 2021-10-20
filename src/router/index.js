@@ -126,34 +126,31 @@ router.beforeEach(async (to, from, next) => {
   console.log(`${from.name} => ${to.name}`)
 
   let accessToken = VueCookies.get('accessToken');
-  let refreshToken = VueCookies.get('refreshToken');
 
   const authenticatedPages = ["Qna", "Faq"];
 
-  if (authenticatedPages.indexOf(to.name) > -1) {
-    if (accessToken === null && refreshToken !== null) {
-      console.log(1)
-      await store.dispatch('user/requestRefreshToken').then(
-          () => {
-            console.log("Reissue access token");
-            return next();
-          },
-          () => {
-            console.log("Reissue access token failure")
+  if (accessToken === null) {
+    console.log("Routing : reissuing access token...")
+    let params = {
+      "id" : localStorage.id
+    };
+    await store.dispatch('user/requestRefreshToken', params).then(
+        () => {
+          console.log("Reissue access token");
+          return next();
+        },
+        () => {
+          console.log("Reissue access token failure")
+          if (authenticatedPages.indexOf(to.name) > -1) {
             return next('/authentication/sign-in');
+          } else {
+            return next();
           }
-      )
-    }
-    if (accessToken !== null) {
-      console.log(2)
-      return next();
-    }
-    if (refreshToken === null && to.name !== 'SignIn') {
-      console.log(3)
-      return next('/authentication/sign-in');
-    }
-  } else {
-    console.log(4)
+        }
+    )
+  }
+  else {
+    console.log("Routing : Certified")
     return next();
   }
 })

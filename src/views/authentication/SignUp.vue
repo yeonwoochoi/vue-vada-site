@@ -293,10 +293,12 @@ export default {
         )
       }
     },
+
     cancel(){
       this.reset();
       this.$router.push('/authentication/sign-in')
     },
+
     reset() {
       this.email = '';
       this.password = null;
@@ -309,6 +311,7 @@ export default {
       this.showPassword = false;
       this.showAlert = false;
     },
+
     isNumber: function(evt) {
       evt = (evt) ? evt : window.event;
       let charCode = (evt.which) ? evt.which : evt.keyCode;
