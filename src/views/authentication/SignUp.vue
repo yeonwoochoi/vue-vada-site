@@ -7,13 +7,13 @@
     <v-row align="center" justify="center" class="ma-0" style="height: 100%;">
       <v-card :style="`width: ${cardWidth}%; height: fit-content`" class="my-9 pb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
         <v-alert
-          :value="showAlert"
+          :value="isShowingAlert"
           type="error"
           transition="slide-y-transition"
           >
           {{ alertMessage }}
         </v-alert>
-        <v-row align="center" justify="center" :class="`${showAlert ? 'pt-0' : 'pt-12'}`" style="width: 100%; height: fit-content;">
+        <v-row align="center" justify="center" :class="`${isShowingAlert ? 'pt-0' : 'pt-12'}`" style="width: 100%; height: fit-content;">
           <v-col cols="10" class="text-center pb-0 mb-0">
             <p class="white--text display-1">
               회원가입
@@ -27,15 +27,50 @@
               <v-form @submit.prevent="submit">
                 <validation-provider v-slot="{ errors }" name="Email" rules="required|email">
                   <p class="white--text ma-1 subtitle-1 text-start font-weight-regular">Email</p>
-                  <v-text-field
-                    v-model="email"
-                    :error-messages="errors"
-                    required
-                    outlined
-                    dense
-                    filled
-                    dark
-                  />
+                  <div style="display:flex; flex-direction: row; justify-content: start; align-items: start">
+                    <v-text-field
+                        v-model="email"
+                        :error-messages="errors"
+                        required
+                        outlined
+                        dense
+                        filled
+                        dark
+                        :disabled="isAuthorized"
+                    />
+                    <v-btn
+                        @click="sendEmailAuthCode"
+                        large
+                        class="font-weight-bold ml-4"
+                        :disabled="isAuthorized"
+                    >
+                      이메일 인증
+                    </v-btn>
+                  </div>
+                </validation-provider>
+                <validation-provider v-slot="{ errors }" name="Email auth code" v-if="isEmailAuthCodeSending">
+                  <div style="display:flex; flex-direction: row; justify-content: start; align-items: start">
+                    <v-text-field
+                        v-model="emailAuthCode"
+                        :error-messages="errors"
+                        @keypress="isNumber($event)"
+                        maxlength="6"
+                        required
+                        outlined
+                        dense
+                        filled
+                        dark
+                        :disabled="isAuthorized"
+                    />
+                    <v-btn
+                        @click="emailAuth"
+                        large
+                        class="font-weight-bold ml-4"
+                        :disabled="isAuthorized"
+                    >
+                      확인
+                    </v-btn>
+                  </div>
                 </validation-provider>
                 <validation-provider v-slot="{ errors }" name="Password" vid="password" rules="required|alpha-dash|min:8|max:20">
                   <p class="white--text ma-1 subtitle-1 text-start font-weight-regular">Password</p>
@@ -165,7 +200,7 @@
               취소하기
             </v-btn>
           </v-col>
-          <v-col cols="12" v-if="showAlert"/>
+          <v-col cols="12" v-if="isShowingAlert"/>
         </v-row>
       </v-card>
     </v-row>
@@ -227,9 +262,14 @@ export default {
     if (!this.termsOfUse && !this.privacyPolicy) {
       this.$router.push('/authentication/signup-agreement')
     }
+    this.reset();
   },
   data: () => ({
     email: '',
+    emailAuthCode: '',
+    isEmailAuthCodeSending: false,
+    isEmailClickChecking: false,
+    isAuthorized: false,
     password: null,
     passwordConfirmed: null,
     username: '',
@@ -237,10 +277,10 @@ export default {
     phoneMiddle: null,
     phoneLast: null,
     phoneFirstList: ['010','011','016','017','019','02','031','032','033','041','043','042','044','051','052','053','054','055','061','062','063','064','070'],
-    organization: null,
+    organization: 'Private',
     showPassword: false,
-    showAlert: false,
-    alertMessage: 'Sign up failed. Please retry again.'
+    isShowingAlert: false,
+    alertMessage: ""
   }),
   components: {
     ValidationObserver,
@@ -251,6 +291,9 @@ export default {
     ...mapState('app', {
       termsOfUse: 'termsOfUseCheckBox',
       privacyPolicy: 'privacyPolicyCheckBox'
+    }),
+    ...mapState('user', {
+      emailAuthNum: "emailAuthNum"
     }),
     aspectRatio () {
       return this.$vuetify.breakpoint.width / this.$vuetify.breakpoint.height;
@@ -272,7 +315,7 @@ export default {
   methods: {
     async submit() {
       const valid = await this.$refs.observer.validate();
-      if (valid && this.phone) {
+      if (valid && this.phone && this.isAuthorized) {
         let user = {
           "id": this.email,
           "pwd": this.password,
@@ -280,6 +323,7 @@ export default {
           "phone": this.phone,
           "organization": this.organization
         }
+        console.log(user)
         this.$store.dispatch('user/register', user).then(
             () => {
               console.log('register success')
@@ -287,10 +331,49 @@ export default {
             },
             (msg) => {
               console.log(`register failure : ${msg}`)
-              this.showAlert = true;
+              this.showAlert('Sign up failed. Please retry again.');
               //this.$router.push('/authentication/sign-in')
             },
         )
+      }
+    },
+
+    async sendEmailAuthCode() {
+      // email validate check
+      if (!this.isEmailClickChecking) {
+        this.isEmailClickChecking = true;
+        if (!this.email) {
+          this.showAlert('Please input email.')
+          this.isEmailClickChecking = false;
+        } else {
+          let user = {
+            "email": this.email
+          }
+          this.$store.dispatch('user/emailAuth', user).then(
+              () => {
+                console.log('email auth success')
+                alert("인증 코드가 발송되었습니다.")
+                this.isEmailAuthCodeSending = true;
+                this.closeAlert();
+              },
+              (msg) => {
+                console.log(`email auth failure : ${msg}`)
+                this.isEmailClickChecking = false;
+                this.showAlert(msg);
+              }
+          )
+        }
+      }
+    },
+
+    emailAuth() {
+      console.log(this.emailAuthNum)
+      if (`${this.emailAuthNum}` === this.emailAuthCode) {
+        alert("인증이 완료되었습니다.")
+        this.closeAlert();
+        this.isAuthorized = true;
+      } else {
+        this.showAlert("올바른 인증 코드를 입력해주세요.")
       }
     },
 
@@ -301,15 +384,18 @@ export default {
 
     reset() {
       this.email = '';
+      this.isEmailAuthCodeSending = false;
+      this.isEmailClickChecking = false;
+      this.isAuthorized = false;
       this.password = null;
       this.passwordConfirmed = null;
       this.username = '';
       this.phoneFirst = '010';
       this.phoneMiddle = null;
       this.phoneLast = null;
-      this.organization = null;
+      this.organization = 'Private';
       this.showPassword = false;
-      this.showAlert = false;
+      this.isShowingAlert = false;
     },
 
     isNumber: function(evt) {
@@ -320,6 +406,17 @@ export default {
       } else {
         return true;
       }
+    },
+
+    showAlert (msg) {
+      this.isShowingAlert = false;
+      this.alertMessage = msg;
+      this.isShowingAlert = true;
+    },
+
+    closeAlert () {
+      this.isShowingAlert = false;
+      this.alertMessage = "";
     }
   }
 }

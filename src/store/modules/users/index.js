@@ -5,6 +5,7 @@ const state = {
     host: 'http://127.0.0.1:3000',
     accessToken: null,
     role: '',
+    emailAuthNum: -1
 }
 
 const getters = {
@@ -18,13 +19,19 @@ const mutations = {
         state.role = payload.data.role;
         state.accessToken = payload.data.accessToken;
     },
-    removeToken () {
+    removeToken (state) {
         VueCookies.remove('accessToken');
 
         localStorage.id = null;
         state.role = null;
         state.accessToken = null;
     },
+    setEmailAuthNum (state, payload) {
+        state.emailAuthNum = payload.data.authNum;
+    },
+    resetEmailAuthNum (state) {
+        state.emailAuthNum = -1;
+    }
 }
 
 const actions = {
@@ -35,11 +42,10 @@ const actions = {
                 console.log(`${res.status}: ${res.msg}`);
                 commit('setLoginToken', res.data);
                 resolve(res);
+            }).catch(err => {
+                console.log(err.message);
+                reject(err.response.data.msg);
             })
-                .catch(err => {
-                    console.log(err.message);
-                    reject(err.message);
-                })
         })
     },
     login: ({commit}, params) => {
@@ -49,11 +55,10 @@ const actions = {
               console.log(`${res.status} : ${res.msg}`)
               commit('setLoginToken', res.data);
               resolve(res);
+          }).catch(err => {
+              console.log(err.response.data.msg);
+              reject(err.response.data.msg);
           })
-              .catch(err => {
-                  console.log(err.message);
-                  reject(err.message);
-              })
       })
     },
     requestRefreshToken: ({commit}, params) => {
@@ -66,7 +71,7 @@ const actions = {
                 resolve(res.data);
             }).catch(err => {
                 console.log('refreshToken error : ', err.config);
-                reject(err.config.data);
+                reject(err.response.data.msg);
             })
         })
     },
@@ -83,6 +88,20 @@ const actions = {
                 reject(err.config.data)
             })
         })
+    },
+    emailAuth: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instance.post(state.host + '/auth/emailAuth', params).then(res => {
+                console.log('email auth 결과')
+                console.log(`${res.status} : ${res.msg}`)
+                commit('setEmailAuthNum', res.data);
+                resolve()
+            }).catch(err => {
+                console.log(`email auth error: ${err.config}`);
+                commit('resetEmailAuthNum')
+                reject(err.response.data.msg);
+            })
+        }))
     }
 }
 
