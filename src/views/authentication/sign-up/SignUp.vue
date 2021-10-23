@@ -293,7 +293,7 @@ export default {
       privacyPolicy: 'privacyPolicyCheckBox'
     }),
     ...mapState('user', {
-      emailAuthNum: "emailAuthNum"
+      emailAuthNum: "emailAuthNumForSignUp"
     }),
     aspectRatio () {
       return this.$vuetify.breakpoint.width / this.$vuetify.breakpoint.height;
@@ -326,12 +326,10 @@ export default {
         console.log(user)
         this.$store.dispatch('user/register', user).then(
             () => {
-              console.log('register success')
               this.$router.push('/authentication/signup-done')
             },
             (msg) => {
-              console.log(`register failure : ${msg}`)
-              this.showAlert('Sign up failed. Please retry again.');
+              this.showAlert(msg);
               //this.$router.push('/authentication/sign-in')
             },
         )
@@ -351,13 +349,11 @@ export default {
           }
           this.$store.dispatch('user/emailAuth', user).then(
               () => {
-                console.log('email auth success')
                 alert("인증 코드가 발송되었습니다.")
                 this.isEmailAuthCodeSending = true;
                 this.closeAlert();
               },
               (msg) => {
-                console.log(`email auth failure : ${msg}`)
                 this.isEmailClickChecking = false;
                 this.showAlert(msg);
               }
@@ -396,6 +392,7 @@ export default {
       this.organization = 'Private';
       this.showPassword = false;
       this.isShowingAlert = false;
+      this.$refs.observer.reset()
     },
 
     isNumber: function(evt) {

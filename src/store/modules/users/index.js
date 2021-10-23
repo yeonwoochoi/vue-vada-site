@@ -5,7 +5,9 @@ const state = {
     host: 'http://127.0.0.1:3000',
     accessToken: null,
     role: '',
-    emailAuthNum: -1
+    emailAuthNumForSignUp: -1,
+    emailAuthNumForResetPwd: -1,
+    tempPassword: null
 }
 
 const getters = {
@@ -26,11 +28,23 @@ const mutations = {
         state.role = null;
         state.accessToken = null;
     },
-    setEmailAuthNum (state, payload) {
-        state.emailAuthNum = payload.data.authNum;
+    setEmailAuthNumForSignUp (state, payload) {
+        state.emailAuthNumForSignUp = payload.data.authNum;
     },
-    resetEmailAuthNum (state) {
-        state.emailAuthNum = -1;
+    resetEmailAuthNumForSignUp (state) {
+        state.emailAuthNumForSignUp = -1;
+    },
+    setEmailAuthNumForResetPwd (state, payload) {
+        state.emailAuthNumForResetPwd = payload.data.authNum;
+    },
+    resetEmailAuthNumForResetPwd (state) {
+        state.emailAuthNumForResetPwd = -1;
+    },
+    setTempPwd (state, payload) {
+        state.tempPassword = payload.data.pwd;
+    },
+    resetTempPwd (state) {
+        state.tempPassword = null;
     }
 }
 
@@ -43,8 +57,8 @@ const actions = {
                 commit('setLoginToken', res.data);
                 resolve(res);
             }).catch(err => {
-                console.log(err.message);
-                reject(err.response.data.msg);
+                console.log(`register failure : ${err.response.data}`)
+                reject(err.response.data);
             })
         })
     },
@@ -56,8 +70,8 @@ const actions = {
               commit('setLoginToken', res.data);
               resolve(res);
           }).catch(err => {
-              console.log(err.response.data.msg);
-              reject(err.response.data.msg);
+              console.log(`login failure : ${err.response.data}`)
+              reject(err.response.data);
           })
       })
     },
@@ -71,7 +85,7 @@ const actions = {
                 resolve(res.data);
             }).catch(err => {
                 console.log('refreshToken error : ', err.config);
-                reject(err.response.data.msg);
+                reject(err.response.data);
             })
         })
     },
@@ -83,9 +97,9 @@ const actions = {
                 commit('removeToken');
                 resolve()
             }).catch(err => {
-                console.log(`logout error : ${err.config}`);
+                console.log(`logout error : ${err.response.data}`);
                 commit('removeToken');
-                reject(err.config.data)
+                reject(err.response.data)
             })
         })
     },
@@ -94,12 +108,41 @@ const actions = {
             instance.post(state.host + '/auth/emailAuth', params).then(res => {
                 console.log('email auth 결과')
                 console.log(`${res.status} : ${res.msg}`)
-                commit('setEmailAuthNum', res.data);
+                commit('setEmailAuthNumForSignUp', res.data);
                 resolve()
             }).catch(err => {
-                console.log(`email auth error: ${err.config}`);
-                commit('resetEmailAuthNum')
-                reject(err.response.data.msg);
+                console.log(`email auth failure : ${err.response.data}`)
+                commit('resetEmailAuthNumForSignUp')
+                reject(err.response.data);
+            })
+        }))
+    },
+    emailCheck: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instance.post(state.host + '/auth/emailCheck', params).then(res => {
+                console.log('send auth code for reset password 결과')
+                console.log(`${res.status} : ${res.msg}`)
+                commit('setEmailAuthNumForResetPwd', res.data)
+                resolve(res.data)
+            }).catch(err => {
+                console.log(`send auth code for reset password error: ${err.response.data}`);
+                commit('resetEmailAuthNumForResetPwd')
+                reject(err.response.data);
+            })
+        }))
+    },
+
+    resetPwd: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instance.post(state.host + '/users/resetPwd', params).then(res => {
+                console.log('reset password 결과')
+                console.log(`${res.status} : ${res.msg}`)
+                commit('setTempPwd', res.data)
+                resolve()
+            }).catch(err => {
+                console.log(`reset password error: ${err.response.data}`);
+                commit('resetTempPwd')
+                reject(err.response.data);
             })
         }))
     }

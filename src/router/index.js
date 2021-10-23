@@ -79,39 +79,51 @@ const routes = [
         path: 'sign-in',
         name: 'SignIn',
         component: () => import(
-            '@/views/authentication/SignIn'
+            '@/views/authentication/sign-in/SignIn'
             )
       },
       {
         path: 'sign-up',
         name: 'SignUp',
         component: () => import(
-            '@/views/authentication/SignUp'
+            '@/views/authentication/sign-up/SignUp'
             )
       },
       {
         path: 'forgot-password',
         name: 'ForgotPassword',
         component: () => import(
-            '@/views/authentication/ForgotPassword'
+            '@/views/authentication/forgot-password/ForgotPassword'
+            )
+      },
+      {
+        path: 'forgot-password-done',
+        name: 'ForgotPasswordDone',
+        component: () => import(
+            '@/views/authentication/forgot-password/ForgotPasswordDone'
             )
       },
       {
         path: 'signup-agreement',
         name: 'SignUpAgreement',
         component: () => import(
-            '@/views/authentication/SignUpAgreement'
+            '@/views/authentication/sign-up/SignUpAgreement'
             )
       },
       {
         path: 'signup-done',
         name: 'SignUpDone',
         component: () => import(
-            '@/views/authentication/SignUpDone'
+            '@/views/authentication/sign-up/SignUpDone'
             )
       }
     ]
-  }
+  },
+  {
+    path: "*",
+    name: "notFound",
+    component: () => import('@/layout/etc/NotFound')
+  },
 ]
 
 const router = new VueRouter({
@@ -136,11 +148,9 @@ router.beforeEach(async (to, from, next) => {
     };
     await store.dispatch('user/requestRefreshToken', params).then(
         () => {
-          console.log("Reissue access token");
           return next();
         },
         () => {
-          console.log("Reissue access token failure")
           if (authenticatedPages.indexOf(to.name) > -1) {
             return next('/authentication/sign-in');
           } else {

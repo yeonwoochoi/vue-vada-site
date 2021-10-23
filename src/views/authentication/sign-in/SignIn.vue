@@ -60,7 +60,7 @@
               />
               <a
                   style="text-decoration: none; align-items: center; display: flex"
-                  href="/"
+                  href="/authentication/forgot-password"
               >
                 Forgot Password?
               </a>
@@ -113,6 +113,7 @@
 <script>
 import { required, email } from 'vee-validate/dist/rules'
 import { extend, ValidationProvider, setInteractionMode, ValidationObserver } from 'vee-validate'
+import VueCookies from "vue-cookies";
 
 setInteractionMode('eager')
 
@@ -143,6 +144,10 @@ export default {
   },
 
   mounted() {
+    let accessToken = VueCookies.get('accessToken');
+    if (accessToken) {
+      this.$router.push('/')
+    }
     let emailLocal = localStorage.username;
     if (emailLocal) {
       this.email = emailLocal;
@@ -177,11 +182,10 @@ export default {
         this.rememberMe();
         this.$store.dispatch("user/login", user).then(
             () => {
-              console.log('login success')
               this.$router.push('/');
             },
             (err) => {
-              console.log(`login failure : ${err}`)
+              this.alertMessage = err;
               this.showAlert = true;
             }
         );
