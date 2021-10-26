@@ -1,17 +1,10 @@
 <template>
-  <v-img style="position: relative;" height="700" :src="headerStyle.image">
+  <v-img style="position: relative;" height="450" :src="require('@/assets/bg_login.jpg')">
     <v-card-text style="height: 100%; position: absolute;">
       <v-container fluid style="height: 100%;">
         <v-row align="center" justify="center" style="height: 100%;">
-          <v-col v-if="!isMobile" ref="scrollTarget" cols="11">
-            <div v-for="(item, i) in headerStyle.contents" :key="i">
-              <p :class="`text-start ${item.style}`">{{ item.content }}</p>
-            </div>
-          </v-col>
-          <v-col v-else ref="scrollTarget" cols="11">
-            <div v-for="(mobileItem, j) in headerStyle.mobileContents" :key="j">
-              <p :class="`text-start ${mobileItem.style}`">{{ mobileItem.content }}</p>
-            </div>
+          <v-col cols="12" align="center" class="mt-6">
+            <pre class="font-weight-bold display-1 white--text mt-12 header-anim">{{ headerTitle }}</pre>
           </v-col>
         </v-row>
       </v-container>
@@ -23,10 +16,18 @@
 import "animate.css"
 export default {
   name: "AppBarSheetView",
-  props: ['headerStyle', 'isMobile']
+  props: ['isMobile'],
+  computed: {
+    headerTitle() {
+      return this.$route.name;
+    }
+  }
 }
 </script>
 
 <style scoped>
-
+  .header-anim {
+    animation: backInDown;
+    animation-duration: 1.2s;
+  }
 </style>

@@ -5,7 +5,7 @@
       :src="require('@/assets/bg_login.jpg')"
   >
     <v-row align="center" justify="center" class="ma-0" style="height: 100%;">
-      <v-card :style="`width: ${cardWidth}%; height: 65%;`" class="mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
+      <v-card :style="`width: ${cardWidth}%; height: fit-content;`" class="mb-12 elevation-10" :img="require('@/assets/bg_login.jpg')">
         <v-alert
             :value="showAlert"
             type="error"
@@ -13,7 +13,7 @@
         >
           {{ alertMessage }}
         </v-alert>
-        <v-row align="center" justify="center" :class="`${showAlert ? 'pt-0' : 'pt-12'}`" style="width: 100%; height: 100%;">
+        <v-row align="center" justify="center" :class="`${showAlert ? 'pt-0' : 'pt-12 pb-6'}`" style="width: 100%; height: 600px;">
           <v-col cols="10" class="text-center pb-0 mb-0">
             <p class="white--text display-1">
               LOGIN
@@ -66,30 +66,27 @@
               </a>
             </div>
           </v-col>
-
-          <v-col cols="9" align="start" class="mb-0 pb-0">
+          <v-col cols="9" align="start" class="my-0 py-0">
             <v-btn
                 @click="submit"
                 type="submit"
                 large
                 rounded
                 class="text-center black--text font-weight-bold subtitle-1 #DCDCDC"
-                style="width: 120px;"
+                style="width: 100%;"
             >
               LOGIN
             </v-btn>
-            <!--
             <v-btn
                 @click="cancel"
                 type="cancel"
                 large
                 rounded
-                class="text-center black--text ml-3 font-weight-bold subtitle-1 #DCDCDC"
-                style="width: 120px;"
+                class="text-center white--text font-weight-bold subtitle-1 elevation-0 #DCDCDC mt-3 no-hover-button"
+                style="width: 100%; background-color: transparent;"
             >
               CANCEL
             </v-btn>
-            -->
           </v-col>
           <v-col cols="9" align="center" class="subtitle-1">
             <p class="white--text">
@@ -103,7 +100,6 @@
               </a>
             </p>
           </v-col>
-          <v-col cols="12" v-if="showAlert"/>
         </v-row>
       </v-card>
     </v-row>
@@ -221,5 +217,8 @@ export default {
   .v-text-field--outlined >>> fieldset {
     border-color: #DCDCDC;
     border-width: 2px;
+  }
+  .no-hover-button::before {
+    display: none;
   }
 </style>

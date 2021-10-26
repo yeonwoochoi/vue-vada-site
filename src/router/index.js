@@ -19,52 +19,52 @@ const routes = [
             )
       },
       {
-        path: '/about',
-        name: 'About',
+        path: '/members',
+        name: 'Members',
         component: () => import(
-            '@/views/default/about/About'
+            '@/views/default/Members'
             )
       },
       {
-        path: '/api',
-        name: 'Service',
+        path: '/research',
+        name: 'Research',
         component: () => import(
-            '@/views/default/service/Service'
+            '@/views/default/Research'
             )
       },
       {
-        path: '/support',
-        name: 'Notice',
+        path: '/publications',
+        name: 'Publications',
         component: () => import(
-            '@/views/default/support/Notice'
+            '@/views/default/Publications'
             )
       },
       {
-        path: '/support/faq',
-        name: 'Faq',
+        path: '/projects',
+        name: 'Projects',
         component: () => import(
-            '@/views/default/support/Faq'
+            '@/views/default/Projects'
             )
       },
       {
-        path: '/support/qna',
-        name: 'Qna',
+        path: '/news',
+        name: 'News',
         component: () => import(
-            '@/views/default/support/Qna'
+            '@/views/default/News'
             )
       },
       {
-        path: '/support/privacy-policy',
-        name: 'PrivacyPolicy',
+        path: '/seminar',
+        name: 'Seminar',
         component: () => import(
-            '@/views/default/support/PrivacyPolicy'
+            '@/views/default/Seminar'
             )
       },
       {
-        path: '/support/terms-of-use',
-        name: 'TermsOfUse',
+        path: '/contact',
+        name: 'Contact',
         component: () => import(
-            '@/views/default/support/TermsOfUse'
+            '@/views/default/Contact'
             )
       }
     ]
@@ -76,7 +76,7 @@ const routes = [
         ),
     children: [
       {
-        path: 'sign-in',
+        path: '',
         name: 'SignIn',
         component: () => import(
             '@/views/authentication/sign-in/SignIn'
@@ -139,7 +139,7 @@ router.beforeEach(async (to, from, next) => {
 
   let accessToken = VueCookies.get('accessToken');
 
-  const authenticatedPages = ["Qna", "Faq"];
+  const authenticatedPages = ["Seminar"];
 
   if (accessToken === null) {
     console.log("Routing : reissuing access token...")
@@ -152,7 +152,7 @@ router.beforeEach(async (to, from, next) => {
         },
         () => {
           if (authenticatedPages.indexOf(to.name) > -1) {
-            return next('/authentication/sign-in');
+            return next('/authentication');
           } else {
             return next();
           }

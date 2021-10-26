@@ -8,6 +8,8 @@
         style="transition: all 0.6s ease;"
         v-scroll="onScroll"
         height="90px"
+        @mouseenter="setIsHovered(true)"
+        @mouseleave="setIsHovered(false)"
     >
       <v-container fluid>
         <v-row
@@ -15,12 +17,18 @@
             align="center"
             justify="center"
         >
-          <v-col cols="3" align="left">
-            <CompanyLogoBtn v-if="!isActive" :logo-src="companyWhiteLogo"/>
-            <CompanyLogoBtn v-else :logo-src="companyDefaultLogo"/>
+          <v-col cols="4" align="left" style="display: flex; justify-content: right; align-items: center; cursor:pointer;" @click="goToMain">
+            <CompanyLogoBtn v-if="!isActive" :logo-src="companyWhiteLogo" :logo-height="70" :is-white="true" class="mr-3"/>
+            <CompanyLogoBtn v-else :logo-src="companyDefaultLogo" :logo-height="70" :is-white="false" class="mr-3"/>
+            <div :class="!isActive ? 'white--text' : 'black--text'" class="display-1 font-weight-bold pa-0 ma-0" style="height: 100%">
+              AI-LAB
+              <p class="body-2 font-weight-bold pa-0 ma-0">
+                Artificial Intelligence Laboratory
+              </p>
+            </div>
           </v-col>
 
-          <v-col cols="8" align="right">
+          <v-col cols="8" align="center" style="width: fit-content;">
             <v-menu
               open-on-hover
               bottom
@@ -28,24 +36,23 @@
               offset-y
               v-for="(content, i) in toolbarItems"
               :key="i"
-              content-class="elevation-0 tab-content"
+              content-class="elevation-0"
+              transition="slide-y-transition"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                     id="no-background-hover"
-                    :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
-                    :active-class="`font-weight-bold ${isActive ? 'tab-selected-content1' : 'tab-selected-content2'}`"
+                    :class="`elevation-0 subtitle-2 ${isActive ? 'black--text' : 'white--text'} font-weight-medium menu-button left`"
+                    :active-class="`font-weight-bold menu-button ${isActive ? 'active-black' : 'active-white'}`"
                     :ripple="false"
-                    :to="content.link"
+                    :href="content.link"
                     v-bind="attrs"
                     v-on="on"
                     style="height: 90px;"
                     text
                     tile
-                    @mouseenter="setIsHovered(true)"
-                    @mouseleave="setIsHovered(false)"
                 >
-                  {{content.title}}
+                  {{ content.title }}
                 </v-btn>
               </template>
 
@@ -53,15 +60,13 @@
                 v-for="(item, index) in content.items"
                 :key="index"
                 style="background-color: white;"
-                @mouseenter="setIsHovered(true)"
-                @mouseleave="setIsHovered(false)"
               >
                 <v-btn
                     id="no-background-hover"
-                    :class="`elevation-0 title font-weight-light`"
+                    :class="`elevation-0 subtitle-2 font-weight-medium`"
                     active-class="font-weight-bold"
                     :ripple="false"
-                    :to="item.link"
+                    :href="item.link"
                     height="100%"
                     text
                 >
@@ -71,14 +76,12 @@
             </v-menu>
             <v-btn
                 id="no-background-hover"
-                :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
+                :class="`elevation-0 subtitle-1 ${isActive ? 'black--text' : 'white--text'} font-weight-medium`"
                 :ripple="false"
                 @click="onClickLogIn"
                 style="width: 100px;"
                 text
                 tile
-                @mouseenter="setIsHovered(true)"
-                @mouseleave="setIsHovered(false)"
             >
               <v-divider class="mr-6" vertical :style="`border-width: 1px; background-color: ${isActive ? 'black' : 'white'};`"/>
               {{ loginBtnText }}
@@ -86,14 +89,14 @@
           </v-col>
         </v-row>
         <v-row
-            v-if="isMobile"
+            v-else
             align="center"
             justify="space-between"
         >
           <v-app-bar-nav-icon @click="drawer = !drawer"  :style="`${isActive ? 'color: black' : 'color: white'}`"/>
           <v-btn
               id="no-background-hover"
-              :class="`elevation-0 title ${isActive ? 'black--text' : 'white--text'} font-weight-light`"
+              :class="`elevation-0 subtitle-1 ${isActive ? 'black--text' : 'white--text'} font-weight-medium`"
               :ripple="false"
               @click="onClickLogIn"
               style="border-width: 1px; background-color: transparent; width: 100px;"
@@ -105,8 +108,8 @@
         </v-row>
       </v-container>
     </v-app-bar>
-    <app-bar-sheet-view v-if="this.$route.path !== '/'" :header-style="getHeader()" :is-mobile="isMobile"/>
-    <app-bar-sheet-particle-view v-else :header-style="getHeader()" :is-mobile="isMobile"/>
+    <app-bar-sheet-view v-if="this.$route.path !== '/'" :is-mobile="isMobile"/>
+    <app-bar-sheet-particle-view v-else :is-mobile="isMobile"/>
   </v-card>
 </template>
 
@@ -141,9 +144,8 @@ export default {
   computed: {
     ...mapState('app', {
       toolbarItems: 'toolbarItems',
-      headerStyle: 'headerStyle',
-      companyDefaultLogo: 'companyDefaultLogo',
-      companyWhiteLogo: 'companyWhiteLogo'
+      companyDefaultLogo: 'companyDefaultEmblem',
+      companyWhiteLogo: 'companyWhiteEmblem'
     }),
     isActive () {
       return this.isScrolled || this.isHovered;
@@ -170,18 +172,6 @@ export default {
       const top = window.pageYOffset || e.target.scrollTop || 0
       this.isScrolled = top > 0
     },
-    getHeader () {
-      switch (this.$route.path.split('/')[1]) {
-        case 'about':
-          return this.headerStyle.about
-        case 'service':
-          return this.headerStyle.service
-        case 'support':
-          return this.headerStyle.support
-        default:
-          return this.headerStyle.home
-      }
-    },
     setIsHovered (flag) {
       this.isHovered = flag
     },
@@ -202,7 +192,21 @@ export default {
         );
       }
       else {
-        this.$router.push('/authentication/sign-in')
+        this.$router.push('/authentication')
+      }
+    },
+    goToMain() {
+      if (this.$router.currentRoute.path === '/') {
+        this.$router.go(this.$router.currentRoute);
+      } else {
+        this.$router.push('/')
+      }
+    },
+    goTo(path) {
+      if (this.$router.currentRoute.path === path) {
+        this.$router.go(this.$router.currentRoute);
+      } else {
+        this.$router.push(path)
       }
     }
   }
@@ -213,19 +217,36 @@ export default {
   #no-background-hover::before {
     background-color: transparent !important;
   }
-  .tab-selected-content1 {
+
+  .menu-button {
+    background: linear-gradient(currentColor, currentColor) bottom / 0 .1em no-repeat;
+    transition: 1s background-size;
+  }
+
+  .menu-button:hover {
+    background-size: 100% .1em;
+  }
+
+  /* Variations */
+  .menu-button.left {
+    background-position: left bottom;
+  }
+
+  .menu-button:active {
+    background-size: 100% .1em;
+  }
+
+  .menu-button.active-black {
+    transition: none;
     border-bottom-style: solid;
     border-bottom-color: black;
     border-bottom-width: thin;
   }
-  .tab-selected-content2 {
+
+  .menu-button.active-white {
+    transition: none;
     border-bottom-style: solid;
     border-bottom-color: white;
     border-bottom-width: thin;
-  }
-  .tab-content {
-    border-style: solid;
-    border-color: #DCDCDC;
-    border-width: thin;
   }
 </style>

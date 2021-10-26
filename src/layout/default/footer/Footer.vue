@@ -3,30 +3,44 @@
       app
       absolute
       padless
-      color="#001229"
-      :height="isMobile ? 180 : 280"
+      color="rgb(25,25,25)"
+      height="280"
   >
-    <Mobile v-if="isMobile" />
-    <Pc v-if="!isMobile" />
+    <v-container>
+      <v-row justify="space-between" align="center" class="pa-4">
+        <v-col cols="12" align="start" class="mb-5">
+          <CompanyLogoBtn :logo-src="companyLogo" :logo-height="250"/>
+        </v-col>
+        <v-col cols="12" align="start">
+          <div v-for="info in companyInfo" :key="info" class="white--text subtitle-2">
+            {{info}}
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-footer>
 </template>
 
 <script>
-import Mobile from "./Mobile";
-import Pc from "./Default";
+import { mapState } from 'vuex'
+import CompanyLogoBtn from "@/components/CompanyLogoBtn";
+
 export default {
   name: "DefaultFooter",
-  components:{
-    Mobile, Pc
-  },
+  components: {CompanyLogoBtn},
+  data:()=>({
+    companyInfo: [
+      'Unit 317, Digital Information Center, 558 Daehak-ro Gunsan-si Jeollabuk-do\n',
+      '© Copyright 2021, Artificial Intelligence Laboratory,\n',
+      'Kunsan National University.\n',
+    ]
+  }),
   computed: {
-    isMobile () {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return true
-        case 'sm': return true
-        default: return false
-      }
-    }
+    ...mapState('app', {
+      companyLogo: 'companyWhiteLogo',
+      footerBtnInfo: 'footerBtnInfo',
+      copyright: 'copyright'
+    })
   }
 }
 </script>

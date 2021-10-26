@@ -1,10 +1,10 @@
 <template>
-  <p>PrivacyPolicy</p>
+  <p>Contact</p>
 </template>
 
 <script>
 export default {
-  name: "PrivacyPolicy"
+  name: "Contact"
 }
 </script>
 
