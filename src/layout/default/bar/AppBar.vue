@@ -1,5 +1,5 @@
 <template>
-  <v-card class="rounded-0" style="color: transparent" height="700" flat>
+  <v-card class="rounded-0" style="color: transparent; height: fit-content;" flat>
     <v-app-bar
         app
         flat
