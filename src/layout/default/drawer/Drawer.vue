@@ -4,7 +4,7 @@
     v-model="drawer"
     v-bind="$attrs"
     dark
-    :src="require('@/assets/bg_sidebar.jpg')"
+    :src="require('@/assets/bg_sidebar.png')"
     app
   >
     <template
