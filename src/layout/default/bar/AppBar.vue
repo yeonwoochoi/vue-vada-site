@@ -45,7 +45,7 @@
                     :class="`elevation-0 subtitle-2 ${isActive ? 'black--text' : 'white--text'} font-weight-medium menu-button left`"
                     :active-class="`font-weight-bold menu-button ${isActive ? 'active-black' : 'active-white'}`"
                     :ripple="false"
-                    :href="content.link"
+                    :to="content.link"
                     v-bind="attrs"
                     v-on="on"
                     style="height: 90px;"

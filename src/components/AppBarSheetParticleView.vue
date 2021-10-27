@@ -8,8 +8,8 @@
       <v-container fluid style="height: 100%;">
         <v-row align="center" justify="center" style="height: 100%;">
           <v-col cols="10" sm="8" align="start" class="mt-10">
-            <pre class="display-3 font-weight-medium white--text my-6 text-start" style="white-space: pre-wrap; width: fit-content">{{ headerTitle }}</pre>
-            <pre class="subtitle-1 font-weight-light white--text my-6 text-start" style="white-space: pre-wrap; width: fit-content">{{ headerSubTitle }}</pre>
+            <pre class="display-4 font-weight-regular white--text my-6 text-start" style="white-space: pre-wrap; width: fit-content">{{ headerTitle }}</pre>
+            <pre class="title font-weight-light white--text my-6 ml-2 text-start" style="white-space: pre-wrap; width: fit-content">{{ headerSubTitle }}</pre>
           </v-col>
         </v-row>
       </v-container>

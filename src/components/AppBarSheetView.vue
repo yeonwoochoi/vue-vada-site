@@ -3,8 +3,8 @@
     <v-card-text style="height: 100%; position: absolute;">
       <v-container fluid style="height: 100%;">
         <v-row align="center" justify="center" style="height: 100%;">
-          <v-col cols="12" align="center" class="mt-6">
-            <pre class="font-weight-bold display-1 white--text mt-12 header-anim">{{ headerTitle }}</pre>
+          <v-col cols="12" align="center" class="mt-4">
+            <pre class="font-weight-bold display-2 white--text mt-12 header-anim">{{ headerTitle }}</pre>
           </v-col>
         </v-row>
       </v-container>
