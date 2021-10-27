@@ -55,7 +55,7 @@
             <v-btn
               id="no-background-hover"
               x-large
-              to="/authentication/sign-in"
+              to="/authentication"
               class="white--text font-weight-bold elevation-0 mt-2"
               width="100%"
               height="60px"

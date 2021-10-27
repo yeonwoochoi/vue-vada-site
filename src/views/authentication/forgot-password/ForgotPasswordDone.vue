@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     goToLogin(){
-      this.$router.push('/authentication/sign-in')
+      this.$router.push('/authentication')
     }
   }
 }

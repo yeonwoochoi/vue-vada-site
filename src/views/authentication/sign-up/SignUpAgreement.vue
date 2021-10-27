@@ -54,7 +54,7 @@
                 color="white"
                 x-large
                 class="title black--text font-weight-medium mx-2"
-                @click="$router.push('/authentication/sign-in')"
+                @click="$router.push('/authentication')"
             >
               취소
             </v-btn>
