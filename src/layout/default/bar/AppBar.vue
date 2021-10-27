@@ -17,18 +17,18 @@
             align="center"
             justify="center"
         >
-          <v-col cols="4" align="left" style="display: flex; justify-content: right; align-items: center; cursor:pointer;" @click="goToMain">
+          <v-col cols="4" md="3" align="left" style="display: flex; justify-content: right; align-items: center; cursor:pointer;" @click="goToMain">
             <CompanyLogoBtn v-if="!isActive" :logo-src="companyWhiteLogo" :logo-height="70" :is-white="true" class="mr-3"/>
             <CompanyLogoBtn v-else :logo-src="companyDefaultLogo" :logo-height="70" :is-white="false" class="mr-3"/>
             <div :class="!isActive ? 'white--text' : 'black--text'" class="display-1 font-weight-bold pa-0 ma-0" style="height: 100%">
               AI-LAB
-              <p class="body-2 font-weight-bold pa-0 ma-0">
+              <p :class="`${logoFontSize} font-weight-bold pa-0 ma-0`">
                 Artificial Intelligence Laboratory
               </p>
             </div>
           </v-col>
 
-          <v-col cols="8" align="center" style="width: fit-content;">
+          <v-col cols="8" md="9" align="center" style="width: fit-content;">
             <v-menu
               open-on-hover
               bottom
@@ -42,7 +42,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                     id="no-background-hover"
-                    :class="`elevation-0 subtitle-2 ${isActive ? 'black--text' : 'white--text'} font-weight-medium menu-button left`"
+                    :class="`elevation-0 subtitle-2 ${isActive ? 'black--text' : 'white--text'} font-weight-medium menu-button left ${appBarPaddingSize}`"
                     :active-class="`font-weight-bold menu-button ${isActive ? 'active-black' : 'active-white'}`"
                     :ripple="false"
                     :to="content.link"
@@ -66,7 +66,7 @@
                     :class="`elevation-0 subtitle-2 font-weight-medium`"
                     active-class="font-weight-bold"
                     :ripple="false"
-                    :href="item.link"
+                    :to="item.link"
                     height="100%"
                     text
                 >
@@ -164,6 +164,12 @@ export default {
       set (value) {
         return this.$store.commit('app/setDrawer', value)
       }
+    },
+    appBarPaddingSize () {
+      return this.$vuetify.breakpoint.name === 'md' ? 'pr-1' : ''
+    },
+    logoFontSize () {
+      return this.$vuetify.breakpoint.name === 'md' ? 'caption' : 'body-2'
     }
   },
   methods: {

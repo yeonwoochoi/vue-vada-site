@@ -66,7 +66,7 @@
               </a>
             </div>
           </v-col>
-          <v-col cols="9" align="start" class="my-0 py-0">
+          <v-col cols="9" align="start" class="mb-0 mt-3 py-0">
             <v-btn
                 @click="submit"
                 type="submit"
@@ -88,7 +88,7 @@
               CANCEL
             </v-btn>
           </v-col>
-          <v-col cols="9" align="center" class="subtitle-1">
+          <v-col cols="9" align="center" class="subtitle-1 pt-0">
             <p class="white--text">
               Need an account?
               <a
