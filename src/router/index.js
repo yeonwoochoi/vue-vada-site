@@ -66,6 +66,13 @@ const routes = [
         component: () => import(
             '@/views/default/Contact'
             )
+      },
+      {
+        path: '/test',
+        name: 'Test',
+        component: () => import(
+            '@/layout/test/Test'
+            ),
       }
     ]
   },
