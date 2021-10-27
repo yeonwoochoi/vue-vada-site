@@ -2,8 +2,8 @@
   <v-container fluid>
     <v-row align="center" justify="center">
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
-        <rank-card1 :rank-data="professorData"/>
-        <rank-card1 :rank-data="professorData"/>
+        <rank-card1 :rank-data="professorData1"/>
+        <rank-card1 :rank-data="professorData2"/>
         <rank-card2 :member-data="phdData"/>
         <rank-card2 :member-data="masterData"/>
       </v-card>
@@ -18,9 +18,9 @@ export default {
   name: "Members",
   components: {RankCard1, RankCard2},
   data: () => ({
-    professorData: {
+    professorData1: {
       rank: 'Principal Investigator',
-      imgSrc: '@/assets/members/images/professor.png',
+      imgSrc: '@/assets/members/images/professor_1.png',
       name: 'Sungroh Yoon, PhD',
       degree: 'Professor of Electrical and Computer Engineering',
       email: 'sryoon@snu.ac.kr',
@@ -48,6 +48,29 @@ export default {
         'Interdisciplinary Program in Artificial Intelligence',
         'Interdisciplinary Program in Bioinformatics',
       ]
+    },
+    professorData2: {
+      rank: 'Research Professor',
+      imgSrc: '@/assets/members/images/professor_2.png',
+      name: 'Daehyung Cho, PhD',
+      degree: 'Research Professor of Electrical and Computer Engineering',
+      email: 'dhcho97@snu.ac.kr',
+      phone: '+82-10-5317-1471',
+      education: [
+        'PhD in ECE, University of Illinois at Urbana-Champaign, USA',
+        'MS in Electronic Eng., Hanyang University, Korea',
+        'BS in Electronic Eng., Hanyang University, Korea',
+      ],
+      experience: [
+        'Research Professor, ECE, Yonsei University (2017-2020)',
+        'Senior Advisor, The Swiss Federal Institute of Technology, Lausanne (EPFL), Switzerland (2012-2016)',
+        'Representative, Analog Bits, Inc., USA (2007-2012)',
+        'Founder & CEO, Ubeacon Technologies, Inc., Korea (2006-2009)',
+        'Senior Director, Samsung Electronics, Korea (2002-2005)',
+        'Director, Hyundai Electronics (SKHynix), Korea (1995-1997)',
+        'Engineer, Samsung Electronics, Korea (1983-1990)',
+      ],
+      affiliation: []
     },
     phdData: {
       rank: 'PhD Students',
