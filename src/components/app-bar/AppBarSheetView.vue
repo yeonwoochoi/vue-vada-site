@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import "animate.css"
+import "../../../node_modules/animate.css/animate.css"
 export default {
   name: "AppBarSheetView",
   props: ['isMobile'],
@@ -28,6 +28,6 @@ export default {
 <style scoped>
   .header-anim {
     animation: backInDown;
-    animation-duration: 1.2s;
+    animation-duration: 1s;
   }
 </style>

@@ -19,6 +19,7 @@
       />
       <default-list-item
         v-else
+        class="pl-6"
         :key="`child-${i}`"
         :item="child"
       />

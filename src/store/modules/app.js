@@ -6,17 +6,17 @@ const state = {
     companyWhiteEmblem: require('@/assets/logo/Emblem_white.png'),
     drawer: false,
     drawerItems: [
-        { title: 'Home', icon: 'mdi-view-dashboard', to: '/' },
-        { title: 'MEMBERS', icon: 'mdi-menu', to: '/members'},
-        { title: 'RESEARCH', icon: 'mdi-grid', to: '/research' },
-        { title: 'PUBLICATIONS', icon: 'mdi-grid', to: '/publications' },
-        { title: 'PROJECTS', icon: 'mdi-grid', to: '/projects' },
-        { title: 'BOARD', icon: 'mdi-table-settings', items: [
-                { title: 'NEWS', to: '/news' },
-                { title: 'SEMINAR', to: '/seminar' },
+        { title: 'Home', icon: 'mdi-home', to: '/' },
+        { title: 'MEMBERS', icon: 'mdi-account-group', to: '/members'},
+        { title: 'RESEARCH', icon: 'mdi-flask-empty-outline', to: '/research' },
+        { title: 'PUBLICATIONS', icon: 'mdi-book-open-blank-variant ', to: '/publications' },
+        { title: 'PROJECTS', icon: 'mdi-human-male-child', to: '/projects' },
+        { title: 'BOARD', icon: 'mdi-clipboard', items: [
+                { title: 'NEWS', icon: 'mdi-newspaper-variant-multiple', to: '/news' },
+                { title: 'SEMINAR', icon: 'mdi-bookshelf', to: '/seminar' },
             ]
         },
-        { title: 'CONTACT', icon: 'mdi-grid', to: '/contact' },
+        { title: 'CONTACT', icon: 'mdi-phone', to: '/contact' },
     ],
     toolbarItems: [
         { title: 'MEMBERS', link: '/members', items: []},

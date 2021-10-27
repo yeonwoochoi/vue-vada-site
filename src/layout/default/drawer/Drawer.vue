@@ -22,6 +22,7 @@
 
     <drawer-list :items="items" />
 
+    <!--
     <template #append>
       <div class="pa-4 text-center">
         <v-btn
@@ -37,6 +38,7 @@
         </v-btn>
       </div>
     </template>
+    -->
   </v-navigation-drawer>
 </template>
 

@@ -210,7 +210,7 @@
 <script>
 import { required, email, between, confirmed, alpha_dash, integer, min, max } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from "vee-validate";
-import SignUpHeaderIcons from "@/components/SignUpHeaderIcons";
+import SignUpHeaderIcons from "@/components/signup/SignUpHeaderIcons";
 import { mapState } from "vuex";
 
 setInteractionMode('eager')
@@ -330,7 +330,7 @@ export default {
             },
             (msg) => {
               this.showAlert(msg);
-              //this.$router.push('/authentication/sign-in')
+              //this.$router.push('/authentication')
             },
         )
       }
@@ -375,7 +375,7 @@ export default {
 
     cancel(){
       this.reset();
-      this.$router.push('/authentication/sign-in')
+      this.$router.push('/authentication')
     },
 
     reset() {

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import SignUpHeaderIcons from "@/components/SignUpHeaderIcons";
+import SignUpHeaderIcons from "@/components/signup/SignUpHeaderIcons";
 import { mapState, mapMutations } from "vuex";
 
 export default {
