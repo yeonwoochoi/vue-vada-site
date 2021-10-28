@@ -1,20 +1,12 @@
 <template>
-  <v-card class="elevation-0 card-flat mb-6 px-12 py-8">
-    <v-card-title>
-      <p class="font-weight-light my-4" style="font-size: 40px; letter-spacing: -0.5px;">
-        {{ 'Research Topics' }}
-        <v-divider style="width: 80px; background-color:#555555; border-width: 1px !important;" class="my-6"/>
-      </p>
-    </v-card-title>
-    <v-row align="start" justify="space-around" class="mb-6 mx-4">
-      <v-col v-for="(research, index) in researchData" :key="`research-${index}`" cols="12" sm="6" class="pr-12 pb-6">
-        <v-img :src="getImg(research.imgSrc)" :aspect-ratio="16/9" style="min-width: 95%; max-width: 95%;"/>
-        <p class="font-weight-medium title mt-4 mb-2">{{ research.title }}</p>
-        <v-divider style="width: 95%; background-color:rgb(150, 150, 150); border-width: 1px !important;" class="mb-4 mt-1"/>
-        <pre class="pr-4 content-grey-font">{{ research.content }}</pre>
-      </v-col>
-    </v-row>
-  </v-card>
+  <v-row align="start" justify="space-around" class="mb-6 mx-4">
+    <v-col v-for="(research, index) in researchData" :key="`research-${index}`" cols="12" sm="6" class="pr-12 pb-6">
+      <v-img :src="getImg(research.imgSrc)" :aspect-ratio="16/9" style="min-width: 95%; max-width: 95%;"/>
+      <p class="font-weight-medium title mt-4 mb-2">{{ research.title }}</p>
+      <v-divider style="width: 80px; background-color:rgb(150, 150, 150); border-width: 1px !important;" class="mb-4 mt-1"/>
+      <pre class="pr-4 content-grey-font">{{ research.content }}</pre>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -49,12 +41,6 @@ export default {
 </script>
 
 <style scoped>
-  .card-flat {
-    width: 100%;
-    height: fit-content;
-    background-color: transparent;
-  }
-
   .content-grey-font {
     font-size: 16px;
     font-family: "Roboto", sans-serif;

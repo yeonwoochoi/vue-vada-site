@@ -2,7 +2,11 @@
   <v-container fluid>
     <v-row align="center" justify="center">
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
-        <research-card :research-data="researchData"/>
+        <main-card :header="header">
+          <template v-slot:body>
+            <research-card :research-data="researchData"/>
+          </template>
+        </main-card>
       </v-card>
     </v-row>
   </v-container>
@@ -10,10 +14,12 @@
 
 <script>
 import ResearchCard from "@/components/research/ResearchCard";
+import MainCard from "@/components/MainCard";
 export default {
   name: "Research",
-  components: {ResearchCard},
+  components: {MainCard, ResearchCard},
   data: () => ({
+    header: 'Research Topics',
     researchData: [
       {
         imgSrc: '@/assets/research/research_deep_learning.jpg',

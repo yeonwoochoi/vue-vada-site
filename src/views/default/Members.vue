@@ -2,10 +2,26 @@
   <v-container fluid>
     <v-row align="center" justify="center">
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
-        <rank-card1 :rank-data="professorData1"/>
-        <rank-card1 :rank-data="professorData2"/>
-        <rank-card2 :member-data="phdData"/>
-        <rank-card2 :member-data="masterData"/>
+        <main-card :header="professorData1.rank">
+          <template v-slot:body>
+            <rank-card1 :rank-data="professorData1"/>
+          </template>
+        </main-card>
+        <main-card :header="professorData2.rank">
+          <template v-slot:body>
+            <rank-card1 :rank-data="professorData2"/>
+          </template>
+        </main-card>
+        <main-card :header="phdData.rank">
+          <template v-slot:body>
+            <rank-card2 :member-data="phdData"/>
+          </template>
+        </main-card>
+        <main-card :header="masterData.rank">
+          <template v-slot:body>
+            <rank-card2 :member-data="masterData"/>
+          </template>
+        </main-card>
       </v-card>
     </v-row>
   </v-container>
@@ -14,9 +30,10 @@
 <script>
 import RankCard1 from "@/components/members/RankCard1";
 import RankCard2 from "@/components/members/RankCard2";
+import MainCard from "@/components/MainCard";
 export default {
   name: "Members",
-  components: {RankCard1, RankCard2},
+  components: {MainCard, RankCard1, RankCard2},
   data: () => ({
     professorData1: {
       rank: 'Principal Investigator',
