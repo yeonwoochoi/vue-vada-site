@@ -14,13 +14,13 @@ export default {
   name: "ResearchCard",
   props: {
     researchData: {
-      type: Object,
+      type: Array,
       default: () => {
-        return {
+        return [{
           imgSrc: '',
           title: '',
           content: ''
-        }
+        }]
       }
     }
   },
