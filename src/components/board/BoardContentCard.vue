@@ -1,15 +1,219 @@
 <template>
-  <v-row align="start" justify="space-around" class="mb-6 mx-4" style="width: 100%;">
-
+  <v-row align="start" justify="space-around" class="mb-6 px-4" style="width: 100%;">
+    <v-col cols="12">
+      <pre class="title-font title ma-1 font-weight-black">{{ `${tableContent.importance ? `[공지사항]  ${tableContent.title}` : tableContent.title}` }}</pre>
+    </v-col>
+    <v-col cols="12" style="background-color: #F5F5F5;">
+      <div :style="`display: ${isMobile ? 'block' : 'flex'};`">
+        <pre class="caption font-weight-bold mx-6 my-1">작성자 <span class="subtitle-2 content-grey-font pl-3">{{ tableContent.author }}</span></pre>
+        <pre class="caption font-weight-bold mx-6 my-1">작성일 <span class="subtitle-2 content-grey-font pl-3">{{ tableContent.created_at }}</span></pre>
+        <pre class="caption font-weight-bold mx-6 my-1">조회 <span class="subtitle-2 content-grey-font pl-3">{{ tableContent.view_count }}</span></pre>
+      </div>
+    </v-col>
+    <v-col cols="12" class="pa-6">
+      <pre class="subtitle-2 content-grey-font" v-html="tableContent.content"/>
+    </v-col>
+    <v-col cols="12">
+      <v-divider class="mb-3" />
+      <div style="display: flex;" v-if="hasAttach">
+        <div v-for="(attach, index) in tableContent.attach" :key="index">
+          <button
+              type="button"
+              class="download-button mx-2"
+              :onclick="`window.location.href='${attach.url}'`"
+              formtarget="_blank"
+              :title="attach.title"
+          >
+            {{ attach.title }}
+          </button>
+        </div>
+      </div>
+    </v-col>
+    <v-col cols="12" class="py-6" style="background-color: #F5F5F5;">
+      <v-card class="card-flat elevation-0 my-2">
+        <p class="content-grey-font font-weight-bold caption ml-3">
+          전체
+          <span class="ml-2 red--text font-weight-medium caption">{{ commentCount }}</span>
+        </p>
+        <v-divider class="mx-2"/>
+        <v-card-text class="py-0">
+          <div v-if="commentCount > 0">
+            <div v-for="(comment, index) in tableContent.comments" :key="index">
+              <board-comment-card :comment-data="comment"/>
+              <v-divider />
+            </div>
+          </div>
+          <div class="mt-4" v-if="isLogin">
+            <p class="subtitle-2 font-weight-bold">댓글 쓰기</p>
+            <v-textarea
+                v-model="newComment"
+                outlined
+                auto-grow
+            />
+          </div>
+          <div>
+            <v-spacer />
+            <v-btn
+              @click="saveComment"
+              class="font-weight-bold elevation-0"
+              outlined
+            >
+              저장
+            </v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col cols="12" align="end" class="mt-6">
+      <v-btn to="/seminar" x-large class="elevation-0" color="#F6F6F6">
+         목록보기
+      </v-btn>
+    </v-col>
   </v-row>
 </template>
 
 <script>
+import BoardCommentCard from "@/components/board/BoardCommentCard";
 export default {
-  name: "BoardContentCard"
+  name: "BoardContentCard",
+  components: {BoardCommentCard},
+  props: {
+    tableContents: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            no: 1,
+            title: 'Title',
+            content: 'Content',
+            author: 'user01',
+            created_at: '2020-11-11',
+            view_count: 0,
+            comments: [
+              {
+                'author': 'user21',
+                'content': 'Comment',
+                'created_at': '2021-11-01',
+              },
+            ],
+            attach: '',
+            importance: false
+          },
+        ]
+      }
+    }
+  },
+  mounted() {
+    this.checkLogin();
+    this.setTableContent();
+    this.commentCount = this.tableContent.comments.length;
+    this.hasAttach = this.tableContent.attach.length > 0;
+  },
+  data: () => ({
+    tableContent: {},
+    commentCount: 0,
+    hasAttach: false,
+    isLogin: false,
+    newComment: ''
+  }),
+  computed: {
+    isMobile () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return true
+        case 'sm': return true
+        default: return false
+      }
+    },
+  },
+  methods: {
+    setTableContent() {
+      let contents = JSON.parse(JSON.stringify(this.tableContents));
+      let param = parseInt(this.$route.params.content_id);
+      for (let i = 0; i < contents.length; i++) {
+        if (contents[i].no === param){
+          this.tableContent = contents[i];
+        }
+      }
+    },
+    checkLogin () {
+      let params = {
+        "id" : localStorage.id
+      };
+      if (!params.id) {
+        this.isLogin = false;
+        return;
+      }
+      this.$store.dispatch('user/requestRefreshToken', params).then(
+          () => {
+            this.isLogin = true;
+          },
+          () => {
+            this.isLogin = false;
+          }
+      )
+    },
+    saveComment() {
+      if (this.newComment.length > 0) {
+        alert('Save!')
+      } else {
+        alert('Please input comments')
+      }
+      this.newComment = ''
+    }
+  }
 }
 </script>
 
 <style scoped>
 
+.title-font {
+  font-family: "Roboto", sans-serif;
+  color: rgba(1, 1, 1, 0.67);
+  white-space: pre-wrap;
+}
+
+.content-grey-font {
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  color: rgba(1, 1, 1, 0.55);
+  white-space: pre-wrap;
+}
+
+p {
+  display: flex;
+  align-items: center;
+  white-space: pre-wrap;
+}
+
+pre {
+  white-space: pre-wrap;
+}
+
+v-divider {
+  background-color:rgb(150, 150, 150);
+  border-width: 1px !important;
+}
+
+.download-button {
+  margin: 0 0 5px 0;
+  padding: 4px 5px;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 12px;
+  text-align: left;
+  border: 1px solid #ededed;
+  background: white none;
+  border-radius: 2px;
+  letter-spacing: normal;
+  cursor: pointer;
+  vertical-align: middle;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.card-flat {
+  width: 100%;
+  height: fit-content;
+  background-color: transparent;
+}
 </style>

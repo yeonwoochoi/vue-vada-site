@@ -1,7 +1,7 @@
 <template>
-  <v-row align="center" justify="center" class="mb-6 mx-4" style="width: 100%;">
-    <v-col cols="6" align="start" class="py-0 my-0">
-      <p class="subtitle-2">전체 {{ contentLength }}</p>
+  <v-row align="center" justify="center" class="mb-6 pl-6" style="width: 100%;">
+    <v-col cols="6" align="start" class="py-0 pl-4">
+      <p class="subtitle-2 my-0">전체 {{ contentLength }}</p>
     </v-col>
     <v-col cols="6" align="end" class="py-0">
       <v-menu offset-y>
@@ -30,7 +30,7 @@
         </v-list>
       </v-menu>
     </v-col>
-    <v-col cols="12">
+    <v-col cols="12" class="py-0s">
       <v-data-table
           :headers="headers"
           :items="pseudoTableData"
@@ -41,49 +41,67 @@
           :items-per-page="itemsPerPage"
           hide-default-footer
           @page-count="pageCount = $event"
+          :mobile-breakpoint="960"
       >
         <template v-slot:item="{ item }">
-          <tr :style="`background-color: ${item.importance ? 'rgb(230, 230, 230)' : 'transparent'};`">
-            <td :class="`text-center ${isMobile ? 'ellipsis' : ''}`" style="min-width: 80px; max-width: 80px; height: 38px; font-size: 11px;">
+          <tr v-if="!isMobile" :style="`background-color: ${item.importance ? 'rgb(230, 230, 230)' : 'transparent'};`">
+            <td class="text-center content-grey-font table-row" style="min-width: 80px; max-width: 80px;">
               {{ `${item.importance ? '공지사항' : item.no }` }}
             </td>
-            <td class="text-start ellipsis" @click="onClickContent" :style="`cursor: pointer; ${isMobile ? 'max-width: 90px' : 'max-width: 400px' }; height: 38px; font-size: 11px;`">
-              <div class="ellipsis">
+            <td class="text-start ellipsis" @click="onClickContent(item.index)" style="cursor: pointer; max-width: 400px; height: 38px; font-size: 13px;">
+              <div class="ellipsis font-weight-medium">
                 {{ item.title }}
-                <span v-if="item.comments.length > 0" class="blue--text">{{ ` (${item.comments.length})` }}</span>
+                <span v-if="item.comments.length > 0" class="blue--text ml-1">{{ `(${item.comments.length})` }}</span>
               </div>
             </td>
-            <td class="text-center ellipsis" style="min-width: 80px; max-width: 80px; height: 38px; font-size: 11px;">
-              {{ item.author }}
+            <td class="text-center table-row" style="min-width: 80px; max-width: 80px; height: 38px; font-size: 13px;">
+              <p class="my-0 ellipsis content-grey-font" style="white-space: nowrap;">{{ item.author }}</p>
             </td>
-            <td :class="`text-center ${isMobile ? 'ellipsis' : ''}`" style="min-width: 80px; max-width: 80px; height: 38px; font-size: 11px;">
+            <td class="text-center content-grey-font table-row" style="min-width: 80px; max-width: 80px; height: 38px; font-size: 13px;">
               {{ `${item.importance ? getRealTableData(item).created_at : item.created_at}` }}
             </td>
-            <td :class="`text-center ${isMobile ? 'ellipsis' : ''}`" style="min-width: 10px; max-width: 10px; height: 38px; font-size: 11px;">
+            <td class="text-center content-grey-font table-row" style="min-width: 10px; max-width: 10px; height: 38px; font-size: 13px;">
               {{ `${item.importance ? getRealTableData(item).view_count : item.view_count}` }}
             </td>
           </tr>
+          <tr v-else :style="`background-color: ${item.importance ? 'rgb(230, 230, 230)' : 'transparent'};`">
+            <div class="pa-4" @click="onClickContent(item.index)" style="cursor:pointer;">
+              <p class="font-weight-bold subtitle-1" style="width: 100%">
+                {{ item.title }}
+                <span v-if="item.comments.length > 0" class="blue--text pl-1">{{ `(${item.comments.length})` }}</span>
+              </p>
+              <div style="display: flex; height: fit-content; overflow-x: hidden; text-overflow: ellipsis" class="content-grey-font caption">
+                <p class="my-0 mr-2 ellipsis" style="white-space: nowrap; max-width: 130px;">{{ item.author }}</p>
+                <p class="my-0 mr-2"><v-divider vertical/></p>
+                <p class="my-0 mr-2" style="white-space: nowrap">{{ `${item.importance ? getRealTableData(item).created_at : item.created_at}` }}</p>
+                <p class="my-0 mr-2"><v-divider vertical/></p>
+                <p class="my-0 mr-2" style="white-space: nowrap">{{ `조회 ${item.importance ? getRealTableData(item).view_count : item.view_count}` }}</p>
+              </div>
+            </div>
+            <v-divider/>
+          </tr>
+        </template>
+        <template v-slot:footer>
+          <div style="display: flex; align-items: center; justify-content: space-between" class="pt-6">
+            <v-spacer/>
+            <v-pagination
+                v-model="currentPage"
+                :length="pageCount"
+                total-visible="10"
+                prev-icon="mdi-menu-left"
+                next-icon="mdi-menu-right"
+            />
+            <v-spacer/>
+            <v-btn
+                color="rgb(40, 40, 40)"
+                dark
+                v-if="isLogin"
+            >
+              글쓰기
+            </v-btn>
+          </div>
         </template>
       </v-data-table>
-    </v-col>
-    <v-col cols="2"/>
-    <v-col cols="7" sm="8" class="py-0">
-      <v-pagination
-          v-model="currentPage"
-          :length="pageCount"
-          total-visible="10"
-          prev-icon="mdi-menu-left"
-          next-icon="mdi-menu-right"
-      />
-    </v-col>
-    <v-col cols="2" align="end">
-      <v-btn
-          color="rgb(40, 40, 40)"
-          dark
-          v-if="isLogin"
-      >
-        글쓰기
-      </v-btn>
     </v-col>
     <v-col cols="12" sm="10" md="8" xl="6" class="mt-4 mb-12">
       <div style="display: flex; justify-content: center; height: 30px;">
@@ -250,7 +268,7 @@ export default {
     contentLength: 0
   }),
   mounted() {
-    this.tableData = this.tableContents;
+    this.tableData = JSON.parse(JSON.stringify(this.tableContents));
     this.setIndex();
     this.checkLogin();
     this.setSortableItems();
@@ -315,8 +333,9 @@ export default {
       this.tableData.sort((a,b) => b.importance - a.importance)
     },
 
-    onClickContent(){
-      this.$router.push('/')
+    onClickContent(index){
+      let content_id = this.tableData.find(v => v.index === index).no
+      this.$router.push(`/seminar/content/${content_id}`)
     },
 
     setSortableItems () {
@@ -392,5 +411,17 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.content-grey-font {
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  color: rgba(1, 1, 1, 0.55);
+  white-space: pre-wrap;
+}
+
+.table-row {
+  height: 38px; 
+  font-size: 13px;
 }
 </style>

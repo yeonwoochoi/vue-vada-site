@@ -4,7 +4,7 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-card :table-contents="tableData" />
+            <board-content-card :table-contents="tableData" />
           </template>
         </main-card>
       </v-card>
@@ -14,15 +14,15 @@
 
 <script>
 import MainCard from "@/components/MainCard";
-import BoardCard from "@/components/board/BoardCard";
+import BoardContentCard from "@/components/board/BoardContentCard";
 export default {
-  name: "Seminar",
-  components: {BoardCard, MainCard},
+  name: "SeminarContent",
+  components: { MainCard, BoardContentCard },
   data: () => ({
     tableData: [
       {
         no: 1,
-        title: '[Paper Review] Attacking Adversarial Attack as A Defense',
+        title: '[Paper Review]Attacking Adversarial Attack as A Defense',
         content: '1. Topic\n' +
             'Adversarial Training 기법과 더불어 Denoising 기반의 Adversarial Defense 방법론을 제안함\n' +
             '\n' +
@@ -183,9 +183,6 @@ export default {
     ],
     header: 'Seminar',
   }),
-  methods: {
-
-  }
 }
 </script>
 

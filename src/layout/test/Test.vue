@@ -4,9 +4,7 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <publication-card :publication-data="publicationData1"/>
-            <publication-card :publication-data="publicationData2"/>
-            <publication-card :publication-data="publicationData3"/>
+            <board-card :table-data="tableData"/>
           </template>
         </main-card>
       </v-card>
@@ -16,553 +14,169 @@
 
 <script>
 
-import PublicationCard from "@/components/publications/PublicationCard";
 import MainCard from "@/components/MainCard";
+import BoardCard from "@/components/board/BoardCard";
 export default {
   name: "Test",
-  components: {MainCard, PublicationCard},
+  components: {BoardCard, MainCard},
   data: () => ({
     header: 'Publication',
-    publicationData1: {
-      year: '2021',
-      data: [
-        {
-          header: 'arXiv',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification. FICGAN: Facial Identity Controllable GAN for De-identification FICGAN: Facial Identity Controllable GAN for De-identification FICGAN: Facial Identity Controllable GAN for De-identification FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        },
-        {
-          header: 'Conference',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        },
-        {
-          header: 'Journal',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        }
-      ]
-    },
-    publicationData2: {
-      year: '2020',
-      data: [
-        {
-          header: 'arXiv',
-          content: [
-            {
-              title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-              content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-              link: 'https://arxiv.org/abs/2106.07273'
-            },
-            {
-              title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-              content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-              link: 'https://arxiv.org/abs/2110.00740'
-            },
-          ]
-        },
-        {
-          header: 'Conference',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        },
-        {
-          header: 'Journal',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification. FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        }
-      ]
-    },
-    publicationData3: {
-      year: '2019',
-      data: [
-        {
-          header: 'arXiv',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        },
-        {
-          header: 'Conference',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        },
-        {
-          header: 'Journal',
-          content: [
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-              {
-                title: 'FICGAN: Facial Identity Controllable GAN for De-identification',
-                content: 'Yonghyun Jeong, Jooyoung Choi, Sungwon Kim, Youngmin Ro, Tae-Hyun Oh, Doyeon Kim, Heonseok Ha, Sungroh Yoon, arXiv:2110.00740 [cs.CV], October 2021.',
-                link: 'https://arxiv.org/abs/2110.00740'
-              },
-              {
-                title: 'Geometry-aware Transformer for molecular property prediction',
-                content: 'Bumju Kwak, Jeonghee Jo, Byunghan Lee, Sungroh Yoon, arXiv:2106.15516 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.15516'
-              },
-              {
-                title: 'Flexible dual-branched message passing neural network for quantum mechanical property prediction with molecular conformation',
-                content: 'Jeonghee Jo, Bumju Kwak, Byunghan Lee, Sungroh Yoon, arXiv:2106.07273 [cs.LG], June 2021.',
-                link: 'https://arxiv.org/abs/2106.07273'
-              },
-          ]
-        }
-      ]
-    },
+    tableData: [
+      {
+        no: 1,
+        index: 0,
+        title: 'Welcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univ',
+        content: 'To check',
+        author: 'user01',
+        created_at: '2020-11-11',
+        view_count: 5,
+        comments: [
+          {
+            'author': 'user21',
+            'content': 'Comment! Comment! Comment! Comment! Comment! ',
+            'created_at': '2021-11-01',
+          },
+          {
+            'author': 'user21',
+            'content': 'Comment! Comment! Comment! Comment! Comment! ',
+            'created_at': '2021-11-01',
+          },
+        ],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 2,
+        index: 1,
+        title: 'Welcome to kunsan univ',
+        content: 'Content~~~ Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah',
+        author: 'user02',
+        created_at: '2021-10-31',
+        view_count: 4,
+        comments: [
+          {
+            'author': 'user21',
+            'content': 'Comment! Comment! Comment! Comment! Comment! ',
+            'created_at': '2021-11-01',
+          },
+          {
+            'author': 'user21',
+            'content': 'Comment! Comment! Comment! Comment! Comment! ',
+            'created_at': '2021-11-01',
+          },
+        ],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 3,
+        index: 2,
+        title: 'Welcome to kunsan univ',
+        content: 'Content~~~ Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah',
+        author: 'David Robert Joseph Beckham',
+        created_at: '2020-11-11',
+        view_count: 7,
+        comments: [],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 4,
+        index: 3,
+        title: 'Welcome to kunWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univsan univ',
+        content: 'Content~~~ Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah',
+        author: 'user04',
+        created_at: '2021-10-31',
+        view_count: 0,
+        comments: [],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 5,
+        index: 4,
+        title: 'Welcome to kunsan unWelcome to kunsan univWelcome to kunsan univWelcome to kunsan univiv',
+        content: 'Content~~~ Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah',
+        author: 'user05',
+        created_at: '2020-04-11',
+        view_count: 10,
+        comments: [],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 6,
+        index: 5,
+        title: 'Welcome to korea univ',
+        content: 'to check6',
+        author: 'user01',
+        created_at: '2021-10-31',
+        view_count: 0,
+        comments: [],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 7,
+        index: 6,
+        title: 'Welcome to kunsan univ',
+        content: 'to check7',
+        author: 'user01',
+        created_at: '2021-10-31',
+        view_count: 0,
+        comments: [],
+        attach: '',
+        importance: true
+      },
+      {
+        no: 8,
+        index: 7,
+        title: 'Welcome to kunsan univ',
+        content: 'to check8',
+        author: 'user01',
+        created_at: '2021-10-31',
+        view_count: 0,
+        comments: [],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 9,
+        index: 8,
+        title: 'Welcome to kunsan univ',
+        content: 'to check9',
+        author: 'user01',
+        created_at: '2021-10-31',
+        view_count: 0,
+        comments: [],
+        attach: '',
+        importance: false
+      },
+      {
+        no: 10,
+        index: 9,
+        title: 'Welcome to kunsan univ',
+        content: 'to check10',
+        author: 'user01',
+        created_at: '2021-10-31',
+        view_count: 0,
+        comments: [],
+        attach: '',
+        importance: true
+      },
+      {
+        no: 11,
+        index: 10,
+        title: 'Welcome to kunsan univ',
+        content: 'to check11',
+        author: 'user01',
+        created_at: '2021-10-31',
+        view_count: 0,
+        comments: [],
+        attach: '',
+        importance: false
+      },
+    ],
   }),
   methods: {
     getImg(imgSrc) {

@@ -61,6 +61,13 @@ const routes = [
             )
       },
       {
+        path: '/seminar/content/:content_id',
+        name: 'Seminar',
+        component: () => import(
+            '@/views/default/SeminarContent'
+            )
+      },
+      {
         path: '/contact',
         name: 'Contact',
         component: () => import(

@@ -54,15 +54,6 @@ export default {
 
 <style scoped>
 
-.content-grey-font {
-  font-size: 16px;
-  font-family: "Roboto", sans-serif;
-  font-weight: normal;
-  color: rgba(1, 1, 1, 0.55);
-  line-height: 22px;
-  letter-spacing: 0mm;
-  white-space: pre-wrap;
-}
 
 pre {
   white-space: pre-wrap;

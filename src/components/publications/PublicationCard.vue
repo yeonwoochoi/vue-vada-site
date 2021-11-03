@@ -1,5 +1,5 @@
 <template>
-  <v-row align="start" justify="space-around" class="mb-6 mx-4" style="width: 100%;">
+  <v-row align="start" justify="space-around" class="mb-6 px-4" style="width: 100%;">
     <v-col cols="12" lg="1" class="my-2">
       <div style="min-width: 200px;">
         <p class="font-weight-regular display-1 my-0">{{ publicationData.year }}</p>
