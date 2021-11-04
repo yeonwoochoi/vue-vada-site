@@ -4,7 +4,7 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-card :table-data="tableData"/>
+            <board-input-card/>
           </template>
         </main-card>
       </v-card>
@@ -15,12 +15,12 @@
 <script>
 
 import MainCard from "@/components/MainCard";
-import BoardCard from "@/components/board/BoardCard";
+import BoardInputCard from "@/components/board/BoardInputCard";
 export default {
   name: "Test",
-  components: {BoardCard, MainCard},
+  components: {BoardInputCard, MainCard},
   data: () => ({
-    header: 'Publication',
+    header: 'Seminar',
     tableData: [
       {
         no: 1,

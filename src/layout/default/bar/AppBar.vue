@@ -22,7 +22,7 @@
             <CompanyLogoBtn v-else :logo-src="companyDefaultLogo" :logo-height="70" :is-white="false" class="mr-3"/>
             <div :class="!isActive ? 'white--text' : 'black--text'" class="display-1 font-weight-bold pa-0 ma-0" style="height: 100%">
               AI-LAB
-              <p :class="`${logoFontSize} font-weight-bold pa-0 ma-0`">
+              <p :class="`${logoFontSize} font-weight-bold pa-0 ma-0`" style="width: 140px">
                 Artificial Intelligence Laboratory
               </p>
             </div>
@@ -254,5 +254,10 @@ export default {
     border-bottom-style: solid;
     border-bottom-color: white;
     border-bottom-width: thin;
+  }
+
+  .ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

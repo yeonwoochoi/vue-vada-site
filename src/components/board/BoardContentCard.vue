@@ -14,7 +14,7 @@
       <pre class="subtitle-2 content-grey-font" v-html="tableContent.content"/>
     </v-col>
     <v-col cols="12">
-      <v-divider class="mb-3" />
+      <v-divider class="mb-3" v-if="hasAttach" />
       <div style="display: flex;" v-if="hasAttach">
         <div v-for="(attach, index) in tableContent.attach" :key="index">
           <button
@@ -65,8 +65,8 @@
       </v-card>
     </v-col>
     <v-col cols="12" align="end" class="mt-6">
-      <v-btn to="/seminar" x-large class="elevation-0" color="#F6F6F6">
-         목록보기
+      <v-btn to="/seminar" large class="elevation-0" style="color: #CCCCCC; border: 1px solid grey" outlined>
+         <p class="my-0 font-weight-bold grey--text text--darken-4">목록보기</p>
       </v-btn>
     </v-col>
   </v-row>
@@ -175,7 +175,7 @@ export default {
 .content-grey-font {
   font-family: "Roboto", sans-serif;
   font-weight: normal;
-  color: rgba(1, 1, 1, 0.55);
+  color: rgba(1, 1, 1, 0.75);
   white-space: pre-wrap;
 }
 
