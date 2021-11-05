@@ -8,14 +8,14 @@
       />
       <vue-editor v-model="content" :editorToolbar="customToolbar"></vue-editor>
       <form @submit.prevent="save" method="post" class="my-6" enctype="multipart/form-data">
-        <input type="file" ref="selectFile" @change="previewFile" multiple="multiple">
+        <input type="file" ref="selectFile" multiple="multiple">
         <v-row v-if="uploadFiles.length > 0" align="center" justify="start">
-          <v-col cols="6" md="3" v-for="(selectFile, index) in uploadFiles" :key="index" class="px-4">
-            <p style="display: flex;justify-content: space-between;" class="mb-1 mt-4">
-              {{ selectFile.file.name }}
-              <v-btn @click="removeFile" class="elevation-0 red--text no-background-hover mr-2" :ripple="false" small style="width: fit-content">X</v-btn>
-            </p>
-            <img v-if="selectFile.previewImgUrl" :src="selectFile.previewImgUrl" style="max-width: 90%; max-height: 90%"/>
+          <v-col cols="12" sm="6" md="3" v-for="(selectFile, index) in uploadFiles" :key="index" class="px-4">
+            <span style="display: flex;justify-content: space-between; " class="mb-1 mt-4">
+              <p class="ellipsis">{{ selectFile.file.name }}</p>
+              <v-btn @click="removeFile(selectFile.file)" class="elevation-0 red--text no-background-hover mr-2" :ripple="false" small style="width: fit-content">X</v-btn>
+            </span>
+            <img v-if="selectFile.previewImgUrl" :src="selectFile.previewImgUrl" style="width: 205px; height: 128px;"/>
           </v-col>
         </v-row>
       </form>
@@ -48,14 +48,13 @@ export default {
       ["link", "image", "video"],
       ["clean"]
     ],
+    existingFiles: null,
     uploadFiles: [],
     isUploading: false,
     response: null
   }),
   mounted() {
-    let input = document.querySelector('input');
-    input.style.opacity = 0;
-
+    this.$refs.selectFile.addEventListener('change', this.handleFileSelect, false)
   },
   methods: {
     async save() {
@@ -78,15 +77,12 @@ export default {
       }
     },
     previewFile() {
-      console.log("called")
       let isError = false;
       if (this.$refs.selectFile.files.length > 0) {
         let length = this.$refs.selectFile.files.length;
         if (this.uploadFiles.length !== length) {
           this.uploadFiles = []
           for (let i = 0; i < length; i++) {
-            console.log(`selectFile ${i} : ${this.$refs.selectFile.files[i]}`)
-
             this.uploadFiles.push({
               file: null,
               previewImgUrl: null
@@ -103,11 +99,12 @@ export default {
           );
           fileExt = fileExt.toLowerCase();
 
+          // 20MB
           let limitSize = 1048576 * 20;
 
           // 이미지 파일
           if (
-              ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
+              ["jpeg", "jpg", "png", "gif", "bmp"].includes(fileExt) &&
               selectFile.size <= limitSize
           ) {
             let reader = new FileReader();
@@ -118,7 +115,7 @@ export default {
           }
           // 이미지 외 파일
           else if (selectFile.size <= limitSize) {
-            this.uploadFiles[i].previewImgUrl = null;
+            this.uploadFiles[i].previewImgUrl = require('@/assets/no_thumbnail.png');
           }
           else {
             isError = true;
@@ -132,10 +129,48 @@ export default {
         alert("파일을 다시 선택해 주세요.")
       }
     },
-    removeFile(targetIndex) {
+    removeFile(target) {
       if (this.uploadFiles.length > 0) {
+        let targetIndex = this.uploadFiles.findIndex(i => i.file === target)
         this.uploadFiles.splice(targetIndex, 1);
+        const dataTransfer = new DataTransfer();
+        const files = this.$refs.selectFile.files;
+        Array.from(files)
+            .filter(file => file !== target)
+            .forEach(file => {
+              dataTransfer.items.add(file);
+            });
+        console.log(files)
+        this.$refs.selectFile.files = dataTransfer.files;
+        this.existingFiles = this.$refs.selectFile.files;
       }
+    },
+
+    handleFileSelect(e) {
+      if (!e.target.files) return;
+      e.preventDefault();
+
+      let files = this.$refs.selectFile.files;
+      let existingFiles = this.existingFiles;
+
+
+      const dataTransfer = new DataTransfer();
+      if (existingFiles) {
+        Array.from(existingFiles)
+            .forEach(existingFile => {
+              dataTransfer.items.add(existingFile);
+            });
+      }
+
+      Array.from(files)
+          .forEach(file => {
+            dataTransfer.items.add(file);
+          });
+
+      this.$refs.selectFile.files = dataTransfer.files;
+      this.existingFiles = this.$refs.selectFile.files;
+
+      this.previewFile()
     }
   }
 }
@@ -144,5 +179,10 @@ export default {
 <style scoped>
 .no-background-hover::before {
   background-color: transparent !important;
+}
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
