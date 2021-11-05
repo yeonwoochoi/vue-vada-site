@@ -68,6 +68,13 @@ const routes = [
             )
       },
       {
+        path: '/seminar/input',
+        name: 'Seminar',
+        component: () => import(
+            '@/views/default/SeminarInput'
+            )
+      },
+      {
         path: '/contact',
         name: 'Contact',
         component: () => import(

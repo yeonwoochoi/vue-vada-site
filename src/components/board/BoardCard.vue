@@ -96,6 +96,7 @@
                 color="rgb(40, 40, 40)"
                 dark
                 v-if="isLogin"
+                @click="goToBoardInput"
             >
               글쓰기
             </v-btn>
@@ -401,6 +402,10 @@ export default {
             this.isLogin = false;
           }
       )
+    },
+
+    goToBoardInput() {
+      this.$router.push('/seminar/input')
     }
   },
 }

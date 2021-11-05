@@ -6,8 +6,8 @@
           outlined
           dense
       />
-      <vue-editor v-model="content" :editorToolbar="customToolbar"></vue-editor>
-      <form @submit.prevent="save" method="post" class="my-6" enctype="multipart/form-data">
+      <vue-editor v-model="content" :editorToolbar="customToolbar" />
+      <form @submit.prevent="save" method="post" class="my-8" enctype="multipart/form-data">
         <input type="file" ref="selectFile" multiple="multiple">
         <v-row v-if="uploadFiles.length > 0" align="center" justify="start">
           <v-col cols="12" sm="6" md="3" v-for="(selectFile, index) in uploadFiles" :key="index" class="px-4">
@@ -19,7 +19,10 @@
           </v-col>
         </v-row>
       </form>
-      <v-btn :disabled="isUploading" @click="save">저장</v-btn>
+      <div style="display: flex; width: 100%; justify-content: end">
+        <v-btn large :disabled="isUploading" @click="save" class="mr-4 font-weight-bold elevation-0 button-border-grey" outlined>저장</v-btn>
+        <v-btn large :disabled="isUploading" @click="cancel" class="font-weight-bold elevation-0 button-border-grey" outlined>취소</v-btn>
+      </div>
     </v-card>
   </v-row>
 </template>
@@ -32,6 +35,9 @@ export default {
   data: () => ({
     title: '',
     content: '',
+    existingFiles: null,
+    uploadFiles: [],
+    isUploading: false,
     customToolbar: [
       [{ header: [false, 1, 2, 3, 4, 5, 6] }],
       ["bold", "italic", "underline", "strike"],
@@ -48,10 +54,6 @@ export default {
       ["link", "image", "video"],
       ["clean"]
     ],
-    existingFiles: null,
-    uploadFiles: [],
-    isUploading: false,
-    response: null
   }),
   mounted() {
     this.$refs.selectFile.addEventListener('change', this.handleFileSelect, false)
@@ -75,6 +77,17 @@ export default {
 
         //TODO (업로드 to 서버)
       }
+    },
+    reset () {
+      this.title = '';
+      this.content = '';
+      this.existingFiles = null;
+      this.uploadFiles = [];
+      this.isUploading = false;
+    },
+    cancel () {
+      this.reset();
+      this.$router.push('/seminar')
     },
     previewFile() {
       let isError = false;
@@ -140,7 +153,6 @@ export default {
             .forEach(file => {
               dataTransfer.items.add(file);
             });
-        console.log(files)
         this.$refs.selectFile.files = dataTransfer.files;
         this.existingFiles = this.$refs.selectFile.files;
       }
@@ -184,5 +196,9 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.button-border-grey {
+  border: rgb(200, 200, 200) 0.01em solid;
 }
 </style>
