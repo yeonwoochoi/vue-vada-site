@@ -7,7 +7,7 @@
           dense
       />
       <vue-editor v-model="content" :editorToolbar="customToolbar" />
-      <form @submit.prevent="save" method="post" class="my-8" enctype="multipart/form-data">
+      <form @submit.prevent="save" method="post" class="mt-8 mb-6" enctype="multipart/form-data">
         <input type="file" ref="selectFile" multiple="multiple">
         <v-row v-if="uploadFiles.length > 0" align="center" justify="start">
           <v-col cols="12" sm="6" md="3" v-for="(selectFile, index) in uploadFiles" :key="index" class="px-4">

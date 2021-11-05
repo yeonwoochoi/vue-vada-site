@@ -139,11 +139,12 @@
         >
         </v-text-field>
         <v-btn
-            color="rgb(238, 238, 238)"
-            class="elevation-0 ml-3"
+            class="elevation-0 ml-3 button-border-grey"
+            style="background-color: #F5F5F5"
+            outlined
             @click="onClickSearchBtn"
         >
-          {{'검색'}}
+          검색
         </v-btn>
       </div>
     </v-col>
@@ -428,5 +429,9 @@ export default {
 .table-row {
   height: 38px; 
   font-size: 13px;
+}
+
+.button-border-grey {
+  border: rgb(150, 150, 150) 0.01em solid;
 }
 </style>

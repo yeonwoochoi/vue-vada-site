@@ -55,7 +55,7 @@
             <v-spacer />
             <v-btn
               @click="saveComment"
-              class="font-weight-bold elevation-0"
+              class="font-weight-bold elevation-0 button-border-grey"
               outlined
             >
               저장
@@ -65,7 +65,7 @@
       </v-card>
     </v-col>
     <v-col cols="12" align="end" class="mt-6">
-      <v-btn to="/seminar" large class="elevation-0" style="color: #CCCCCC; border: 1px solid grey" outlined>
+      <v-btn to="/seminar" large class="elevation-0 button-border-grey" style="color: #CCCCCC;" outlined>
          <p class="my-0 font-weight-bold grey--text text--darken-4">목록보기</p>
       </v-btn>
     </v-col>
@@ -215,5 +215,9 @@ v-divider {
   width: 100%;
   height: fit-content;
   background-color: transparent;
+}
+
+.button-border-grey {
+  border: rgb(150, 150, 150) 0.01em solid;
 }
 </style>
