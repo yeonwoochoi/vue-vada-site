@@ -96,7 +96,7 @@ export default {
                 'created_at': '2021-11-01',
               },
             ],
-            attach: [],
+            attach: '',
             importance: false
           },
         ]

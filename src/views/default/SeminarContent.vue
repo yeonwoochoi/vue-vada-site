@@ -49,10 +49,8 @@ export default {
         ],
         attach: [
           {
-            title: 'Interactive Features of\n' +
-                'Proteins Composing\n' +
-                'Eukaryotic Circadian Clocks',
-            url: 'http://127.0.0.1:3000/uploads/files-1636358747767.pdf'
+            title: 'DSBA_1018_세미나_Prompt-Based-Learning.pdf',
+            url: 'http://dsba.korea.ac.kr/?action=kboard_file_download&uid=1830&file=file1&kboard-file-download-nonce=61a727ab63'
           },
           {
             title: '2021_10_21_세미나_박경찬_업로드.pdf',

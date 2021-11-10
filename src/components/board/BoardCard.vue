@@ -157,6 +157,7 @@ export default {
   props: {
     tableContents: {
       type: Array,
+
       default: () => {
         return [
           {
@@ -173,12 +174,7 @@ export default {
                 'created_at': '2021-11-01',
               },
             ],
-            attach: [
-              {
-                title: 'DSBA_1018_세미나_Prompt-Based-Learning.pdf',
-                url: 'http://dsba.korea.ac.kr/?action=kboard_file_download&uid=1830&file=file1&kboard-file-download-nonce=61a727ab63'
-              },
-            ],
+            attach: '',
             importance: false
           },
         ]
