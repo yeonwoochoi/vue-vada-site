@@ -29,12 +29,14 @@
 
 <script>
 import { VueEditor } from "vue2-editor";
+import _ from "lodash";
 export default {
   name: "BoardInputCard",
   components: {VueEditor},
   data: () => ({
     title: '',
     content: '',
+    importance: false,
     existingFiles: null,
     uploadFiles: [],
     isUploading: false,
@@ -67,15 +69,31 @@ export default {
         alert('내용을 입력해주세요')
       }
       else {
-        let form = new FormData();
-        form.append("id", localStorage.id)
-        form.append("title", this.title)
-        form.append("content", this.content)
-        form.append("attach", this.uploadFiles)
+        const form = new FormData();
+
+        _.forEach(this.$refs.selectFile.files, file => {
+          form.append('files', file)
+        })
+        form.append('tags', JSON.stringify({
+          "user_id": localStorage.id,
+          "title": this.title,
+          "content": this.content,
+          "importance": this.importance,
+        }))
 
         this.isUploading = true;
 
-        //TODO (업로드 to 서버)
+        this.$store.dispatch('board/registerSeminarContent', form).then(
+            (res) => {
+              // 모두 다시 다 불러와서 vuex state 의 seminarContents 업데이트하기 (dispatch)
+              this.$router.push('/seminar')
+              console.log(res)
+            },
+            (msg) => {
+              alert(msg);
+              //this.$router.push('/seminar')
+            },
+        )
       }
     },
     reset () {
