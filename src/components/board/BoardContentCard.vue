@@ -15,16 +15,16 @@
     </v-col>
     <v-col cols="12">
       <v-divider class="mb-3" v-if="hasAttach" />
-      <div style="display: flex;" v-if="hasAttach">
-        <div v-for="(attach, index) in tableContent.attach" :key="index">
+      <div style="display: flex; flex-flow: row wrap;" v-if="hasAttach">
+        <div v-for="(attach, index) in tableContent.attach" :key="index" style="height: fit-content;">
           <button
               type="button"
               class="download-button mx-2"
-              :onclick="`window.location.href='${attach.url}'`"
+              :onclick="`window.open('http://${attach.link}', '_blank')`"
               formtarget="_blank"
-              :title="attach.title"
+              :title="attach.name"
           >
-            {{ attach.title }}
+            <pre class="ellipsis content-grey-font" style="max-width: 200px;">{{ attach.name }}</pre>
           </button>
         </div>
       </div>
@@ -78,39 +78,36 @@ export default {
   name: "BoardContentCard",
   components: {BoardCommentCard},
   props: {
-    tableContents: {
-      type: Array,
+    tableContent: {
+      type: Object,
       default: () => {
-        return [
-          {
-            no: 1,
-            title: 'Title',
-            content: 'Content',
-            author: 'user01',
-            created_at: '2020-11-11',
-            view_count: 0,
-            comments: [
-              {
-                'author': 'user21',
-                'content': 'Comment',
-                'created_at': '2021-11-01',
-              },
-            ],
-            attach: '',
-            importance: false
-          },
-        ]
+        return {
+          no: 1,
+          title: 'Title',
+          content: 'Content',
+          author: 'user01',
+          created_at: '2020-11-11',
+          view_count: 0,
+          comments: [
+            {
+              'author': 'user21',
+              'content': 'Comment',
+              'created_at': '2021-11-01',
+            },
+          ],
+          attach: '',
+          importance: false
+        }
       }
     }
   },
   mounted() {
     this.checkLogin();
-    this.setTableContent();
+    //this.setTableContent();
     this.commentCount = this.tableContent.comments.length;
     this.hasAttach = this.tableContent.attach.length > 0;
   },
   data: () => ({
-    tableContent: {},
     commentCount: 0,
     hasAttach: false,
     isLogin: false,
@@ -126,6 +123,7 @@ export default {
     },
   },
   methods: {
+    /*
     setTableContent() {
       let contents = JSON.parse(JSON.stringify(this.tableContents));
       let param = parseInt(this.$route.params.content_id);
@@ -135,6 +133,7 @@ export default {
         }
       }
     },
+     */
     checkLogin () {
       let params = {
         "id" : localStorage.id
@@ -165,6 +164,11 @@ export default {
 </script>
 
 <style scoped>
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .title-font {
   font-family: "Roboto", sans-serif;
@@ -176,7 +180,6 @@ export default {
   font-family: "Roboto", sans-serif;
   font-weight: normal;
   color: rgba(1, 1, 1, 0.75);
-  white-space: pre-wrap;
 }
 
 p {

@@ -4,7 +4,7 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-content-card :table-contents="tableData" />
+            <board-content-card v-if="isDataFetched" :table-content="tableData" />
           </template>
         </main-card>
       </v-card>
@@ -15,10 +15,36 @@
 <script>
 import MainCard from "@/components/MainCard";
 import BoardContentCard from "@/components/board/BoardContentCard";
+import { mapGetters } from "vuex"
+
 export default {
   name: "SeminarContent",
   components: { MainCard, BoardContentCard },
+  mounted() {
+    this.$store.dispatch("board/readSeminarContent", this.$route.params.content_id).then(
+      (result) => {
+        this.tableData = result.data.data
+        this.isDataFetched = true;
+      },
+      (err) => {
+        alert(err)
+      }
+    )
+
+    this.$store.dispatch("board/addViewCount", this.$route.params.content_id).then(
+      (result) => {
+        console.log(result)
+      },
+      (err) => {
+        alert(err)
+      }
+    )
+
+  },
   data: () => ({
+    isDataFetched: false,
+    tableData: {},
+    /*
     tableData: [
       {
         no: 1,
@@ -181,8 +207,14 @@ export default {
         importance: false
       },
     ],
+     */
     header: 'Seminar',
   }),
+  computed: {
+    ...mapGetters('board', {
+      'getCurrentSeminarContent': "getCurrentSeminarContent"
+    })
+  }
 }
 </script>
 

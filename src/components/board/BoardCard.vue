@@ -157,7 +157,6 @@ export default {
   props: {
     tableContents: {
       type: Array,
-
       default: () => {
         return [
           {
@@ -336,7 +335,7 @@ export default {
     },
 
     onClickContent(index){
-      let content_id = this.tableData.find(v => v.index === index).no
+      let content_id = this.tableData.find(v => v.index === index).idx
       this.$router.push(`/seminar/content/${content_id}`)
     },
 

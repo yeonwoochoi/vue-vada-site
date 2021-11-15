@@ -4,7 +4,7 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-card :table-contents="tableData" />
+            <board-card v-if="isDataFetched" :table-contents="tableData" />
           </template>
         </main-card>
       </v-card>
@@ -18,7 +18,21 @@ import BoardCard from "@/components/board/BoardCard";
 export default {
   name: "Seminar",
   components: {BoardCard, MainCard},
+  created() {
+    this.$store.dispatch('board/readAllSeminarContents').then(
+        (contents) => {
+          this.tableData = contents.data.data
+          this.isDataFetched = true;
+        },
+        (err) => {
+          alert(err)
+        }
+    )
+  },
   data: () => ({
+    isDataFetched: false,
+    tableData: [],
+    /*
     tableData: [
       {
         no: 1,
@@ -181,6 +195,7 @@ export default {
         importance: false
       },
     ],
+     */
     header: 'Seminar',
   }),
   methods: {
