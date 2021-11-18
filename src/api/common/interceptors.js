@@ -3,6 +3,28 @@ import axios from "axios";
 
 const baseUrl = 'http://127.0.0.1:3000';
 
+export function setInterceptorsWithFiles(instance) {
+    instance.interceptors.request.use(
+        async config => {
+            if (config.url && config.url.charAt(0) === '/') {
+                config.url = baseUrl + config.url;
+            }
+            //헤더 셋팅
+            // config.timeout = 10000;
+            config.headers["x-access-token"] = VueCookies.get("accessToken");
+            config.headers["Content-Type"] = "multipart/form-data";
+
+            return config;
+        },
+        error => {
+            console.log(`axios request error : ${error}`);
+            return Promise.reject(error);
+        }
+    )
+
+    return instance;
+}
+
 export function setInterceptors(instance) {
     instance.interceptors.request.use(
         async config => {

@@ -153,11 +153,25 @@ export default {
     },
     saveComment() {
       if (this.newComment.length > 0) {
-        alert('Save!')
+        const params = {
+          'id': localStorage.id,
+          'idx': this.tableContent.idx,
+          'comment': this.newComment
+        }
+        this.$store.dispatch("board/addComment", params).then(
+            () => {
+              this.newComment = ''
+              this.$router.go(0);
+            },
+            (err) => {
+              this.newComment = ''
+              alert(err)
+            }
+        )
       } else {
         alert('Please input comments')
+        this.newComment = ''
       }
-      this.newComment = ''
     }
   }
 }

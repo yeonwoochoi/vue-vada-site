@@ -11,19 +11,20 @@ const state = {
 }
 
 const getters = {
+    isAdmin: (state) => {
+        return state.role === 'admin'
+    }
 }
 
 const mutations = {
     setLoginToken (state, payload) {
         VueCookies.set('accessToken', payload.data.accessToken, '60s');
-
         localStorage.id = payload.data.id;
         state.role = payload.data.role;
         state.accessToken = payload.data.accessToken;
     },
     removeToken (state) {
         VueCookies.remove('accessToken');
-
         localStorage.id = null;
         state.role = null;
         state.accessToken = null;

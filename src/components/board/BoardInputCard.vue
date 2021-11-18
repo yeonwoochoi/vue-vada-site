@@ -1,14 +1,25 @@
 <template>
   <v-row align="start" justify="space-around" class="mb-6 px-4" style="width: 100%;">
     <v-card class="elevation-0 px-12 py-12" style="background-color: #F5F5F5; width: 100%">
-      <v-text-field
-          v-model="title"
-          outlined
-          dense
-      />
+      <v-card-title class="px-0 pt-0 pb-8" style="">
+        <v-text-field
+            v-model="title"
+            hide-details
+            outlined
+            dense
+        />
+        <v-checkbox
+            class="pl-4"
+            v-model="isNotice"
+            v-if="isAdmin"
+            label="공지사항"
+        >
+          isAdmin
+        </v-checkbox>
+      </v-card-title>
       <vue-editor v-model="content" :editorToolbar="customToolbar" />
       <form @submit.prevent="save" method="post" class="mt-8 mb-6" enctype="multipart/form-data">
-        <input type="file" ref="selectFile" multiple="multiple">
+        <input type="file" name="files" ref="selectFile" multiple="multiple">
         <v-row v-if="uploadFiles.length > 0" align="center" justify="start">
           <v-col cols="12" sm="6" md="3" v-for="(selectFile, index) in uploadFiles" :key="index" class="px-4">
             <span style="display: flex;justify-content: space-between; " class="mb-1 mt-4">
@@ -35,6 +46,8 @@ export default {
   data: () => ({
     title: '',
     content: '',
+    isNotice: false,
+    isAdmin: false,
     existingFiles: null,
     uploadFiles: [],
     isUploading: false,
@@ -56,6 +69,7 @@ export default {
     ],
   }),
   mounted() {
+    this.isAdmin = this.$store.getters["user/isAdmin"];
     this.$refs.selectFile.addEventListener('change', this.handleFileSelect, false)
   },
   methods: {
@@ -71,11 +85,23 @@ export default {
         form.append("id", localStorage.id)
         form.append("title", this.title)
         form.append("content", this.content)
-        form.append("attach", this.uploadFiles)
+        form.append("importance", this.isNotice)
+        let files = this.$refs.selectFile.files;
+        for(let i = 0; i < files.length; i++) {
+          let file = files[i];
+          form.append('files', file);
+        }
 
         this.isUploading = true;
 
-        //TODO (업로드 to 서버)
+        this.$store.dispatch('board/registerSeminarContent', form).then(
+            () => {
+                this.$router.push('/seminar');
+            },
+            (err) => {
+                alert(err)
+            }
+        )
       }
     },
     reset () {

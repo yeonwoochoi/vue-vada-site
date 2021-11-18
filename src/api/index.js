@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {setInterceptors} from "@/api/common/interceptors";
+import {setInterceptors, setInterceptorsWithFiles} from "@/api/common/interceptors";
 
 const baseUrl = 'http://127.0.0.1:3000';
 
@@ -19,5 +19,11 @@ function createInstanceWithAuth() {
     return setInterceptors(instance);
 }
 
+function createInstanceWithFiles(){
+    const instance = createCommonInstance();
+    return setInterceptorsWithFiles(instance);
+}
+
 export const instance = createInstance();
+export const instanceWithFiles = createInstanceWithFiles();
 export const instanceWithAuth = createInstanceWithAuth();

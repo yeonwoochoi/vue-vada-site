@@ -1,5 +1,5 @@
 import VueCookies from "vue-cookies";
-import { instance } from "@/api";
+import {instance, instanceWithAuth, instanceWithFiles} from "@/api";
 import user from '@/store/modules/users/index'
 
 const state = {
@@ -19,6 +19,18 @@ const mutations = {
 }
 
 const actions = {
+    // eslint-disable-next-line no-unused-vars
+    test: ({commit}, params) => {
+        return new Promise((resolve, reject) => {
+            instanceWithFiles.post(user.state.host + '/board/test', params).then(res => {
+                resolve(res.data);
+            }).catch(err => {
+                reject(err.response.data);
+            })
+        })
+    },
+
+    // eslint-disable-next-line no-unused-vars
     registerSeminarContent: ({commit}, params) => {
         return new Promise((resolve, reject) => {
             instance.post(user.state.host + '/board/register', params, {
@@ -29,7 +41,6 @@ const actions = {
             }).then(res => {
                 console.log('Seminar 게시글 등록 요청 결과');
                 console.log(`${res.status}: ${res.msg}`);
-                commit('updateSeminarContents', res.data);
                 resolve(res.data);
             }).catch(err => {
                 console.log(`seminar content register failure : ${err.response.data}`)
@@ -37,6 +48,7 @@ const actions = {
             })
         })
     },
+
     readAllSeminarContents: ({commit}) => {
         return new Promise(((resolve, reject) => {
             instance.get(user.state.host + '/board/readAll').then(res => {
@@ -50,6 +62,7 @@ const actions = {
             })
         }))
     },
+
     // eslint-disable-next-line no-unused-vars
     readSeminarContent: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
@@ -63,6 +76,7 @@ const actions = {
             })
         }))
     },
+
     // eslint-disable-next-line no-unused-vars
     addViewCount: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
@@ -72,6 +86,21 @@ const actions = {
                 resolve(res);
             }).catch(err => {
                 console.log(`read seminar content failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        }))
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    addComment: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/board/addComment', params).then(res => {
+                    console.log('Seminar 댓글 추가 요청 결과')
+                    console.log(`${res.status}: ${res.msg}`);
+                    resolve(res);
+                }
+            ).catch(err => {
+                console.log(`add seminar comment failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         }))
