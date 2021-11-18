@@ -37,7 +37,7 @@
               v-for="(content, i) in toolbarItems"
               :key="i"
               content-class="elevation-0"
-              transition="slide-y-transition"
+              transition="slide-y-reverse-transition"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
