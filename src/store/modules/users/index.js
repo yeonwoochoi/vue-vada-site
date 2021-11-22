@@ -54,7 +54,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             instance.post(state.host + '/users/register', params).then(res => {
                 console.log('회원가입 요청 결과');
-                console.log(`${res.status}: ${res.msg}`);
+                console.log(`${res.status}: ${res.data.msg}`);
                 commit('setLoginToken', res.data);
                 resolve(res);
             }).catch(err => {
@@ -67,7 +67,7 @@ const actions = {
       return new Promise((resolve, reject) => {
           instance.post(state.host + '/auth/login', params).then(res => {
               console.log('login 요청 결과')
-              console.log(`${res.status} : ${res.msg}`)
+              console.log(`${res.status} : ${res.data.msg}`)
               commit('setLoginToken', res.data);
               resolve(res);
           }).catch(err => {
@@ -81,7 +81,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             instanceWithAuth.post(state.host + '/auth/check', params).then(res => {
                 console.log('accessToken 재요청 결과')
-                console.log(`${res.status} : ${res.msg}`)
+                console.log(`${res.status} : ${res.data.msg}`)
                 commit('setLoginToken', res.data);
                 resolve(res.data);
             }).catch(err => {
@@ -94,7 +94,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             instance.post(state.host + '/users/logout', params).then(res => {
                 console.log('logout 결과')
-                console.log(`${res.status} : ${res.msg}`)
+                console.log(`${res.status} : ${res.data.msg}`)
                 commit('removeToken');
                 resolve()
             }).catch(err => {
@@ -108,7 +108,7 @@ const actions = {
         return new Promise(((resolve, reject) => {
             instance.post(state.host + '/auth/emailAuth', params).then(res => {
                 console.log('email auth 결과')
-                console.log(`${res.status} : ${res.msg}`)
+                console.log(`${res.status} : ${res.data.msg}`)
                 commit('setEmailAuthNumForSignUp', res.data);
                 resolve()
             }).catch(err => {
@@ -122,7 +122,7 @@ const actions = {
         return new Promise(((resolve, reject) => {
             instance.post(state.host + '/auth/emailCheck', params).then(res => {
                 console.log('send auth code for reset password 결과')
-                console.log(`${res.status} : ${res.msg}`)
+                console.log(`${res.status} : ${res.data.msg}`)
                 commit('setEmailAuthNumForResetPwd', res.data)
                 resolve(res.data)
             }).catch(err => {
@@ -137,7 +137,7 @@ const actions = {
         return new Promise(((resolve, reject) => {
             instance.post(state.host + '/users/resetPwd', params).then(res => {
                 console.log('reset password 결과')
-                console.log(`${res.status} : ${res.msg}`)
+                console.log(`${res.status} : ${res.data.msg}`)
                 commit('setTempPwd', res.data)
                 resolve()
             }).catch(err => {

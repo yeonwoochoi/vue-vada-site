@@ -61,15 +61,15 @@ const routes = [
             )
       },
       {
-        path: '/seminar/content/:content_id',
-        name: 'Seminar',
+        path: '/seminar/content',
+        name: 'SeminarContent',
         component: () => import(
             '@/views/default/SeminarContent'
             )
       },
       {
         path: '/seminar/input',
-        name: 'Seminar',
+        name: 'SeminarInput',
         component: () => import(
             '@/views/default/SeminarInput'
             )

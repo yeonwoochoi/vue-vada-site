@@ -19,7 +19,11 @@ export default {
   props: ['isMobile'],
   computed: {
     headerTitle() {
-      return this.$route.name;
+      let title = this.$route.name;
+      if (this.$route.name.includes("Seminar")) {
+        title = "Seminar"
+      }
+      return title;
     }
   }
 }

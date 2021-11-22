@@ -15,13 +15,12 @@
 <script>
 import MainCard from "@/components/MainCard";
 import BoardContentCard from "@/components/board/BoardContentCard";
-import { mapGetters } from "vuex"
 
 export default {
   name: "SeminarContent",
   components: { MainCard, BoardContentCard },
   mounted() {
-    this.$store.dispatch("board/readSeminarContent", this.$route.params.content_id).then(
+    this.$store.dispatch("board/readSeminarContent", this.$route.query.uid).then(
       (result) => {
         this.tableData = result.data.data
         this.isDataFetched = true;
@@ -31,7 +30,7 @@ export default {
       }
     )
 
-    this.$store.dispatch("board/addViewCount", this.$route.params.content_id).then(
+    this.$store.dispatch("board/addViewCount", this.$route.query.uid).then(
       (result) => {
         console.log(result)
       },
@@ -209,12 +208,7 @@ export default {
     ],
      */
     header: 'Seminar',
-  }),
-  computed: {
-    ...mapGetters('board', {
-      'getCurrentSeminarContent': "getCurrentSeminarContent"
-    })
-  }
+  })
 }
 </script>
 
