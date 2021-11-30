@@ -1,5 +1,5 @@
 import VueCookies from "vue-cookies";
-import {instance, instanceWithAuth} from "@/api";
+import {instance} from "@/api";
 import user from '@/store/modules/users/index'
 
 const state = {
@@ -16,9 +16,9 @@ const mutations = {
 const actions = {
 
     // eslint-disable-next-line no-unused-vars
-    registerSeminarContent: ({commit}, params) => {
+    registerNewsContent: ({commit}, params) => {
         return new Promise((resolve, reject) => {
-            instance.post(user.state.host + '/board/register', params, {
+            instance.post(user.state.host + '/news/register', params, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'x-access-token': VueCookies.get("accessToken")
@@ -26,7 +26,7 @@ const actions = {
             }).then(res => {
                 resolve(res.data);
             }).catch(err => {
-                console.log(`seminar content register failure : ${err.response.data}`)
+                console.log(`news content register failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         })
@@ -34,24 +34,24 @@ const actions = {
 
 
     // eslint-disable-next-line no-unused-vars
-    readSeminarContentsByPage: ({commit}, params) => {
+    readNewsContentsByPage: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
-            instance.post(user.state.host + '/board/readByPage', params).then(res => {
+            instance.post(user.state.host + '/news/readByPage', params).then(res => {
                 resolve(res);
             }).catch(err => {
-                console.log(`read seminar contents in page ${params.currentPage} failure : ${err.response.data}`)
+                console.log(`read news contents in page ${params.currentPage} failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         }))
     },
 
     // eslint-disable-next-line no-unused-vars
-    readSeminarContent: ({commit}, params) => {
+    readNewsContent: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
-            instance.get(user.state.host + '/board/read/' + params).then(res => {
+            instance.get(user.state.host + '/news/read/' + params).then(res => {
                 resolve(res);
             }).catch(err => {
-                console.log(`read seminar content failure : ${err.response.data}`)
+                console.log(`read news content failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         }))
@@ -60,10 +60,10 @@ const actions = {
     // eslint-disable-next-line no-unused-vars
     addViewCount: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
-            instance.get(user.state.host + '/board/addViewCount/' + params).then(res => {
+            instance.get(user.state.host + '/news/addViewCount/' + params).then(res => {
                 resolve(res);
             }).catch(err => {
-                console.log(`read seminar content failure : ${err.response.data}`)
+                console.log(`read news content failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         }))
@@ -72,26 +72,14 @@ const actions = {
     // eslint-disable-next-line no-unused-vars
     readTotalPage: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
-            instance.post(user.state.host + '/board/getTotalPage', params).then(res => {
+            instance.post(user.state.host + '/news/getTotalPage', params).then(res => {
                 resolve(res);
             }).catch(err => {
-                console.log(`read seminar total page count failure : ${err.response.data}`)
+                console.log(`read news total page count failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         }))
     },
-
-    // eslint-disable-next-line no-unused-vars
-    addComment: ({commit}, params) => {
-        return new Promise(((resolve, reject) => {
-            instanceWithAuth.post(user.state.host + '/board/addComment', params).then(res => {
-                resolve(res);
-            }).catch(err => {
-                console.log(`add seminar comment failure : ${err.response.data}`)
-                reject(err.response.data);
-            })
-        }))
-    }
 }
 
 export default {

@@ -1,7 +1,7 @@
 <template>
   <v-row align="center" justify="center" class="mb-6 pl-6" style="width: 100%;">
     <v-col cols="6" align="start" class="py-0 pl-4">
-      <p class="subtitle-2 my-0">전체 {{ contentLength }}</p>
+      <p class="subtitle-2 my-0">전체 {{ totalDataLength }}</p>
     </v-col>
     <v-col cols="6" align="end" class="py-0">
       <v-menu offset-y>
@@ -23,7 +23,6 @@
               v-for="(item, index) in sortableItems"
               :key="index"
               @click="changeSortBy(item)"
-
           >
             <v-list-item-title class="caption">{{ item }}</v-list-item-title>
           </v-list-item>
@@ -33,14 +32,9 @@
     <v-col cols="12" class="py-0s">
       <v-data-table
           :headers="headers"
-          :items="pseudoTableData"
-          :search="search"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :page.sync="currentPage"
+          :items="tableContents"
           :items-per-page="itemsPerPage"
           hide-default-footer
-          @page-count="pageCount = $event"
           :mobile-breakpoint="960"
       >
         <template v-slot:item="{ item }">
@@ -48,7 +42,7 @@
             <td class="text-center content-grey-font table-row" style="min-width: 80px; max-width: 80px;">
               {{ `${item.importance ? '공지사항' : item.no }` }}
             </td>
-            <td class="text-start ellipsis" @click="onClickContent(item.index)" style="cursor: pointer; max-width: 400px; height: 38px; font-size: 13px;">
+            <td class="text-start ellipsis" @click="onClickContent(item.no)" style="cursor: pointer; max-width: 400px; height: 38px; font-size: 13px;">
               <div class="ellipsis font-weight-medium">
                 {{ item.title }}
                 <span v-if="item.comments.length > 0" class="blue--text ml-1">{{ `(${item.comments.length})` }}</span>
@@ -58,14 +52,14 @@
               <p class="my-0 ellipsis content-grey-font" style="white-space: nowrap;">{{ item.author }}</p>
             </td>
             <td class="text-center content-grey-font table-row" style="min-width: 80px; max-width: 80px; height: 38px; font-size: 13px;">
-              {{ `${item.importance ? getRealTableData(item).created_at : item.created_at}` }}
+              {{ item.created_at }}
             </td>
             <td class="text-center content-grey-font table-row" style="min-width: 10px; max-width: 10px; height: 38px; font-size: 13px;">
-              {{ `${item.importance ? getRealTableData(item).view_count : item.view_count}` }}
+              {{ item.view_count }}
             </td>
           </tr>
           <tr v-else :style="`background-color: ${item.importance ? 'rgb(230, 230, 230)' : 'transparent'};`">
-            <div class="pa-4" @click="onClickContent(item.index)" style="cursor:pointer;">
+            <div class="pa-4" @click="onClickContent(item.no)" style="cursor:pointer;">
               <p class="font-weight-bold subtitle-1" style="width: 100%">
                 {{ item.title }}
                 <span v-if="item.comments.length > 0" class="blue--text pl-1">{{ `(${item.comments.length})` }}</span>
@@ -73,9 +67,9 @@
               <div style="display: flex; height: fit-content; overflow-x: hidden; text-overflow: ellipsis" class="content-grey-font caption">
                 <p class="my-0 mr-2 ellipsis" style="white-space: nowrap; max-width: 130px;">{{ item.author }}</p>
                 <p class="my-0 mr-2"><v-divider vertical/></p>
-                <p class="my-0 mr-2" style="white-space: nowrap">{{ `${item.importance ? getRealTableData(item).created_at : item.created_at}` }}</p>
+                <p class="my-0 mr-2" style="white-space: nowrap">{{ item.created_at }}</p>
                 <p class="my-0 mr-2"><v-divider vertical/></p>
-                <p class="my-0 mr-2" style="white-space: nowrap">{{ `조회 ${item.importance ? getRealTableData(item).view_count : item.view_count}` }}</p>
+                <p class="my-0 mr-2" style="white-space: nowrap">{{ item.view_count }}</p>
               </div>
             </div>
             <v-divider/>
@@ -86,10 +80,11 @@
             <v-spacer/>
             <v-pagination
                 v-model="currentPage"
-                :length="pageCount"
+                :length="totalPage"
                 total-visible="10"
                 prev-icon="mdi-menu-left"
                 next-icon="mdi-menu-right"
+                @input="changePage"
             />
             <v-spacer/>
             <v-btn
@@ -178,6 +173,24 @@ export default {
           },
         ]
       }
+    },
+    totalPage: {
+      type: Number,
+      default: () => {
+        return 1
+      }
+    },
+    totalDataLength: {
+      type: Number,
+      default: () => {
+        return 0
+      }
+    },
+    currentPath: {
+      type: String,
+      default: () => {
+        return 'seminar'
+      }
     }
   },
   data: () => ({
@@ -187,7 +200,6 @@ export default {
     searchBy: '전체',
     sortDesc: true,
     currentPage: 1,
-    pageCount: 0,
     itemsPerPage: 10,
     headers: [
       {
@@ -233,8 +245,6 @@ export default {
         value: 'view_count',
       },
     ],
-    tableData: [],
-    pseudoTableData: [],
     sortableItems: [],
     sortableItemsRef: [
       {
@@ -266,16 +276,13 @@ export default {
       },
     ],
     isLogin: false,
-    contentLength: 0
+    path: '',
   }),
   mounted() {
-    this.tableData = JSON.parse(JSON.stringify(this.tableContents));
-    this.setIndex();
     this.checkLogin();
     this.setSortableItems();
     this.setSearchableItems();
-    this.setPseudoTableData();
-    this.contentLength = this.tableData.length
+    this.init();
   },
   computed: {
     currentSortBy() {
@@ -290,10 +297,40 @@ export default {
       }
     },
   },
-
   methods: {
-    onClickSearchBtn () {
-      this.search = this.searchInput
+    init() {
+      this.currentPage = parseInt(this.$route.query.page)
+      this.sortBy = this.$route.query.board_list_sort
+      this.itemsPerPage = parseInt(this.$route.query.items_per_page)
+
+      if (this.$route.query.keyword) {
+        this.search = this.$route.query.keyword
+        let searchBy = this.$route.query.target;
+        if (searchBy === 'total') {
+          this.searchBy = '전체'
+        } else {
+          this.searchBy = this.searchableItemsRef.find(v => v.view === this.searchBy).value;
+        }
+        this.searchInput = this.search
+      } else {
+        this.search = '';
+        this.searchInput = this.search;
+        this.searchBy = '전체';
+      }
+    },
+
+    changePage(){
+      let searchBy = this.searchBy === '전체' ? 'total' : this.searchableItemsRef.find(v => v.view === this.searchBy).value
+      this.$router.push({
+        path: this.currentPath,
+        query: {
+          page: this.currentPage,
+          board_list_sort: this.sortBy,
+          items_per_page: this.itemsPerPage,
+          keyword: this.search,
+          target: searchBy
+        }
+      })
     },
 
     changeSortBy (sortBy) {
@@ -306,39 +343,53 @@ export default {
       else {
         this.sortBy = targetVal
       }
+
+      this.$router.push({
+        path: this.currentPath,
+        query: {
+          page: 1,
+          board_list_sort: this.sortBy,
+          items_per_page: this.itemsPerPage
+        }
+      })
     },
 
+    // sort by 눌렀을 때 (v-menu)
     changeSearchBy(searchBy) {
       this.searchBy = searchBy;
-      for (let i = 0; i < this.headers.length; i++) {
-        this.headers[i].filterable = false;
-      }
-      let targets = [];
-      if (searchBy === '전체') {
-        for (let i = 0; i < this.searchableItemsRef.length; i++) {
-          targets.push(this.searchableItemsRef[i].value)
+    },
+
+    // 검색 범위 v-menu 눌렀을때
+    onClickContent(no){
+      let content_id = this.tableContents.find(v => v.no === no).idx;
+      this.$router.push({
+        path: `${this.currentPath}/content`,
+        query: {
+          uid: content_id
         }
-      } else {
-        targets.push(this.searchableItemsRef.find(v => v.view === searchBy).value);
-      }
-      for (let i = 0; i < this.headers.length; i++) {
-        for (let j = 0; j < targets.length; j++) {
-          if (this.headers[i].value === targets[j]) {
-            this.headers[i].filterable = true;
-          }
+      })
+    },
+
+    // board content 클릭시
+    onClickSearchBtn () {
+      this.search = this.searchInput
+      let searchBy = this.searchBy === '전체' ? 'total' : this.searchableItemsRef.find(v => v.view === this.searchBy).value
+      this.currentPage = 1;
+      this.$router.push({
+        path: this.currentPath,
+        query: {
+          page: this.currentPage,
+          board_list_sort: this.sortBy,
+          items_per_page: this.itemsPerPage,
+          keyword: this.search,
+          target: searchBy
         }
-      }
+      })
     },
 
-    setNoticeItemsSort(){
-      this.tableData.sort((a,b) => b.importance - a.importance)
-    },
-
-    onClickContent(index){
-      let content_id = this.tableData.find(v => v.index === index).idx
-      this.$router.push(`/seminar/content/${content_id}`)
-    },
-
+    // v-menu 에서 sortBy 되는 Header만 추려서 v-menu list에 등록하는 과정
+    // 최신순 (no) 업데이트순 (created_at) 조회순 (view_count)
+    // 초기 설정
     setSortableItems () {
       let result = [];
       if (this.headers) {
@@ -352,6 +403,8 @@ export default {
       this.sortableItems = result;
     },
 
+    // 검색 범위 설정할 때, 검색 가능한 Header만 추려서 설정
+    // 초기 설정
     setSearchableItems () {
       let result = [];
       result.push('전체')
@@ -360,30 +413,6 @@ export default {
       }
       this.searchableItems = result;
       this.searchBy = this.searchableItems[0];
-    },
-
-    setPseudoTableData () {
-      let result = JSON.parse(JSON.stringify(this.tableData));
-      for (let i = 0; i < result.length; i++) {
-        if (result[i].importance) {
-          result[i].no = 1000000000;
-          result[i].created_at = '3000-01-01';
-          result[i].view_count = 100000000;
-        }
-      }
-      this.pseudoTableData = result;
-    },
-
-    setIndex() {
-      let result = JSON.parse(JSON.stringify(this.tableData));
-      for (let i = 0; i < result.length; i++) {
-        result[i].index = i;
-      }
-      this.tableData = result;
-    },
-
-    getRealTableData (target) {
-      return this.tableData.find(v => v.index === target.index);
     },
 
     checkLogin () {
@@ -405,8 +434,8 @@ export default {
     },
 
     goToBoardInput() {
-      this.$router.push('/seminar/input')
-    }
+      this.$router.push(`${this.currentPath}/input`)
+    },
   },
 }
 </script>
@@ -426,7 +455,7 @@ export default {
 }
 
 .table-row {
-  height: 38px; 
+  height: 38px;
   font-size: 13px;
 }
 

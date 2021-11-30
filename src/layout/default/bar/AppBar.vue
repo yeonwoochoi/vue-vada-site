@@ -116,8 +116,8 @@
 <script>
 import { mapState } from 'vuex'
 import CompanyLogoBtn from "@/components/CompanyLogoBtn";
-import AppBarSheetView from "@/components/app-bar/AppBarSheetView";
-import AppBarSheetParticleView from "@/components/app-bar/AppBarSheetParticleView";
+import AppBarSheetView from "@/components/appbar/AppBarSheetView";
+import AppBarSheetParticleView from "@/components/appbar/AppBarSheetParticleView";
 import VueCookies from "vue-cookies";
 
 export default {

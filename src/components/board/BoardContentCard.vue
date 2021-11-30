@@ -29,7 +29,7 @@
         </div>
       </div>
     </v-col>
-    <v-col cols="12" class="py-6" style="background-color: #F5F5F5;">
+    <v-col cols="12" class="py-6" style="background-color: #F5F5F5;" v-if="isCommentUsed">
       <v-card class="card-flat elevation-0 my-2">
         <p class="content-grey-font font-weight-bold caption ml-3">
           전체
@@ -65,7 +65,7 @@
       </v-card>
     </v-col>
     <v-col cols="12" align="end" class="mt-6">
-      <v-btn to="/seminar" large class="elevation-0 button-border-grey" style="color: #CCCCCC;" outlined>
+      <v-btn :to="getPath" large class="elevation-0 button-border-grey" style="color: #CCCCCC;" outlined>
          <p class="my-0 font-weight-bold grey--text text--darken-4">목록보기</p>
       </v-btn>
     </v-col>
@@ -99,11 +99,16 @@ export default {
           importance: false
         }
       }
+    },
+    isCommentUsed: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
     }
   },
   mounted() {
     this.checkLogin();
-    //this.setTableContent();
     this.commentCount = this.tableContent.comments.length;
     this.hasAttach = this.tableContent.attach.length > 0;
   },
@@ -111,7 +116,7 @@ export default {
     commentCount: 0,
     hasAttach: false,
     isLogin: false,
-    newComment: ''
+    newComment: '',
   }),
   computed: {
     isMobile () {
@@ -121,19 +126,12 @@ export default {
         default: return false
       }
     },
+    getPath () {
+      let pathArr = this.$route.path.split('/');
+      return `/${pathArr[pathArr.length - 2]}`;
+    }
   },
   methods: {
-    /*
-    setTableContent() {
-      let contents = JSON.parse(JSON.stringify(this.tableContents));
-      let param = parseInt(this.$route.params.content_id);
-      for (let i = 0; i < contents.length; i++) {
-        if (contents[i].no === param){
-          this.tableContent = contents[i];
-        }
-      }
-    },
-     */
     checkLogin () {
       let params = {
         "id" : localStorage.id
@@ -204,6 +202,7 @@ p {
 
 pre {
   white-space: pre-wrap;
+  overflow: hidden;
 }
 
 v-divider {

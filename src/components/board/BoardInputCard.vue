@@ -11,7 +11,7 @@
         <v-checkbox
             class="pl-4"
             v-model="isNotice"
-            v-if="isAdmin"
+            v-if="isAdmin && !isNews"
             label="공지사항"
         >
           isAdmin
@@ -40,10 +40,21 @@
 
 <script>
 import { VueEditor } from "vue2-editor";
+import VueCookies from "vue-cookies";
+
 export default {
   name: "BoardInputCard",
   components: {VueEditor},
+  props: {
+    isNews: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
+    }
+  },
   data: () => ({
+    path: '',
     title: '',
     content: '',
     isNotice: false,
@@ -69,7 +80,23 @@ export default {
     ],
   }),
   mounted() {
-    this.isAdmin = this.$store.getters["user/isAdmin"];
+    let pathArr = this.$route.path.split('/');
+    this.path = `/${pathArr[pathArr.length - 2]}`;
+    if (localStorage.id && VueCookies.get("accessToken")) {
+      this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
+          (isAdmin) => {
+            this.isAdmin = isAdmin
+          },
+          (err) => {
+            alert(err)
+            this.$router.push(`${this.path}`)
+          }
+      )
+    }
+    else {
+      alert('접근 권한이 없습니다.')
+      this.$router.push(`${this.path}`)
+    }
     this.$refs.selectFile.addEventListener('change', this.handleFileSelect, false)
   },
   methods: {
@@ -85,6 +112,9 @@ export default {
         form.append("id", localStorage.id)
         form.append("title", this.title)
         form.append("content", this.content)
+        if (this.isNews) {
+          this.isNotice = false
+        }
         form.append("importance", this.isNotice)
         let files = this.$refs.selectFile.files;
         for(let i = 0; i < files.length; i++) {
@@ -94,14 +124,26 @@ export default {
 
         this.isUploading = true;
 
-        this.$store.dispatch('board/registerSeminarContent', form).then(
-            () => {
-                this.$router.push('/seminar');
-            },
-            (err) => {
+        if (this.path.includes('seminar')) {
+          this.$store.dispatch('board/registerSeminarContent', form).then(
+              () => {
+                this.$router.push(`${this.path}`);
+              },
+              (err) => {
                 alert(err)
-            }
-        )
+              }
+          )
+        }
+        else {
+          this.$store.dispatch('news/registerNewsContent', form).then(
+              () => {
+                this.$router.push(`${this.path}`);
+              },
+              (err) => {
+                alert(err)
+              }
+          )
+        }
       }
     },
     reset () {
@@ -113,7 +155,8 @@ export default {
     },
     cancel () {
       this.reset();
-      this.$router.push('/seminar')
+      console.log(this.path)
+      this.$router.push(`${this.path}`)
     },
     previewFile() {
       let isError = false;

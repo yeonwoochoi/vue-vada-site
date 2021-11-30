@@ -15,6 +15,7 @@
 <script>
 import MainCard from "@/components/MainCard";
 import BoardInputCard from "@/components/board/BoardInputCard";
+
 export default {
   name: "SeminarInput",
   components: { MainCard, BoardInputCard },

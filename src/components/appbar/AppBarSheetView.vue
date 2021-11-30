@@ -23,6 +23,12 @@ export default {
       if (this.$route.name.includes("Seminar")) {
         title = "Seminar"
       }
+      else if (this.$route.name.includes("Project")) {
+        title = "Projects"
+      }
+      else if (this.$route.name.includes("News")) {
+        title = "News"
+      }
       return title;
     }
   }

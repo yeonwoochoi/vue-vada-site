@@ -22,63 +22,91 @@ const routes = [
         path: '/members',
         name: 'Members',
         component: () => import(
-            '@/views/default/Members'
+            '@/views/default/Member/Members'
             )
       },
       {
         path: '/research',
         name: 'Research',
         component: () => import(
-            '@/views/default/Research'
+            '@/views/default/Research/Research'
             )
       },
       {
         path: '/publications',
         name: 'Publications',
         component: () => import(
-            '@/views/default/Publications'
+            '@/views/default/Publication/Publications'
             )
       },
       {
         path: '/projects',
         name: 'Projects',
         component: () => import(
-            '@/views/default/Projects'
+            '@/views/default/Project/Projects'
+            )
+      },
+      {
+        path: '/projects/content',
+        name: 'ProjectContent',
+        component: () => import(
+            '@/views/default/Project/ProjectContent'
+            )
+      },
+      {
+        path: '/projects/input',
+        name: 'ProjectInput',
+        component: () => import(
+            '@/views/default/Project/ProjectInput'
             )
       },
       {
         path: '/news',
         name: 'News',
         component: () => import(
-            '@/views/default/News'
+            '@/views/default/News/News'
+            )
+      },
+      {
+        path: '/news/content',
+        name: 'NewsContent',
+        component: () => import(
+            '@/views/default/News/NewsContent'
+            )
+      },
+      {
+        path: '/news/input',
+        name: 'NewsInput',
+        component: () => import(
+            '@/views/default/News/NewsInput'
             )
       },
       {
         path: '/seminar',
         name: 'Seminar',
         component: () => import(
-            '@/views/default/Seminar'
+            '@/views/default/Seminar/Seminar'
             )
       },
       {
         path: '/seminar/content',
         name: 'SeminarContent',
         component: () => import(
-            '@/views/default/SeminarContent'
+            '@/views/default/Seminar/SeminarContent'
             )
       },
       {
         path: '/seminar/input',
         name: 'SeminarInput',
         component: () => import(
-            '@/views/default/SeminarInput'
+            '@/views/default/Seminar/SeminarInput'
             )
       },
       {
         path: '/contact',
         name: 'Contact',
         component: () => import(
-            '@/views/default/Contact'
+            '@/views/default/Contact/Contact'
             )
       },
       {

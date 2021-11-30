@@ -4,7 +4,7 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-content-card v-if="isDataFetched" :table-content="tableData" />
+            <board-content-card v-if="isDataFetched" :table-content="tableData" :is-comment-used="true"/>
           </template>
         </main-card>
       </v-card>
@@ -38,7 +38,6 @@ export default {
         alert(err)
       }
     )
-
   },
   data: () => ({
     isDataFetched: false,
