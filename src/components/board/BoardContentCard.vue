@@ -11,7 +11,7 @@
       </div>
     </v-col>
     <v-col cols="12" class="pa-6">
-      <pre class="subtitle-2 content-grey-font" v-html="tableContent.content"/>
+      <pre class="subtitle-2 content-grey-font card-content" v-html="tableContent.content" />
     </v-col>
     <v-col cols="12">
       <v-divider class="mb-3" v-if="hasAttach" />
@@ -235,5 +235,9 @@ v-divider {
 
 .button-border-grey {
   border: rgb(150, 150, 150) 0.01em solid;
+}
+
+.card-content >>> img {
+  max-width: 95% !important;
 }
 </style>
