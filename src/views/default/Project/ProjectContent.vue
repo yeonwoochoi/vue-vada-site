@@ -12,7 +12,7 @@
               <p class="text-start mx-2 mb-4 subtitle-2 grey--text font-weight-regular">
                 {{ `${projectData.from}-${projectData.to} | ${projectData.sponsor}` }}
               </p>
-              <pre class="subtitle-1 content-grey-font ml-3" v-html="projectData.content"/>
+              <pre class="subtitle-1 content-grey-font ml-3 card-content" v-html="projectData.content"/>
             </div>
           </template>
         </main-card>
@@ -53,5 +53,11 @@ export default {
   font-family: "Roboto", sans-serif;
   font-weight: normal;
   color: rgba(1, 1, 1, 0.75);
+}
+
+.card-content >>> {
+  max-width: 95% !important;
+  white-space: pre-wrap;
+  overflow: hidden;
 }
 </style>

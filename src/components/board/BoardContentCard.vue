@@ -238,6 +238,11 @@ v-divider {
 }
 
 .card-content >>> img {
-  max-width: 95% !important;
+  max-width: 100% !important;
+}
+
+.card-content >>> {
+  white-space: pre-wrap;
+  overflow: hidden;
 }
 </style>
