@@ -19,17 +19,8 @@ export default {
   props: ['isMobile'],
   computed: {
     headerTitle() {
-      let title = this.$route.name;
-      if (this.$route.name.includes("Seminar")) {
-        title = "Seminar"
-      }
-      else if (this.$route.name.includes("Project")) {
-        title = "Projects"
-      }
-      else if (this.$route.name.includes("News")) {
-        title = "News"
-      }
-      return title;
+      let path = this.$route.path.split('/')[1];
+      return path[0].toUpperCase() + path.slice(1);
     }
   }
 }
