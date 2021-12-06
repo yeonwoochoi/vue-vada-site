@@ -184,14 +184,13 @@ const router = new VueRouter({
 import store from '@/store/index'
 
 router.beforeEach(async (to, from, next) => {
-  console.log(`${from.name} => ${to.name}`)
+  //console.log(`${from.name} => ${to.name}`)
 
   let accessToken = VueCookies.get('accessToken');
-
   const authenticatedPages = ["Seminar"];
 
   if (accessToken === null) {
-    console.log("Routing : reissuing access token...")
+    //console.log("Routing : reissuing access token...")
     let params = {
       "id" : localStorage.id
     };
@@ -209,7 +208,7 @@ router.beforeEach(async (to, from, next) => {
     )
   }
   else {
-    console.log("Routing : Certified")
+    //console.log("Routing : Certified")
     return next();
   }
 })

@@ -40,13 +40,47 @@
 
 <script>
 import { VueEditor } from "vue2-editor";
-import VueCookies from "vue-cookies";
 
 export default {
   name: "BoardInputCard",
   components: {VueEditor},
   props: {
+    // news 는 모두 공지사항이기 때문에.. 이거 외에는 다 공지사항일수도 있고 아닐수도 있음
     isNews: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
+    },
+    path: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    },
+    tableContent: {
+      type: Object,
+      default: () => {
+        return {
+          no: 1,
+          title: 'Title',
+          content: 'Content',
+          author: 'user01',
+          created_at: '2020-11-11',
+          view_count: 0,
+          comments: [
+            {
+              'author': 'user21',
+              'content': 'Comment',
+              'created_at': '2021-11-01',
+            },
+          ],
+          attach: '',
+          importance: false
+        }
+      }
+    },
+    isAdmin: {
       type: Boolean,
       default: () => {
         return false
@@ -54,11 +88,10 @@ export default {
     }
   },
   data: () => ({
-    path: '',
     title: '',
     content: '',
     isNotice: false,
-    isAdmin: false,
+    isUpdate: false,
     existingFiles: null,
     uploadFiles: [],
     isUploading: false,
@@ -80,26 +113,37 @@ export default {
     ],
   }),
   mounted() {
-    let pathArr = this.$route.path.split('/');
-    this.path = `/${pathArr[pathArr.length - 2]}`;
-    if (localStorage.id && VueCookies.get("accessToken")) {
-      this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
-          (isAdmin) => {
-            this.isAdmin = isAdmin
-          },
-          (err) => {
-            alert(err)
-            this.$router.push(`${this.path}`)
-          }
-      )
-    }
-    else {
-      alert('접근 권한이 없습니다.')
-      this.$router.push(`${this.path}`)
-    }
     this.$refs.selectFile.addEventListener('change', this.handleFileSelect, false)
+    this.init();
   },
   methods: {
+    // TODO : update 인 경우 data fetching 시키기
+    async init () {
+      this.isUpdate = this.$route.query.uid !== undefined
+      if (this.isUpdate) {
+        this.title = this.tableContent.title;
+        this.content = this.tableContent.content;
+        this.isNotice = this.tableContent.importance
+
+        if (this.tableContent.attach) {
+          this.existingFiles = this.$refs.selectFile.files;
+          let dataTransfer = new DataTransfer();
+          for (let i = 0; i < this.tableContent.attach.length; i++) {
+            await fetch(`http://${this.tableContent.attach[i].link}`)
+                .then(res => res.blob())
+                .then(blob => {
+                  let file = new File([blob], this.tableContent.attach[i].name, {type: '', lastModified: Date.now()});
+                  dataTransfer.items.add(file);
+                })
+          }
+          this.$refs.selectFile.files = dataTransfer.files;
+          this.existingFiles = this.$refs.selectFile.files;
+          this.previewFile()
+        }
+
+        this.isUploading = false;
+      }
+    },
     async save() {
       if (!this.title) {
         alert('제목을 입력해주세요');
@@ -116,6 +160,9 @@ export default {
           this.isNotice = false
         }
         form.append("importance", this.isNotice)
+        if (this.isUpdate) {
+          form.append("idx", this.$route.query.uid)
+        }
         let files = this.$refs.selectFile.files;
         for(let i = 0; i < files.length; i++) {
           let file = files[i];
@@ -124,25 +171,52 @@ export default {
 
         this.isUploading = true;
 
-        if (this.path.includes('seminar')) {
-          this.$store.dispatch('board/registerSeminarContent', form).then(
-              () => {
-                this.$router.push(`${this.path}`);
-              },
-              (err) => {
-                alert(err)
-              }
-          )
+        //TODO: seminar news 만 할거 아니니까 정확히 set 하기
+        if (this.isUpdate) {
+          if (this.path.includes('seminar')) {
+            this.$store.dispatch('board/updateSeminarContent', form).then(
+                () => {
+                  this.$router.push(`/${this.path}`);
+                },
+                (err) => {
+                  alert(err)
+                  this.$router.push(`/${this.path}`);
+                }
+            )
+          }
+          else if (this.path.includes('news')) {
+            this.$store.dispatch('news/updateNewsContent', form).then(
+                () => {
+                  this.$router.push(`/${this.path}`);
+                },
+                (err) => {
+                  alert(err)
+                  this.$router.push(`/${this.path}`);
+                }
+            )
+          }
         }
         else {
-          this.$store.dispatch('news/registerNewsContent', form).then(
-              () => {
-                this.$router.push(`${this.path}`);
-              },
-              (err) => {
-                alert(err)
-              }
-          )
+          if (this.path.includes('seminar')) {
+            this.$store.dispatch('board/registerSeminarContent', form).then(
+                () => {
+                  this.$router.push(`/${this.path}`);
+                },
+                (err) => {
+                  alert(err)
+                }
+            )
+          }
+          else if (this.path.includes('news')) {
+            this.$store.dispatch('news/registerNewsContent', form).then(
+                () => {
+                  this.$router.push(`/${this.path}`);
+                },
+                (err) => {
+                  alert(err)
+                }
+            )
+          }
         }
       }
     },
@@ -155,8 +229,7 @@ export default {
     },
     cancel () {
       this.reset();
-      console.log(this.path)
-      this.$router.push(`${this.path}`)
+      this.$router.push(`/${this.path}`)
     },
     previewFile() {
       let isError = false;
@@ -227,13 +300,13 @@ export default {
       }
     },
 
+    // 아마도 selectFile 에 들어있는 file이 추가되거나 삭제될때 호출되는 event 함수
     handleFileSelect(e) {
       if (!e.target.files) return;
       e.preventDefault();
 
       let files = this.$refs.selectFile.files;
       let existingFiles = this.existingFiles;
-
 
       const dataTransfer = new DataTransfer();
       if (existingFiles) {

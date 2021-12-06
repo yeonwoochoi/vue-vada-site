@@ -4,7 +4,13 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-card v-if="isDataFetched" :table-contents="tableData" :total-page="totalPage" :total-data-length="totalDataLength" :current-path="'seminar'"/>
+            <board-card
+              v-if="isDataFetched"
+              :table-contents="tableData"
+              :total-page="totalPage"
+              :total-data-length="totalDataLength"
+              :current-path="'seminar'"
+            />
           </template>
         </main-card>
       </v-card>

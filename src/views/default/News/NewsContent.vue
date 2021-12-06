@@ -4,7 +4,12 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-content-card v-if="isDataFetched" :table-content="tableData" />
+            <board-content-card
+              v-if="isDataFetched"
+              :table-content="tableData"
+              :path="path"
+              :targetTable="table"
+            />
           </template>
         </main-card>
       </v-card>
@@ -31,9 +36,7 @@ export default {
     )
 
     this.$store.dispatch("news/addViewCount", this.$route.query.uid).then(
-      (result) => {
-        console.log(result)
-      },
+      () => {},
       (err) => {
         alert(err)
       }
@@ -43,6 +46,8 @@ export default {
     isDataFetched: false,
     tableData: {},
     header: 'News',
+    path: 'news',
+    table: 'news'
   })
 }
 </script>

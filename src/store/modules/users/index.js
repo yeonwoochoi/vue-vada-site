@@ -4,29 +4,23 @@ import { instance, instanceWithAuth } from "@/api/index";
 const state = {
     host: 'http://127.0.0.1:3000',
     accessToken: null,
-    role: '',
     emailAuthNumForSignUp: -1,
     emailAuthNumForResetPwd: -1,
     tempPassword: null
 }
 
 const getters = {
-    isAdmin: (state) => {
-        return state.role === 'admin'
-    }
 }
 
 const mutations = {
     setLoginToken (state, payload) {
         VueCookies.set('accessToken', payload.data.accessToken, '60s');
         localStorage.id = payload.data.id;
-        state.role = payload.data.role;
         state.accessToken = payload.data.accessToken;
     },
     removeToken (state) {
         VueCookies.remove('accessToken');
         localStorage.id = null;
-        state.role = null;
         state.accessToken = null;
     },
     setEmailAuthNumForSignUp (state, payload) {
@@ -86,6 +80,7 @@ const actions = {
                 resolve(res.data);
             }).catch(err => {
                 //console.log('refreshToken error : ', err.config);
+                commit('removeToken')
                 reject(err.response.data);
             })
         })
@@ -151,9 +146,22 @@ const actions = {
     // eslint-disable-next-line no-unused-vars
     isAdmin: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
-            instanceWithAuth.post(state.host + '/users/isAdmin', params).then(res => {
+            instanceWithAuth.post(state.host + '/auth/isAdmin', params).then(res => {
                 resolve(res.data.data['isAdmin'])
             }).catch(err => {
+                //console.log(`check is admin error: ${err.response.data}`);
+                reject(err.response.data);
+            })
+        }))
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    isLogin: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instanceWithAuth.post(state.host + '/auth/isLogin', params).then(res => {
+                resolve(res.data.data['isLogin'])
+            }).catch(err => {
+                //console.log(`check is login error: ${err.response.data}`);
                 reject(err.response.data);
             })
         }))

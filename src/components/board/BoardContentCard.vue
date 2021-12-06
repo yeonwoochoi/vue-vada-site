@@ -8,6 +8,32 @@
         <pre class="caption font-weight-bold mx-6 my-1">작성자 <span class="subtitle-2 content-grey-font pl-3">{{ tableContent.author }}</span></pre>
         <pre class="caption font-weight-bold mx-6 my-1">작성일 <span class="subtitle-2 content-grey-font pl-3">{{ tableContent.created_at }}</span></pre>
         <pre class="caption font-weight-bold mx-6 my-1">조회 <span class="subtitle-2 content-grey-font pl-3">{{ tableContent.view_count }}</span></pre>
+        <v-spacer/>
+        <v-icon
+            v-if="isAuthor"
+            small
+            class="mx-6"
+            @click="editItem"
+        >
+          mdi-pencil
+        </v-icon>
+        <v-dialog
+            v-if="isAuthor"
+            v-model="isConfirmOpen"
+            max-width="350"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+                small
+                class="mr-6 ml-2"
+                v-bind="attrs"
+                v-on="on"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <confirmation-dialog-card @close="isConfirmOpen = false" @onClickOkButton="deleteItem"/>
+        </v-dialog>
       </div>
     </v-col>
     <v-col cols="12" class="pa-6">
@@ -74,9 +100,10 @@
 
 <script>
 import BoardCommentCard from "@/components/board/BoardCommentCard";
+import ConfirmationDialogCard from "@/components/dialog/ConfirmationDialogCard";
 export default {
   name: "BoardContentCard",
-  components: {BoardCommentCard},
+  components: {ConfirmationDialogCard, BoardCommentCard},
   props: {
     tableContent: {
       type: Object,
@@ -105,10 +132,23 @@ export default {
       default: () => {
         return false
       }
-    }
+    },
+    path: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    },
+    targetTable: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    },
   },
   mounted() {
     this.checkLogin();
+    this.checkAuthor();
     this.commentCount = this.tableContent.comments.length;
     this.hasAttach = this.tableContent.attach.length > 0;
   },
@@ -117,6 +157,8 @@ export default {
     hasAttach: false,
     isLogin: false,
     newComment: '',
+    isAuthor: false,
+    isConfirmOpen: false,
   }),
   computed: {
     isMobile () {
@@ -140,14 +182,46 @@ export default {
         this.isLogin = false;
         return;
       }
-      this.$store.dispatch('user/requestRefreshToken', params).then(
-          () => {
-            this.isLogin = true;
+      this.$store.dispatch('user/isLogin', params).then(
+          (isLogin) => {
+            this.isLogin = isLogin;
           },
           () => {
             this.isLogin = false;
           }
       )
+    },
+    checkAuthor () {
+      let params = {
+        "id" : localStorage.id,
+        "idx" : this.$route.query.uid,
+        "table": this.targetTable
+      };
+      if (!params.id || !params.idx) {
+        this.isAuthor = false;
+        return;
+      }
+      //TODO 이것도.. news 랑 seminar만 할 꺼 아니니까
+      if (this.path.includes('news')) {
+        this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
+            (isAdmin) => {
+              this.isAuthor = isAdmin;
+            },
+            () => {
+              this.isAuthor = false;
+            }
+        )
+      }
+      else if (this.path.includes('seminar')) {
+        this.$store.dispatch('board/checkAuthor', params).then(
+            (isAuthor) => {
+              this.isAuthor = isAuthor;
+            },
+            () => {
+              this.isAuthor = false;
+            }
+        )
+      }
     },
     saveComment() {
       if (this.newComment.length > 0) {
@@ -156,6 +230,7 @@ export default {
           'idx': this.tableContent.idx,
           'comment': this.newComment
         }
+
         this.$store.dispatch("board/addComment", params).then(
             () => {
               this.newComment = ''
@@ -170,6 +245,44 @@ export default {
         alert('Please input comments')
         this.newComment = ''
       }
+    },
+    editItem(){
+      this.$router.push({
+        path: `/${this.path}/input`,
+        query: {
+          uid: this.$route.query.uid
+        }
+      })
+    },
+    deleteItem(){
+      let params = {
+        "id" : localStorage.id,
+        "idx" : this.$route.query.uid,
+        "table": this.targetTable
+      };
+      if (this.path.includes('news')) {
+        this.$store.dispatch("news/deleteNewsContent", params).then(
+            () => {
+              this.$router.push(`/${this.path}`)
+            },
+            err => {
+              alert(err)
+              this.$router.push(`/${this.path}`)
+            }
+        )
+      }
+      else if (this.path.includes('seminar')) {
+        this.$store.dispatch("board/deleteBoardContent", params).then(
+            () => {
+              this.$router.push(`/${this.path}`)
+            },
+            err => {
+              alert(err)
+              this.$router.push(`/${this.path}`)
+            }
+        )
+      }
+
     }
   }
 }

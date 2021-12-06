@@ -20,7 +20,7 @@ const actions = {
             instanceWithFiles.post(user.state.host + '/projects/register', params).then(res => {
                 resolve(res);
             }).catch(err => {
-                console.log(`register failure : ${err.response.data}`)
+                //console.log(`register failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         }))
@@ -32,7 +32,7 @@ const actions = {
             instance.get(user.state.host + '/projects/read/' + params).then(res => {
                 resolve(res);
             }).catch(err => {
-                console.log(`read failure : ${err.response.data}`)
+                //console.log(`read failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         })
@@ -44,7 +44,7 @@ const actions = {
             instance.get(user.state.host + '/projects/readAll').then(res => {
                 resolve(res);
             }).catch(err => {
-                console.log(`read all failure : ${err.response.data}`)
+                //console.log(`read all failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         })

@@ -90,7 +90,7 @@
             <v-btn
                 color="rgb(40, 40, 40)"
                 dark
-                v-if="isLogin"
+                v-if="isLogin && isAdmin"
                 @click="goToBoardInput"
             >
               글쓰기
@@ -147,6 +147,8 @@
 </template>
 
 <script>
+import VueCookies from "vue-cookies";
+
 export default {
   name: "BoardCard",
   props: {
@@ -190,6 +192,12 @@ export default {
       type: String,
       default: () => {
         return 'seminar'
+      }
+    },
+    adminInput: {
+      type: Boolean,
+      default: () => {
+        return false
       }
     }
   },
@@ -276,10 +284,12 @@ export default {
       },
     ],
     isLogin: false,
+    isAdmin: false,
     path: '',
   }),
   mounted() {
     this.checkLogin();
+    this.checkAdmin();
     this.setSortableItems();
     this.setSearchableItems();
     this.init();
@@ -423,14 +433,37 @@ export default {
         this.isLogin = false;
         return;
       }
-      this.$store.dispatch('user/requestRefreshToken', params).then(
-          () => {
-            this.isLogin = true;
+      this.$store.dispatch('user/isLogin', params).then(
+          (isLogin) => {
+            this.isLogin = isLogin;
           },
           () => {
             this.isLogin = false;
           }
       )
+    },
+
+    checkAdmin () {
+      if (this.adminInput) {
+        if (localStorage.id && VueCookies.get("accessToken")) {
+          this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
+              (isAdmin) => {
+                this.isAdmin = isAdmin;
+              },
+              (err) => {
+                alert(err)
+                this.$router.push('/')
+              }
+          )
+        }
+        else {
+          this.isAdmin = false;
+        }
+      } else {
+        // 글쓰기 button 활성화 조건이 isAdmin && isLogin 인데
+        // admin이 아닌 user도 글쓰기가 허용되는 경우이므로 isAdmin이 아님에도 그냥 true로 해줌.
+        this.isAdmin = true;
+      }
     },
 
     goToBoardInput() {
