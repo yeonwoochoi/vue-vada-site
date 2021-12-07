@@ -157,6 +157,20 @@ import { VueEditor } from "vue2-editor";
 export default {
   name: "ProjectInputCard",
   components: {VueEditor},
+  props: {
+    projectData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    isUpdate: {
+      type: Boolean,
+      default: () => {
+        return false;
+      }
+    }
+  },
   data: () => ({
     menu: false,
     title: '',
@@ -188,8 +202,9 @@ export default {
   }),
   mounted() {
     this.reset();
-    this.from = new Date().toISOString().substr(0, 7);
-    this.to = '';
+    if (this.isUpdate) {
+      this.fetchData()
+    }
   },
   methods: {
     async save() {
@@ -208,6 +223,7 @@ export default {
       else {
         let form = new FormData();
         form.append("id", localStorage.id)
+        form.append("idx", this.$route.query.uid)
         form.append("title", this.title)
         form.append("content", this.content)
         form.append("sponsor", this.sponsor)
@@ -216,32 +232,67 @@ export default {
 
         form.append('file', this.$refs.selectedImage.files[0]);
 
-        //this.isUploading = true;
+        this.isUploading = true;
 
-        this.$store.dispatch('project/registerProject', form).then(
-            () => {
-              this.$router.push('/projects');
-            },
-            (err) => {
-              alert(err)
-            }
-        )
+        if (this.isUpdate) {
+          this.$store.dispatch('project/updateProject', form).then(
+              () => {
+                this.$router.push('/projects');
+              },
+              (err) => {
+                alert(err)
+              }
+          )
+        }
+        else {
+          this.$store.dispatch('project/registerProject', form).then(
+              () => {
+                this.$router.push('/projects');
+              },
+              (err) => {
+                alert(err)
+              }
+          )
+        }
       }
     },
     reset () {
       this.title = '';
       this.content = '';
       this.sponsor = '';
-      this.from = '';
+      this.from = new Date().toISOString().substr(0, 7);
       this.to = '';
-      this.isUploading = false;
     },
     cancel () {
       this.reset();
+      this.isUploading = false;
       this.$router.push('/projects')
     },
     setImageFile() {
       this.imgSrc = this.$refs.selectedImage.files[0]
+    },
+    async fetchData() {
+      this.title = this.projectData.title;
+      this.content = this.projectData.content;
+      this.sponsor = this.projectData.sponsor;
+      this.from = this.projectData.from;
+      this.to = this.projectData.to;
+
+      if (this.projectData.src) {
+        let dataTransfer = new DataTransfer();
+
+        await fetch(`http://${this.projectData.src}`)
+            .then(res => res.blob())
+            .then(blob => {
+              let file = new File([blob], this.projectData.title, {type: 'image/*', lastModified: Date.now()});
+              dataTransfer.items.add(file);
+            })
+
+        this.$refs.selectedImage.files = dataTransfer.files;
+        this.imgSrc = this.$refs.selectedImage.files[0];
+      }
+
+      this.isUploading = false;
     }
   }
 }

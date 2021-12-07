@@ -5,6 +5,7 @@ import user from './modules/users/index'
 import board from './modules/board/index'
 import project from './modules/project/index'
 import news from './modules/news/index'
+import utils from './modules/utils/index'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     user: user,
     board: board,
     project: project,
-    news: news
+    news: news,
+    utils: utils
   }
 })

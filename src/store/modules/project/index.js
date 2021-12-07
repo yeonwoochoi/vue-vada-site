@@ -1,4 +1,4 @@
-import { instance, instanceWithFiles } from "@/api/index";
+import {instance, instanceWithAuth, instanceWithFiles} from "@/api/index";
 import user from '@/store/modules/users/index'
 
 const state = {
@@ -49,6 +49,30 @@ const actions = {
             })
         })
     },
+
+    // eslint-disable-next-line no-unused-vars
+    updateProject: ({commit}, params) => {
+        return new Promise((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/projects/update', params).then(res => {
+                resolve(res);
+            }).catch(err => {
+                //console.log(`update project failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        })
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    deleteProject: ({commit}, params) => {
+        return new Promise((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/projects/delete', params).then(res => {
+                resolve(res);
+            }).catch(err => {
+                //console.log(`delete project failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        })
+    }
 }
 
 export default {

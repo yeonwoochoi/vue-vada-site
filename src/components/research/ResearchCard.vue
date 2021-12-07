@@ -24,6 +24,8 @@ export default {
       }
     }
   },
+
+  //TODO: admin에서 바꿀수 있게끔 asset 폴더에서 빼고 db에 저장하기
   methods: {
     getImg(imgSrc) {
       let fileNames = imgSrc.split('/');

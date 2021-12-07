@@ -117,7 +117,6 @@ export default {
     this.init();
   },
   methods: {
-    // TODO : update 인 경우 data fetching 시키기
     async init () {
       this.isUpdate = this.$route.query.uid !== undefined
       if (this.isUpdate) {
