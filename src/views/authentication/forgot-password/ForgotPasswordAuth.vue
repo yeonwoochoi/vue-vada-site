@@ -31,7 +31,7 @@
           Password reset code
         </p>
         <v-text-field
-            v-model="emailAuthOtp"
+            v-model="emailAuthCode"
             @keypress="isNumber($event)"
             maxlength="6"
             required
@@ -42,8 +42,6 @@
       <v-col cols="9" class="mt-0 pt-0">
         <v-btn
             x-large
-            block
-            :disabled="!isActive"
             @click="submit"
             class="font-weight-bold"
             width="100%"
@@ -64,8 +62,7 @@ export default {
   data: () => ({
     isShowingAlert: false,
     alertMessage: '',
-    emailAuthOtp: null,
-    otpLength: 6
+    emailAuthCode: null,
   }),
   props: ['email'],
   computed: {
@@ -86,10 +83,6 @@ export default {
         default: return false
       }
     },
-    isActive() {
-      if (!this.emailAuthOtp) return false;
-      return this.emailAuthOtp.length === this.otpLength;
-    }
   },
   methods: {
     ...mapMutations('user', {
@@ -105,7 +98,7 @@ export default {
     reset() {
       this.isShowingAlert = false;
       this.alertMessage = '';
-      this.emailAuthOtp = null;
+      this.emailAuthCode = null;
       this.resetAuthCode()
     },
 
@@ -121,11 +114,11 @@ export default {
 
     submit () {
       console.log(this.code)
-      if (this.emailAuthOtp.length === this.otpLength) {
+      if (this.emailAuthCode.length === 6) {
         if (`${this.code}` === '-1') {
           this.$router.go(this.$router.currentRoute);
         }
-        else if (`${this.emailAuthOtp}` === `${this.code}`) {
+        else if (`${this.emailAuthCode}` === `${this.code}`) {
           console.log('forgot password email auth success');
           let user = {
             "email": this.email
@@ -148,10 +141,11 @@ export default {
       } else {
         this.showAlert('인증번호 6자리를 입력해주십시오.')
       }
-    },
+    }
   }
 }
 </script>
 
 <style scoped>
+
 </style>
