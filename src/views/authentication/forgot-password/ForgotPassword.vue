@@ -6,7 +6,7 @@
   >
     <v-row align="center" justify="center" class="ma-0" style="height: 100%;">
       <forgot-password-auth v-if="isAuthorized" :email="email"/>
-      <v-card :style="`width: ${cardWidth}%; height: fit-content;`" class="elevation-10" :img="require('@/assets/bg_login.jpg')" v-if="!isAuthorized">
+      <v-card v-else :style="`width: ${cardWidth}%; height: fit-content;`" class="elevation-10" :img="require('@/assets/bg_login.jpg')">
         <v-alert
             :value="isShowingAlert"
             type="error"
