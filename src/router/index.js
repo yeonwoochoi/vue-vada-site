@@ -40,6 +40,13 @@ const routes = [
             )
       },
       {
+        path: '/publications/input',
+        name: 'PublicationsInput',
+        component: () => import(
+            '@/views/default/Publication/PublicationInput'
+            )
+      },
+      {
         path: '/projects',
         name: 'Projects',
         component: () => import(

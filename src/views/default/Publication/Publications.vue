@@ -4,9 +4,11 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <publication-card :publication-data="publicationData1"/>
-            <publication-card :publication-data="publicationData2"/>
-            <publication-card :publication-data="publicationData3"/>
+            <div v-if="isDataFetched">
+              <div v-for="(data, i) in publicationData" :key="i">
+                <publication-card :publication-data="data" :is-admin="isAdmin"/>
+              </div>
+            </div>
           </template>
         </main-card>
       </v-card>
@@ -23,6 +25,10 @@ export default {
   components: {MainCard, PublicationCard},
   data: () => ({
     header: 'Publication',
+    isDataFetched: false,
+    publicationData: [],
+    isAdmin: false,
+    /*
     publicationData1: {
       year: '2021',
       data: [
@@ -131,7 +137,7 @@ export default {
             },
           ]
         }
-      ]
+      ],
     },
     publicationData2: {
       year: '2020',
@@ -353,7 +359,46 @@ export default {
         }
       ]
     },
+     */
   }),
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      this.$store.dispatch("publications/readAllContents").then(
+          data => {
+            this.publicationData = data;
+            this.checkAuthor();
+          },
+          err => {
+            alert(err);
+            this.$router.push('/')
+          }
+      )
+    },
+    checkAuthor () {
+      let params = {
+        "id" : localStorage.id,
+      };
+      if (!params.id) {
+        this.isAdmin = false;
+        this.isDataFetched = true;
+      }
+      else {
+        this.$store.dispatch('user/isAdmin', params).then(
+            (isAdmin) => {
+              this.isAdmin = isAdmin;
+              this.isDataFetched = true;
+            },
+            () => {
+              this.isAdmin = false;
+              this.isDataFetched = true;
+            }
+        )
+      }
+    },
+  }
 }
 </script>
 
