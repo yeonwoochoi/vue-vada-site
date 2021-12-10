@@ -4,10 +4,10 @@
       <v-card class="elevation-0 px-12 py-12" style="background-color: #F5F5F5; width: 100%">
         <v-container fluid>
           <v-row align="center" justify="start">
-            <v-col cols="2">
+            <v-col cols="2" v-if="!isMobile">
               <v-subheader>Title</v-subheader>
             </v-col>
-            <v-col cols="9">
+            <v-col cols="12" md="9">
               <v-text-field
                   v-model="title"
                   label="Title"
@@ -16,10 +16,10 @@
                   dense
               />
             </v-col>
-            <v-col cols="2">
+            <v-col cols="2" v-if="!isMobile">
               <v-subheader>Sponsor</v-subheader>
             </v-col>
-            <v-col cols="9">
+            <v-col cols="12" md="9">
               <v-text-field
                   v-model="sponsor"
                   label="Sponsor"
@@ -28,10 +28,10 @@
                   dense
               />
             </v-col>
-            <v-col cols="2">
+            <v-col cols="2" v-if="!isMobile">
               <v-subheader>Date</v-subheader>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="5" md="3">
               <v-menu
                   ref="fromDateMenu"
                   v-model="isFromOpen"
@@ -79,7 +79,7 @@
             <v-col cols="1" align="center">
               <p class="mb-1">~</p>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="5" md="3">
               <v-menu
                   ref="toDateMenu"
                   v-model="isToOpen"
@@ -205,6 +205,15 @@ export default {
     if (this.isUpdate) {
       this.fetchData()
     }
+  },
+  computed: {
+    isMobile () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return true
+        case 'sm': return true
+        default: return false
+      }
+    },
   },
   methods: {
     async save() {

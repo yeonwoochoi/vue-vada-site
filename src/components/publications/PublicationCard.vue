@@ -7,6 +7,9 @@
     </v-col>
     <v-divider vertical style="min-height: 100%; background-color: #DCDCDC" class="my-4"/>
     <v-col cols="12" lg="10" :class="`${isMobile ? 'ml-4' : ''}`">
+      <div v-if="isAdmin" class="mb-3" style="display: flex; justify-content: end;">
+        <v-btn :to="`/${this.path}/input`" class="mr-4 font-weight-bold elevation-0 button-border-grey" outlined>추가</v-btn>
+      </div>
       <v-card v-for="(publication, index) in publicationData.data" :key="`publication-${index}`" class="elevation-0 pb-12 card-flat">
         <div v-if="publication.content.length > 0">
           <pre class="font-weight-medium title mb-2">{{ publication.header }}</pre>
@@ -172,5 +175,8 @@ export default {
 
   pre {
     white-space: pre-wrap;
+  }
+  .button-border-grey {
+    border: rgb(150, 150, 150) 0.01em solid;
   }
 </style>

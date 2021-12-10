@@ -17,7 +17,7 @@ const actions = {
     // eslint-disable-next-line no-unused-vars
     registerContent: ({commit}, params) => {
         return new Promise((resolve, reject) => {
-            instanceWithAuth.post(user.state.host + '/publications/create').then(res => {
+            instanceWithAuth.post(user.state.host + '/publications/create', params).then(res => {
                 resolve(res.data);
             }).catch(err => {
                 //console.log(`publications content register failure : ${err.response.data}`)

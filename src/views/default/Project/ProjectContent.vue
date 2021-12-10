@@ -4,7 +4,7 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0 mb-12">
         <main-card :header="header" v-if="isDataFetched">
           <template v-slot:body>
-            <v-img :src="`http://${projectData.src}`" :aspect-ratio="16/9" contain style="width: 100%" />
+            <v-img :src="imgSrc" :aspect-ratio="16/9" contain style="width: 100%" />
             <div class="ma-6">
               <p class="text-start ma-2 headline grey--text font-weight-medium text--darken-3">
                 {{ projectData.title }}
@@ -70,6 +70,15 @@ export default {
     isAdmin: false,
     isConfirmOpen: false
   }),
+  computed: {
+    errorImg() {
+      return require('@/assets/no_thumbnail.png');
+    },
+    imgSrc() {
+      let temp = this.projectData.src.split('/');
+      return temp[temp.length-1] === 'null' ? require('@/assets/no_thumbnail.png') : `http://${this.projectData.src}`;
+    }
+  },
   methods: {
     init() {
       this.$store.dispatch("project/readProjectByIdx", this.$route.query.uid).then(

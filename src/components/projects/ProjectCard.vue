@@ -3,7 +3,7 @@
     <v-hover v-slot="{ hover }">
       <v-img
           contain
-          :src="`http://${projectData.src}`"
+          :src="imgSrc"
           :error="errorImg"
           :aspect-ratio="16/9"
           @click="onClickCard"
@@ -63,8 +63,17 @@ export default {
     }
   },
   data:() => ({
-    errorImg: require('@/assets/no_thumbnail.png')
+
   }),
+  computed: {
+    errorImg() {
+      return require('@/assets/no_thumbnail.png');
+    },
+    imgSrc() {
+      let temp = this.projectData.src.split('/');
+      return temp[temp.length-1] === 'null' ? require('@/assets/no_thumbnail.png') : `http://${this.projectData.src}`;
+    }
+  },
   methods: {
     onClickCard () {
       this.$router.push({
