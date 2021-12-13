@@ -4,22 +4,22 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="professorData1.rank">
           <template v-slot:body>
-            <rank-card1 :rank-data="professorData1"/>
+            <professor-card :rank-data="professorData1"/>
           </template>
         </main-card>
         <main-card :header="professorData2.rank">
           <template v-slot:body>
-            <rank-card1 :rank-data="professorData2"/>
+            <professor-card :rank-data="professorData2"/>
           </template>
         </main-card>
         <main-card :header="phdData.rank">
           <template v-slot:body>
-            <rank-card2 :member-data="phdData"/>
+            <student-card :member-data="phdData.members"/>
           </template>
         </main-card>
         <main-card :header="masterData.rank">
           <template v-slot:body>
-            <rank-card2 :member-data="masterData"/>
+            <student-card :member-data="masterData.members"/>
           </template>
         </main-card>
       </v-card>
@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import RankCard1 from "@/components/members/RankCard1";
-import RankCard2 from "@/components/members/RankCard2";
+import ProfessorCard from "@/components/members/ProfessorCard";
+import StudentCard from "@/components/members/StudentCard";
 import MainCard from "@/components/MainCard";
 export default {
   name: "Members",
-  components: {MainCard, RankCard1, RankCard2},
+  components: {MainCard, ProfessorCard, StudentCard},
   data: () => ({
     professorData1: {
       rank: 'Principal Investigator',
@@ -154,7 +154,10 @@ export default {
           researchArea: 'Natural language processing, representation learning, vision language multimodal tasks',
         }
       ]
-    }
+    },
+    isDataFetched: false,
+    professors: [],
+    students: [],
   }),
 }
 </script>

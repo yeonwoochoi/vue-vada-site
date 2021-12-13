@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "RankCard",
+  name: "ProfessorCard",
   props: {
     rankData: {
       type: Object,
