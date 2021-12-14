@@ -26,6 +26,13 @@ const routes = [
             )
       },
       {
+        path: '/members/input',
+        name: 'MemberInput',
+        component: () => import(
+            '@/views/default/Member/MemberInput'
+            )
+      },
+      {
         path: '/research',
         name: 'Research',
         component: () => import(

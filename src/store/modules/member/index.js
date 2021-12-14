@@ -30,7 +30,7 @@ const actions = {
     readMemberByIdx: ({commit}, params) => {
         return new Promise((resolve, reject) => {
             instance.get(user.state.host + '/member/read/' + params).then(res => {
-                resolve(res);
+                resolve(res.data.data);
             }).catch(err => {
                 //console.log(`read failure : ${err.response.data}`)
                 reject(err.response.data);
@@ -42,7 +42,7 @@ const actions = {
     readMemberAll: ({commit}) => {
         return new Promise((resolve, reject) => {
             instance.get(user.state.host + '/member/readAll').then(res => {
-                resolve(res);
+                resolve(res.data.data);
             }).catch(err => {
                 //console.log(`read all failure : ${err.response.data}`)
                 reject(err.response.data);

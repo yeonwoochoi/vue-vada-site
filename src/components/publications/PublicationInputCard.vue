@@ -5,7 +5,7 @@
         <v-container fluid>
           <v-row align="center" justify="start">
             <v-col cols="2" v-if="!isMobile">
-              <v-subheader >Year</v-subheader>
+              <v-subheader>Year</v-subheader>
             </v-col>
             <v-col cols="12" md="9">
               <v-select
@@ -19,7 +19,7 @@
               />
             </v-col>
             <v-col cols="2" v-if="!isMobile">
-              <v-subheader >Type</v-subheader>
+              <v-subheader>Type</v-subheader>
             </v-col>
             <v-col cols="12" md="9">
               <v-select
@@ -33,7 +33,7 @@
               />
             </v-col>
             <v-col cols="2" v-if="!isMobile">
-              <v-subheader >Title</v-subheader>
+              <v-subheader>Title</v-subheader>
             </v-col>
             <v-col cols="12" md="9">
               <v-text-field
@@ -49,7 +49,7 @@
               />
             </v-col>
             <v-col cols="2" v-if="!isMobile" style="display: flex; align-self: start" class="pt-1">
-              <v-subheader >Content</v-subheader>
+              <v-subheader>Content</v-subheader>
             </v-col>
             <v-col cols="12" md="9" class="pb-0">
               <v-textarea
@@ -65,7 +65,7 @@
               />
             </v-col>
             <v-col cols="2" v-if="!isMobile" class="pt-0">
-              <v-subheader >Link</v-subheader>
+              <v-subheader>Link</v-subheader>
             </v-col>
             <v-col cols="12" md="9" class="pt-0">
               <v-text-field
@@ -86,8 +86,8 @@
     </v-col>
     <v-col cols="12">
       <div style="display: flex; width: 100%; justify-content: end">
-        <v-btn large :disabled="inputDone" @click="save" class="mr-4 font-weight-bold elevation-0 button-border-grey" outlined>저장</v-btn>
-        <v-btn large :disabled="inputDone" @click="cancel" class="font-weight-bold elevation-0 button-border-grey" outlined>취소</v-btn>
+        <v-btn large @click="save" class="mr-4 font-weight-bold elevation-0 button-border-grey" outlined>저장</v-btn>
+        <v-btn large @click="cancel" class="font-weight-bold elevation-0 button-border-grey" outlined>취소</v-btn>
       </div>
     </v-col>
   </v-row>
@@ -139,13 +139,11 @@ export default {
       ["link", "image", "video"],
       ["clean"]
     ],
-    isDatePickerOpen: false,
     headerItems: [
         'arXiv',
         'Conference',
         'Journal'
     ],
-    inputDone: false,
     contentLimit: 500,
   }),
   mounted() {
@@ -245,6 +243,9 @@ export default {
               }
           )
         }
+      }
+      else {
+        alert("Please input valid value.")
       }
     },
     cancel() {

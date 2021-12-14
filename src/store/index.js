@@ -6,6 +6,8 @@ import board from './modules/board/index'
 import project from './modules/project/index'
 import news from './modules/news/index'
 import publications from './modules/publications/index'
+import professor from './modules/professor/index'
+import member from './modules/member/index'
 import utils from './modules/utils/index'
 
 Vue.use(Vuex)
@@ -18,6 +20,8 @@ export default new Vuex.Store({
     project: project,
     news: news,
     publications: publications,
-    utils: utils
+    member: member,
+    professor: professor,
+    utils: utils,
   }
 })
