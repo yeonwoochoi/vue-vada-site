@@ -35,7 +35,6 @@ export default {
       if (localStorage.id && VueCookies.get("accessToken")) {
         this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
             (isAdmin) => {
-              console.log(`isAdmin: ${isAdmin}`)
               this.isAdmin = isAdmin;
               if (!this.isAdmin) {
                 alert('접근 권한이 없습니다.')

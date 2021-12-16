@@ -134,9 +134,14 @@
                   type="file"
                   name="image"
                   accept="image/*"
-                  class="hidden mt-6"
+                  class="hidden my-6"
                   @change="setImageFile"
               />
+              <v-row align="start" justify="start" v-if="previewImgUrl">
+                <v-col cols="12">
+                  <img :src="previewImgUrl" style="min-height: 128px; max-height: 200px;" alt="project"/>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
         </v-container>
@@ -199,9 +204,11 @@ export default {
       ["link", "image", "video"],
       ["clean"]
     ],
+    previewImgUrl: null
   }),
   mounted() {
     this.reset();
+    this.$refs.selectedImage.addEventListener('change', this.handleImageFileSelect, false)
     if (this.isUpdate) {
       this.fetchData()
     }
@@ -293,17 +300,71 @@ export default {
         await fetch(`http://${this.projectData.src}`)
             .then(res => res.blob())
             .then(blob => {
-              let file = new File([blob], this.projectData.title, {type: 'image/*', lastModified: Date.now()});
+              let file = new File([blob], this.getFileName(this.projectData.src), {type: 'image/*', lastModified: Date.now()});
               dataTransfer.items.add(file);
             })
 
         this.$refs.selectedImage.files = dataTransfer.files;
         this.imgSrc = this.$refs.selectedImage.files[0];
+        this.previewImg();
       }
 
       this.isUploading = false;
+    },
+    handleImageFileSelect(e) {
+      if (!e.target.files) return;
+      e.preventDefault();
+      this.previewImg();
+    },
+    previewImg() {
+      if (this.$refs.selectedImage.files.length > 0) {
+        let selectFile = this.$refs.selectedImage.files[0];
+
+        //확장자명 가져오기 (ex. .png .jpg .pdf)
+        let fileExt = selectFile.name.substring(
+            selectFile.name.lastIndexOf(".") + 1
+        );
+        fileExt = fileExt.toLowerCase();
+
+        // 20MB
+        let limitSize = 1048576 * 20;
+
+        // 이미지 파일
+        if (
+            ["jpeg", "jpg", "png", "gif", "bmp"].includes(fileExt) &&
+            selectFile.size <= limitSize
+        ) {
+          let reader = new FileReader();
+          reader.onload = e => {
+            this.previewImgUrl = e.target.result;
+          }
+          reader.readAsDataURL(selectFile)
+        }
+        // 이미지 외 파일
+        else if (selectFile.size <= limitSize) {
+          this.previewImgUrl = require('@/assets/no_thumbnail.png');
+        }
+        else {
+          alert("Invalid File")
+          this.previewImgUrl = null;
+          this.resetFile()
+        }
+      }
+      else {
+        this.previewImgUrl = null;
+      }
+    },
+    resetFile() {
+      if (this.$refs.selectedImage.size > 0) {
+        const dataTransfer = new DataTransfer();
+        this.$refs.selectedImage.files = dataTransfer.files;
+      }
+    },
+    getFileName(name) {
+      let temp = name.split('/');
+      return temp[temp.length-1];
     }
-  }
+  },
 }
 </script>
 
