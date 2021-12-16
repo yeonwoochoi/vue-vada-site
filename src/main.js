@@ -9,10 +9,16 @@ import VueCookies from "vue-cookies";
 import * as VueGoogleMaps from 'vue2-google-maps'
 import {googleMapKey} from "@/config/config";
 import VueCarousel from 'vue-carousel';
+import VueTelInputVuetify from 'vue-tel-input-vuetify/lib';
+
 
 Vue.use(VueCarousel);
 
 Vue.use(VueParticles, VueCookies)
+
+Vue.use(VueTelInputVuetify, {
+  vuetify,
+});
 
 Vue.config.productionTip = false
 
