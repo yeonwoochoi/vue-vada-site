@@ -1,60 +1,16 @@
 <template>
-  <v-row align="start" justify="center">
-    <div v-for="(professor, index) in professorData" :key="index">
-      <v-col cols="12" md="4" lg="3" align="start" class="mx-4">
-        <v-img :src="!professor.imgSrc ? errorImg : `http://${professor.imgSrc}`" aspect-ratio="1" style="min-width: 258px; max-width: 258px" contain />
-        <p class="font-weight-medium title mt-4">{{ professor.name }}</p>
-        <pre class="my-4 content-grey-font">{{ professor.degree }}</pre>
-        <pre class="my-4 content-grey-font">{{ `${professor.email}\n${professor.phone}` }}</pre>
-        <v-icon
-            v-if="isAdmin"
-            small
-            class="ml-4 mb-1"
-            @click="editItem(professor.idx)"
-        >
-          mdi-pencil
-        </v-icon>
-        <v-dialog
-            v-if="isAdmin"
-            v-model="professor.isConfirmOpen"
-            max-width="350"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-                small
-                class="ml-2 mb-1"
-                v-bind="attrs"
-                v-on="on"
-            >
-              mdi-delete
-            </v-icon>
-          </template>
-          <confirmation-dialog-card @close="professor.isConfirmOpen = false" @onClickOkButton="deleteItem(professor.idx)"/>
-        </v-dialog>
-      </v-col>
-      <v-col cols="12" md="7" lg="8" class="mx-4" align="start">
-        <div v-if="professor.education.length > 0" class="mb-8">
-          <p class="title font-weight-medium mb-4">Education</p>
-          <pre class="ma-1 content-grey-font">{{ professor.education }}</pre>
-        </div>
-        <div v-if="professor.experience.length > 0" class="mb-8">
-          <p class="title font-weight-medium mb-4">Experience</p>
-          <pre class="ma-1 content-grey-font">{{ professor.experience }}</pre>
-        </div>
-        <div v-if="professor.affiliation.length > 0" class="my-8">
-          <p class="title font-weight-medium mb-4">Affiliation</p>
-          <pre class="ma-1 content-grey-font">{{ professor.affiliation }}</pre>
-        </div>
-      </v-col>
+  <v-row align="start" justify="start">
+    <div v-for="(professor, i) in professorData" :key="`professor-content-${i}`">
+      <professor-content-card :professor-content-data="professor" :is-admin="isAdmin"/>
     </div>
   </v-row>
 </template>
 
 <script>
-import ConfirmationDialogCard from "@/components/dialog/ConfirmationDialogCard";
+import ProfessorContentCard from "@/components/members/ProfessorContentCard";
 export default {
   name: "ProfessorCard",
-  components: {ConfirmationDialogCard},
+  components: {ProfessorContentCard},
   props: {
     professorData: {
       type: Array,
@@ -69,45 +25,6 @@ export default {
       }
     }
   },
-  computed: {
-    getHeaderFontSize() {
-      console.log(this.$vuetify.breakpoint.name)
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return 37
-        case 'sm': return 37
-        default: return 40
-      }
-    },
-    errorImg() {
-      return require("@/assets/no_thumbnail.png");
-    },
-  },
-  methods: {
-    editItem(idx){
-      this.$router.push({
-        path: "/members/input",
-        query: {
-          uid: idx,
-          target: "professor"
-        }
-      })
-    },
-    deleteItem(idx){
-      let params = {
-        "id" : localStorage.id,
-        "idx" : idx,
-      };
-      this.$store.dispatch("professor/deleteProfessor", params).then(
-          () => {
-            this.$router.go(this.$router.currentRoute);
-          },
-          err => {
-            alert(err)
-            this.$router.go(this.$router.currentRoute);
-          }
-      )
-    },
-  }
 }
 </script>
 
