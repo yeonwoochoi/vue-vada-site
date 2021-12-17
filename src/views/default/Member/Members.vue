@@ -2,20 +2,20 @@
   <v-container fluid>
     <v-row align="center" justify="center">
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0" v-if="isDataFetched">
-        <v-card-actions v-if="isAdmin">
-          <v-btn @click="onClickCreateProfessor">+</v-btn>
+        <v-card-actions v-if="isAdmin" style="display: flex; justify-content: end">
+          <v-btn class="elevation-0" outlined large @click="onClickCreateProfessor">교수추가</v-btn>
         </v-card-actions>
-        <div v-for="(professor, index) in professors" :key="index">
+        <div v-for="(professor, index) in professors" :key="`professor-${index}`">
           <main-card :header="professor.rank">
             <template v-slot:body>
               <professor-card :professor-data="professor.professors" :is-admin="isAdmin"/>
             </template>
           </main-card>
         </div>
-        <v-card-actions v-if="isAdmin">
-          <v-btn @click="onClickCreateStudent">+</v-btn>
+        <v-card-actions v-if="isAdmin" style="display: flex; justify-content: end">
+          <v-btn class="elevation-0" outlined large @click="onClickCreateStudent">학생추가</v-btn>
         </v-card-actions>
-        <div v-for="(student, index) in students" :key="index">
+        <div v-for="(student, index) in students" :key="`student-${index}`">
           <main-card :header="student.rank">
             <template v-slot:body>
               <student-card :member-data="student.members" :is-admin="isAdmin"/>
