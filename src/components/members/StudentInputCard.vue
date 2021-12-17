@@ -330,7 +330,6 @@ export default {
     // eslint-disable-next-line no-unused-vars
     checkPhoneInput(input, {number, isValid, country}) {
       this.phoneValid = isValid
-      console.log(this.valid)
     }
   }
 }

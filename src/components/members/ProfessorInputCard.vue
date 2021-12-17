@@ -1,160 +1,170 @@
 <template>
-  <v-row align="start" justify="space-around" class="mb-6 px-4" style="width: 100%;">
-    <v-col cols="12">
-      <v-card class="elevation-0 px-12 py-12" style="background-color: #F5F5F5; width: 100%">
-        <v-container fluid>
-          <v-row align="center" justify="start">
-            <v-col cols="2" v-if="!isMobile">
-              <v-subheader>Rank</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9">
-              <v-select
-                  v-model="rank"
-                  :items="headerItems"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Type"
-                  required
-                  menu-props="auto"
-                  :single-line="!isMobile"
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile">
-              <v-subheader >Name</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9">
-              <v-text-field
-                  v-model="name"
-                  ref="name"
-                  label="Name"
-                  hide-details
-                  outlined
-                  dense
-                  required
-                  :rules="[rules.required]"
-                  clearable
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile" style="display: flex; align-self: start" class="pt-1">
-              <v-subheader>Email</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9" class="pb-0">
-              <v-textarea
-                  v-model="email"
-                  ref="email"
-                  label="Email"
-                  rows="6"
-                  outlined
-                  no-resize
-                  auto-grow
-                  counter
-                  :rules="[rules.required, rules.email]"
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile" class="pt-0">
-              <v-subheader>Phone</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9" class="pt-0">
-              <v-text-field
-                  v-model="phone"
-                  label="Phone"
-                  ref="phone"
-                  hide-details
-                  outlined
-                  dense
-                  clearable
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile" class="pt-0">
-              <v-subheader>Degree</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9" class="pt-0">
-              <v-text-field
-                  v-model="degree"
-                  label="Degree"
-                  ref="degree"
-                  hide-details
-                  outlined
-                  dense
-                  clearable
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile" class="pt-0">
-              <v-subheader>Education</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9" class="pt-0">
-              <v-text-field
-                  v-model="education"
-                  label="Education"
-                  ref="education"
-                  hide-details
-                  outlined
-                  dense
-                  clearable
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile" class="pt-0">
-              <v-subheader>Experience</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9" class="pt-0">
-              <v-text-field
-                  v-model="experience"
-                  label="Experience"
-                  ref="experience"
-                  hide-details
-                  outlined
-                  dense
-                  clearable
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile" class="pt-0">
-              <v-subheader>Affiliation</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9" class="pt-0">
-              <v-text-field
-                  v-model="affiliation"
-                  label="Affiliation"
-                  ref="affiliation"
-                  hide-details
-                  outlined
-                  dense
-                  clearable
-              />
-            </v-col>
-            <v-col cols="2" v-if="!isMobile" class="pt-0">
-              <v-subheader>Image</v-subheader>
-            </v-col>
-            <v-col cols="12" md="9" class="pt-0">
-              <input
-                  ref="selectedImage"
-                  id="input"
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  class="hidden mt-6"
-                  @change="setImageFile"
-              />
-              <v-row align="start" justify="start" v-if="previewImgUrl">
-                <v-col cols="12">
-                  <img :src="previewImgUrl" style="min-height: 128px; max-height: 200px;" alt="student"/>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card>
-    </v-col>
-    <v-col cols="12">
-      <div style="display: flex; width: 100%; justify-content: end">
-        <v-btn large :disabled="isUploading" @click="save" class="mr-4 font-weight-bold elevation-0 button-border-grey" outlined>저장</v-btn>
-        <v-btn large :disabled="isUploading" @click="cancel" class="font-weight-bold elevation-0 button-border-grey" outlined>취소</v-btn>
-      </div>
-    </v-col>
-  </v-row>
+  <v-form v-model="valid" ref="form">
+    <v-row align="start" justify="space-around" class="mb-6 px-4" style="width: 100%;">
+      <v-col cols="12">
+        <v-card class="elevation-0 px-12 py-12" style="background-color: #F5F5F5; width: 100%">
+          <v-container fluid>
+            <v-row align="center" justify="start">
+              <v-col cols="2" v-if="!isMobile">
+                <v-subheader>Rank</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9">
+                <v-select
+                    v-model="rank"
+                    :items="headerItems"
+                    :rules="[v => !!v || 'Item is required']"
+                    label="Type"
+                    required
+                    menu-props="auto"
+                    :single-line="!isMobile"
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-3">
+                <v-subheader >Name</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9">
+                <v-text-field
+                    v-model="name"
+                    ref="name"
+                    label="Name"
+                    outlined
+                    dense
+                    required
+                    :rules="[rules.required]"
+                    clearable
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-1">
+                <v-subheader>Email</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9" class="pt-0">
+                <v-text-field
+                    v-model="email"
+                    label="Email"
+                    ref="email"
+                    outlined
+                    dense
+                    required
+                    :rules="[rules.required, rules.email]"
+                    clearable
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-0">
+                <v-subheader>Phone</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9" class="pt-0">
+                <vue-tel-input-vuetify
+                    v-model="phone"
+                    label="Phone"
+                    ref="phone"
+                    outlined
+                    dense
+                    clearable
+                    @input="checkPhoneInput"
+                    mode="international"
+                    required
+                    :rules="[rules.phone]"
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-0">
+                <v-subheader>Degree</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9" class="py-0">
+                <v-textarea
+                    v-model="degree"
+                    label="Degree"
+                    ref="degree"
+                    rows="6"
+                    outlined
+                    no-resize
+                    auto-grow
+                    counter
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-0">
+                <v-subheader>Education</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9" class="pt-0">
+                <v-textarea
+                    v-model="myEducation"
+                    label="Education"
+                    ref="education"
+                    rows="6"
+                    outlined
+                    no-resize
+                    auto-grow
+                    counter
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-0">
+                <v-subheader>Experience</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9" class="pt-0">
+                <v-textarea
+                    v-model="myExperience"
+                    label="Experience"
+                    ref="experience"
+                    rows="6"
+                    outlined
+                    no-resize
+                    auto-grow
+                    counter
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-0">
+                <v-subheader>Affiliation</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9" class="pt-0">
+                <v-textarea
+                    v-model="myAffiliation"
+                    label="Affiliation"
+                    ref="affiliation"
+                    rows="6"
+                    outlined
+                    no-resize
+                    auto-grow
+                    counter
+                />
+              </v-col>
+              <v-col cols="2" v-if="!isMobile" align-self="start" class="pt-0">
+                <v-subheader>Image</v-subheader>
+              </v-col>
+              <v-col cols="12" md="9" class="pt-0">
+                <input
+                    ref="selectedImage"
+                    id="input"
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    class="hidden mb-6 mt-3"
+                    @change="setImageFile"
+                />
+                <v-row align="start" justify="start" v-if="previewImgUrl">
+                  <v-col cols="12">
+                    <img :src="previewImgUrl" style="min-height: 128px; max-height: 200px;" alt="student"/>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-col>
+      <v-col cols="12">
+        <div style="display: flex; width: 100%; justify-content: end">
+          <v-btn large :disabled="isUploading" @click="save" class="mr-4 font-weight-bold elevation-0 button-border-grey" outlined>저장</v-btn>
+          <v-btn large :disabled="isUploading" @click="cancel" class="font-weight-bold elevation-0 button-border-grey" outlined>취소</v-btn>
+        </div>
+      </v-col>
+    </v-row>
+  </v-form>
 </template>
 
 <script>
+import VueTelInputVuetify from "vue-tel-input-vuetify/lib/vue-tel-input-vuetify";
+
 export default {
   name: "ProfessorInputCard",
+  components: {VueTelInputVuetify},
   props: {
     professorData: {
       type: Object,
@@ -196,7 +206,10 @@ export default {
     ],
     isUploading: false,
     contentLimit: 500,
-    previewImgUrl: null
+    previewImgUrl: null,
+    valid: false,
+    phoneValid: false,
+    prefix: "• "
   }),
   mounted() {
     this.reset();
@@ -217,24 +230,71 @@ export default {
       return {
         required: value => !!value || 'Required.',
         counter: value => value.length <= this.contentLimit || `Max ${this.contentLimit} characters`,
-        email: value => /.+@.+/.test(value) || 'E-mail must be valid'
+        email: value => /.+@.+/.test(value) || 'E-mail must be valid',
+        // eslint-disable-next-line no-unused-vars
+        phone: value => this.phoneValid || 'Phone must be valid'
       }
     },
     form () {
       return {
         name: this.name,
         email: this.email,
+        phone: this.phone
       }
     },
-    isValid () {
-      let hasError = false;
-      Object.keys(this.form).forEach(f => {
-        if (!this.$refs[f].validate(true)) {
-          hasError = true
+    myEducation: {
+      get () {
+        return this.education;
+      },
+      set (newVal) {
+        let arr = newVal.split('\n')
+        for (let i = 0; i < arr.length; i++) {
+          let check = arr[i].replace(/ /g,"") + " "
+          if (check === this.prefix && i === arr.length-1) {
+            arr[i] = ""
+          }
+          else if (!arr[i].includes(this.prefix)) {
+            arr[i] = this.prefix + arr[i];
+          }
         }
-        this.$refs[f].validate(true)
-      })
-      return !hasError
+        this.education = arr.join("\n");
+      }
+    },
+    myExperience: {
+      get () {
+        return this.experience;
+      },
+      set (newVal) {
+        let arr = newVal.split('\n')
+        for (let i = 0; i < arr.length; i++) {
+          let check = arr[i].replace(/ /g,"") + " "
+          if (check === this.prefix && i === arr.length-1) {
+            arr[i] = ""
+          }
+          else if (!arr[i].includes(this.prefix)) {
+            arr[i] = this.prefix + arr[i];
+          }
+        }
+        this.experience = arr.join("\n");
+      }
+    },
+    myAffiliation: {
+      get () {
+        return this.affiliation;
+      },
+      set (newVal) {
+        let arr = newVal.split('\n')
+        for (let i = 0; i < arr.length; i++) {
+          let check = arr[i].replace(/ /g,"") + " "
+          if (check === this.prefix && i === arr.length-1) {
+            arr[i] = ""
+          }
+          else if (!arr[i].includes(this.prefix)) {
+            arr[i] = this.prefix + arr[i];
+          }
+        }
+        this.affiliation = arr.join("\n");
+      }
     },
   },
   methods: {
@@ -255,12 +315,13 @@ export default {
           await fetch(`http://${this.professorData.imgSrc}`)
               .then(res => res.blob())
               .then(blob => {
-                let file = new File([blob], this.professorData.name, {type: 'image/*', lastModified: Date.now()});
+                let file = new File([blob], this.getFileName(this.professorData.imgSrc), {type: 'image/*', lastModified: Date.now()});
                 dataTransfer.items.add(file);
               })
 
           this.$refs.selectedImage.files = dataTransfer.files;
           this.imgSrc = this.$refs.selectedImage.files[0];
+          this.previewImg();
         }
 
         this.isUploading = false;
@@ -281,7 +342,7 @@ export default {
       this.imgSrc = "";
     },
     save() {
-      if (this.isValid) {
+      if (this.valid) {
         let form = new FormData();
         form.append("id", localStorage.id)
         form.append("idx", this.$route.query.uid)
@@ -366,11 +427,27 @@ export default {
         }
         else {
           alert("Invalid File")
+          this.previewImgUrl = null;
+          this.resetFile()
         }
       }
       else {
         this.previewImgUrl = null;
       }
+    },
+    resetFile() {
+      if (this.$refs.selectedImage.size > 0) {
+        const dataTransfer = new DataTransfer();
+        this.$refs.selectedImage.files = dataTransfer.files;
+      }
+    },
+    getFileName(name) {
+      let temp = name.split('/');
+      return temp[temp.length-1];
+    },
+    // eslint-disable-next-line no-unused-vars
+    checkPhoneInput(input, {number, isValid, country}) {
+      this.phoneValid = isValid
     }
   }
 }
