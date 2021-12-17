@@ -198,10 +198,10 @@ const router = new VueRouter({
 import store from '@/store/index'
 
 router.beforeEach(async (to, from, next) => {
-  //console.log(`${from.name} => ${to.name}`)
+  console.log(`${from.name} => ${to.name}`)
 
   let accessToken = VueCookies.get('accessToken');
-  const authenticatedPages = ["Seminar"];
+  const authenticatedPages = ["Seminar", "SeminarContent", "SeminarInput", "MemberInput", "PublicationInput", "ProjectInput", "NewsInput"];
 
   if (accessToken === null) {
     //console.log("Routing : reissuing access token...")
