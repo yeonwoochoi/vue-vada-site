@@ -73,7 +73,6 @@ export default {
       return this.$vuetify.breakpoint.width / this.$vuetify.breakpoint.height;
     },
     cardWidth () {
-      console.log(this.$vuetify.breakpoint.height)
       switch (this.$vuetify.breakpoint.name) {
         case "xl": return 40
         case "lg": return 55
@@ -123,7 +122,7 @@ export default {
           let user = {
             "email": this.email
           }
-          this.$store.dispatch('user/resetPwd', user).then(
+          this.$store.dispatch('user/resetTempPwd', user).then(
               () => {
                 this.$router.push('/authentication/forgot-password-done')
                 this.reset();
