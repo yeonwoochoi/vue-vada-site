@@ -14,6 +14,7 @@ const state = {
         { title: 'BOARD', icon: 'mdi-clipboard', items: [
                 { title: 'NEWS', icon: 'mdi-newspaper-variant-multiple', to: '/news' },
                 { title: 'SEMINAR', icon: 'mdi-bookshelf', to: '/seminar' },
+                { title: 'LECTURE', icon: 'mdi-book-open-page-variant', to: '/lecture' },
             ]
         },
         { title: 'CONTACT', icon: 'mdi-phone', to: '/contact' },
@@ -26,6 +27,7 @@ const state = {
         { title: 'BOARD', link: '/news', items: [
                 { title: 'NEWS', link: '/news'},
                 { title: 'SEMINAR', link: '/seminar'},
+                { title: 'LECTURE', link: '/lecture'},
             ]
         },
         { title: 'CONTACT', link: '/contact', items: []},
