@@ -11,6 +11,9 @@
             <pre class="display-4 font-weight-regular white--text my-6 text-start" style="white-space: pre-wrap; width: fit-content">{{ headerTitle }}</pre>
             <pre class="title font-weight-light white--text my-6 ml-2 text-start" style="white-space: pre-wrap; width: fit-content">{{ headerSubTitle }}</pre>
           </v-col>
+          <v-col cols="10" sm="12" align="center" class="mt-10" v-else>
+            <pre class="display-3 text-center font-weight-bold white--text" style="white-space: pre-wrap; width: 100%; font-size: 20px; line-height: 120%">{{ headerTitle }}</pre>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -19,7 +22,7 @@
         class="particle"
         color="#dedede"
         :particle-opacity="0.7"
-        :particles-number="100"
+        :particles-number="120"
         shape-type="circle"
         :particle-size="5"
         lines-color="#dedede"
@@ -42,7 +45,7 @@ export default {
   data: () => ({
     headerTitle: 'Artificial\nIntelligence',
     headerSubTitle: 'Artificial Intelligence Laboratory,\nKunsan National University'
-  })
+  }),
 }
 </script>
 
