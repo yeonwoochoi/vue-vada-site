@@ -3,40 +3,38 @@ import { instance, instanceWithAuth } from "@/api/index";
 
 const state = {
     host: 'http://127.0.0.1:3000',
-    accessToken: null,
     emailAuthNumForSignUp: -1,
     emailAuthNumForResetPwd: -1,
     tempPassword: null
 }
 
 const getters = {
+
 }
 
 const mutations = {
     setLoginToken (state, payload) {
-        VueCookies.set('accessToken', payload.data.accessToken, '60s');
-        localStorage.id = payload.data.id;
-        state.accessToken = payload.data.accessToken;
+        VueCookies.set('accessToken', payload.data['accessToken'], '60s');
+        localStorage.id = payload.data['id'];
     },
-    removeToken (state) {
+    removeToken () {
         VueCookies.remove('accessToken');
         localStorage.id = null;
-        state.accessToken = null;
     },
     setEmailAuthNumForSignUp (state, payload) {
-        state.emailAuthNumForSignUp = payload.data.authNum;
+        state.emailAuthNumForSignUp = payload.data['authNum'];
     },
     resetEmailAuthNumForSignUp (state) {
         state.emailAuthNumForSignUp = -1;
     },
     setEmailAuthNumForResetPwd (state, payload) {
-        state.emailAuthNumForResetPwd = payload.data.authNum;
+        state.emailAuthNumForResetPwd = payload.data['authNum'];
     },
     resetEmailAuthNumForResetPwd (state) {
         state.emailAuthNumForResetPwd = -1;
     },
     setTempPwd (state, payload) {
-        state.tempPassword = payload.data.pwd;
+        state.tempPassword = payload.data['pwd'];
     },
     resetTempPwd (state) {
         state.tempPassword = null;
@@ -63,7 +61,7 @@ const actions = {
               //console.log('login 요청 결과')
               //console.log(`${res.status} : ${res.data.msg}`)
               commit('setLoginToken', res.data);
-              resolve(res);
+              resolve(res.data.data['isTempUser']);
           }).catch(err => {
               //console.log(`login failure : ${err.response.data}`)
               reject(err.response.data);
@@ -128,16 +126,30 @@ const actions = {
         }))
     },
 
+    resetTempPwd: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instance.post(state.host + '/users/resetTempPwd', params).then(res => {
+                //console.log('reset temp password 결과')
+                //console.log(`${res.status} : ${res.data.msg}`)
+                commit('setTempPwd', res.data)
+                resolve()
+            }).catch(err => {
+                //console.log(`reset temp password error: ${err.response.data}`);
+                commit('resetTempPwd')
+                reject(err.response.data);
+            })
+        }))
+    },
+
+    // eslint-disable-next-line no-unused-vars
     resetPwd: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
             instance.post(state.host + '/users/resetPwd', params).then(res => {
                 //console.log('reset password 결과')
                 //console.log(`${res.status} : ${res.data.msg}`)
-                commit('setTempPwd', res.data)
-                resolve()
+                resolve(res.data.data)
             }).catch(err => {
                 //console.log(`reset password error: ${err.response.data}`);
-                commit('resetTempPwd')
                 reject(err.response.data);
             })
         }))
