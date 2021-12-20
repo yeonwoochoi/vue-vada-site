@@ -117,6 +117,27 @@ const routes = [
             )
       },
       {
+        path: '/lecture',
+        name: 'Lecture',
+        component: () => import(
+            '@/views/default/Lecture/Lecture'
+            )
+      },
+      {
+        path: '/lecture/content',
+        name: 'LectureContent',
+        component: () => import(
+            '@/views/default/Lecture/LectureContent'
+            )
+      },
+      {
+        path: '/lecture/input',
+        name: 'LectureInput',
+        component: () => import(
+            '@/views/default/Lecture/LectureInput'
+            )
+      },
+      {
         path: '/contact',
         name: 'Contact',
         component: () => import(
@@ -145,6 +166,7 @@ const routes = [
             '@/views/authentication/sign-in/SignIn'
             )
       },
+      /*
       {
         path: 'sign-up',
         name: 'SignUp',
@@ -152,6 +174,21 @@ const routes = [
             '@/views/authentication/sign-up/SignUp'
             )
       },
+      {
+        path: 'signup-agreement',
+        name: 'SignUpAgreement',
+        component: () => import(
+            '@/views/authentication/sign-up/SignUpAgreement'
+            )
+      },
+      {
+        path: 'signup-done',
+        name: 'SignUpDone',
+        component: () => import(
+            '@/views/authentication/sign-up/SignUpDone'
+            )
+      },
+       */
       {
         path: 'forgot-password',
         name: 'ForgotPassword',
@@ -167,17 +204,10 @@ const routes = [
             )
       },
       {
-        path: 'signup-agreement',
-        name: 'SignUpAgreement',
+        path: 'reset-password',
+        name: 'ResetPassword',
         component: () => import(
-            '@/views/authentication/sign-up/SignUpAgreement'
-            )
-      },
-      {
-        path: 'signup-done',
-        name: 'SignUpDone',
-        component: () => import(
-            '@/views/authentication/sign-up/SignUpDone'
+            '@/views/authentication/reset-password/ResetPassword'
             )
       }
     ]
@@ -198,10 +228,10 @@ const router = new VueRouter({
 import store from '@/store/index'
 
 router.beforeEach(async (to, from, next) => {
-  console.log(`${from.name} => ${to.name}`)
+  //console.log(`${from.name} => ${to.name}`)
 
   let accessToken = VueCookies.get('accessToken');
-  const authenticatedPages = ["Seminar", "SeminarContent", "SeminarInput", "MemberInput", "PublicationInput", "ProjectInput", "NewsInput"];
+  const authenticatedPages = ["Seminar", "SeminarContent", "SeminarInput", "MemberInput", "PublicationInput", "ProjectInput", "NewsInput", "ResetPassword", "LectureInput"];
 
   if (accessToken === null) {
     //console.log("Routing : reissuing access token...")
