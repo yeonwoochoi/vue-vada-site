@@ -21,6 +21,9 @@ Vue.use(VueTelInputVuetify, {
 });
 
 Vue.config.productionTip = false
+Vue.config.errorHandler = function(err, vm, info) {
+  console.log(`Error: ${err.toString()}\nInfo: ${info}`);
+}
 
 Vue.use(VueGoogleMaps, {
   load: {
