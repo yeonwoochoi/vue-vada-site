@@ -22,11 +22,11 @@
           <v-col cols="9" align="center" class="py-0 my-0">
             <validation-observer ref="observer">
               <v-form @submit.prevent="submit">
-                <validation-provider v-slot="{ errors }" name="Email" rules="required|email">
+                <validation-provider v-slot="{ errors }" name="Student ID" rules="required">
                   <v-text-field
-                      v-model="email"
+                      v-model="studentId"
                       :error-messages="errors"
-                      label="Email"
+                      label="Student ID"
                       required
                       outlined
                       dense
@@ -66,7 +66,7 @@
               </a>
             </div>
           </v-col>
-          <v-col cols="9" align="start" class="mb-0 mt-3 py-0">
+          <v-col cols="9" align="start" class="mb-6">
             <v-btn
                 @click="submit"
                 type="submit"
@@ -88,6 +88,7 @@
               CANCEL
             </v-btn>
           </v-col>
+          <!--
           <v-col cols="9" align="center" class="subtitle-1 pt-0">
             <p class="white--text">
               Need an account?
@@ -100,6 +101,7 @@
               </a>
             </p>
           </v-col>
+          -->
         </v-row>
       </v-card>
     </v-row>
@@ -107,7 +109,7 @@
 </template>
 
 <script>
-import { required, email } from 'vee-validate/dist/rules'
+import { required } from 'vee-validate/dist/rules'
 import { extend, ValidationProvider, setInteractionMode, ValidationObserver } from 'vee-validate'
 import VueCookies from "vue-cookies";
 
@@ -118,15 +120,10 @@ extend('required', {
   message: '{_field_} can not be empty'
 })
 
-extend('email', {
-  ...email,
-  message: 'Email must be valid'
-})
-
 export default {
   name: "SignIn",
   data: () => ({
-    email: '',
+    studentId: '',
     password: null,
     showPassword: false,
     rememberCheck: false,
@@ -146,7 +143,7 @@ export default {
     }
     let emailLocal = localStorage.username;
     if (emailLocal) {
-      this.email = emailLocal;
+      this.studentId = emailLocal;
       this.rememberCheck = localStorage.checkbox;
     }
   },
@@ -172,13 +169,18 @@ export default {
       const valid = await this.$refs.observer.validate();
       if (valid) {
         let user = {
-          "id": this.email,
+          "id": this.studentId,
           "pwd": this.password
         }
         this.rememberMe();
         this.$store.dispatch("user/login", user).then(
-            () => {
-              this.$router.push('/');
+            (isTempUser) => {
+              if (isTempUser) {
+                this.$router.push('/authentication/reset-password')
+              }
+              else {
+                this.$router.push('/');
+              }
             },
             (err) => {
               this.alertMessage = err;
@@ -195,14 +197,14 @@ export default {
     },
 
     clear() {
-      this.email = ''
+      this.studentId = ''
       this.password = null
       this.$refs.observer.reset()
     },
 
     rememberMe() {
-      if (this.rememberCheck && this.email !== "") {
-        localStorage.username = this.email;
+      if (this.rememberCheck && this.studentId !== "") {
+        localStorage.username = this.studentId;
         localStorage.checkbox = this.rememberCheck;
       } else {
         localStorage.username = "";
