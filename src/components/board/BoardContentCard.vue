@@ -222,6 +222,16 @@ export default {
             }
         )
       }
+      else if (this.path.includes('lecture')) {
+        this.$store.dispatch('lecture/checkAuthor', params).then(
+            (isAuthor) => {
+              this.isAuthor = isAuthor;
+            },
+            () => {
+              this.isAuthor = false;
+            }
+        )
+      }
     },
     saveComment() {
       if (this.newComment.length > 0) {
@@ -231,16 +241,31 @@ export default {
           'comment': this.newComment
         }
 
-        this.$store.dispatch("board/addComment", params).then(
-            () => {
-              this.newComment = ''
-              this.$router.go(0);
-            },
-            (err) => {
-              this.newComment = ''
-              alert(err)
-            }
-        )
+        //TODO 이것도 하드코딩
+        if (this.path.includes('seminar')) {
+          this.$store.dispatch("board/addComment", params).then(
+              () => {
+                this.newComment = ''
+                this.$router.go(0);
+              },
+              (err) => {
+                this.newComment = ''
+                alert(err)
+              }
+          )
+        }
+        else if (this.path.includes('lecture')) {
+          this.$store.dispatch("lecture/addComment", params).then(
+              () => {
+                this.newComment = ''
+                this.$router.go(0);
+              },
+              (err) => {
+                this.newComment = ''
+                alert(err)
+              }
+          )
+        }
       } else {
         alert('Please input comments')
         this.newComment = ''
@@ -282,7 +307,17 @@ export default {
             }
         )
       }
-
+      else if (this.path.includes('lecture')) {
+        this.$store.dispatch("lecture/deleteLectureContent", params).then(
+            () => {
+              this.$router.push(`/${this.path}`)
+            },
+            err => {
+              alert(err)
+              this.$router.push(`/${this.path}`)
+            }
+        )
+      }
     }
   }
 }

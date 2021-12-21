@@ -10,6 +10,7 @@ import professor from './modules/professor/index'
 import member from './modules/member/index'
 import utils from './modules/utils/index'
 import research from './modules/research/index'
+import lecture from './modules/lecture/index'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     user: user,
     research: research,
     board: board,
+    lecture: lecture,
     project: project,
     news: news,
     publications: publications,

@@ -194,6 +194,17 @@ export default {
                 }
             )
           }
+          else if (this.path.includes('lecture')) {
+            this.$store.dispatch('lecture/updateLectureContent', form).then(
+                () => {
+                  this.$router.push(`/${this.path}`);
+                },
+                (err) => {
+                  alert(err)
+                  this.$router.push(`/${this.path}`);
+                }
+            )
+          }
         }
         else {
           if (this.path.includes('seminar')) {
@@ -208,6 +219,16 @@ export default {
           }
           else if (this.path.includes('news')) {
             this.$store.dispatch('news/registerNewsContent', form).then(
+                () => {
+                  this.$router.push(`/${this.path}`);
+                },
+                (err) => {
+                  alert(err)
+                }
+            )
+          }
+          else if (this.path.includes('lecture')) {
+            this.$store.dispatch('lecture/registerLectureContent', form).then(
                 () => {
                   this.$router.push(`/${this.path}`);
                 },

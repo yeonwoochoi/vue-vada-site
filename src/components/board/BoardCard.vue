@@ -155,25 +155,7 @@ export default {
     tableContents: {
       type: Array,
       default: () => {
-        return [
-          {
-            no: 1,
-            title: 'Title',
-            content: 'Content',
-            author: 'user01',
-            created_at: '2020-11-11',
-            view_count: 0,
-            comments: [
-              {
-                'author': 'user21',
-                'content': 'Comment',
-                'created_at': '2021-11-01',
-              },
-            ],
-            attach: '',
-            importance: false
-          },
-        ]
+        return []
       }
     },
     totalPage: {
