@@ -29,24 +29,22 @@ export default {
     header: 'Contact',
     contactData1: {
       header: 'Mailing address',
-      content: 'Professor Sungroh Yoon\n' +
-          'Rm. 908, Bldg. 301\n' +
-          'Department of Electrical and Computer Engineering\n' +
-          'Seoul National University\n' +
-          '1 Gwanak-ro, Gwanak-gu\n' +
-          'Seoul 08826, Republic of Korea\n' +
-          '서울 관악구 관악로 1\n' +
-          '서울대학교 공과대학 전기정보공학부 301동 908호\n' +
-          '우편번호 08826\n'
+      content: 'Professor Changwoo Lee\n' +
+          'Department of Computer Information Engineering\n' +
+          'Kunsan National University\n' +
+          '558, Daehak-ro, Gunsan-si \n' +
+          'Jeollabuk-do, Republic of Korea\n' +
+          '전북 군산시 대학로 558\n' +
+          '군산대학교 디지털 정보관 컴퓨터 정보통신학과 151-317\n' +
+          '우편번호 54150'
     },
     contactData2: {
       header: 'Line',
-      content: 'Phone : +82-2-880-1406 (Professor), +82-2-880-1406 (Lab)\n' +
-          'Fax : +82-2-880-1406'
+      content: 'Email : cwlee@kunsan.ac.kr (Professor)'
     },
     contactData3: {
       header: 'Directions',
-      content: 'How to get to SNU (Gwanak campus): English, Korean'
+      content: 'How to get to KSNU : English, Korean'
     }
   }),
 }
