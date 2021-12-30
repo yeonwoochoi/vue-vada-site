@@ -90,7 +90,7 @@
             <v-btn
                 color="rgb(40, 40, 40)"
                 dark
-                v-if="isLogin && isAdmin"
+                v-if="hasInputControl"
                 @click="goToBoardInput"
             >
               글쓰기
@@ -147,8 +147,6 @@
 </template>
 
 <script>
-import VueCookies from "vue-cookies";
-
 export default {
   name: "BoardCard",
   props: {
@@ -176,12 +174,24 @@ export default {
         return 'seminar'
       }
     },
-    adminInput: {
+    isLogin: {
       type: Boolean,
       default: () => {
         return false
       }
-    }
+    },
+    isAdmin: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
+    },
+    canAdminInput: {
+      type: Boolean,
+      default: () => {
+        return true
+      }
+    },
   },
   data: () => ({
     search: '',
@@ -265,13 +275,9 @@ export default {
         value: 'author'
       },
     ],
-    isLogin: false,
-    isAdmin: false,
     path: '',
   }),
   mounted() {
-    this.checkLogin();
-    this.checkAdmin();
     this.setSortableItems();
     this.setSearchableItems();
     this.init();
@@ -280,7 +286,6 @@ export default {
     currentSortBy() {
       return this.sortableItemsRef.find(v => v.value === this.sortBy).view;
     },
-
     isMobile () {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs': return true
@@ -288,6 +293,14 @@ export default {
         default: return false
       }
     },
+    hasInputControl() {
+      if (this.canAdminInput) {
+        return this.isAdmin && this.isLogin
+      }
+      else {
+        return this.isLogin
+      }
+    }
   },
   methods: {
     init() {
@@ -322,7 +335,13 @@ export default {
           keyword: this.search,
           target: searchBy
         }
-      })
+      }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+        ) { throw err }
+      });
     },
 
     changeSortBy (sortBy) {
@@ -343,7 +362,13 @@ export default {
           board_list_sort: this.sortBy,
           items_per_page: this.itemsPerPage
         }
-      })
+      }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+        ) { throw err }
+      });
     },
 
     // sort by 눌렀을 때 (v-menu)
@@ -359,7 +384,13 @@ export default {
         query: {
           uid: content_id
         }
-      })
+      }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+        ) { throw err }
+      });
     },
 
     // board content 클릭시
@@ -376,7 +407,13 @@ export default {
           keyword: this.search,
           target: searchBy
         }
-      })
+      }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+        ) { throw err }
+      });
     },
 
     // v-menu 에서 sortBy 되는 Header만 추려서 v-menu list에 등록하는 과정
@@ -407,49 +444,8 @@ export default {
       this.searchBy = this.searchableItems[0];
     },
 
-    checkLogin () {
-      let params = {
-        "id" : localStorage.id
-      };
-      if (!params.id) {
-        this.isLogin = false;
-        return;
-      }
-      this.$store.dispatch('user/isLogin', params).then(
-          (isLogin) => {
-            this.isLogin = isLogin;
-          },
-          () => {
-            this.isLogin = false;
-          }
-      )
-    },
-
-    checkAdmin () {
-      if (this.adminInput) {
-        if (localStorage.id && VueCookies.get("accessToken")) {
-          this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
-              (isAdmin) => {
-                this.isAdmin = isAdmin;
-              },
-              (err) => {
-                alert(err)
-                this.$router.push('/')
-              }
-          )
-        }
-        else {
-          this.isAdmin = false;
-        }
-      } else {
-        // 글쓰기 button 활성화 조건이 isAdmin && isLogin 인데
-        // admin이 아닌 user도 글쓰기가 허용되는 경우이므로 isAdmin이 아님에도 그냥 true로 해줌.
-        this.isAdmin = true;
-      }
-    },
-
     goToBoardInput() {
-      this.$router.push(`${this.currentPath}/input`)
+      this.$emit('goToInput')
     },
   },
 }

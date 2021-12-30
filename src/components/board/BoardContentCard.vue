@@ -65,7 +65,12 @@
         <v-card-text class="py-0">
           <div v-if="commentCount > 0">
             <div v-for="(comment, index) in tableContent.comments" :key="index">
-              <board-comment-card :comment-data="comment"/>
+              <board-comment-card
+                :comment-data="comment"
+                :is-admin="isAdmin"
+                :path="path"
+                @deleteComment="deleteComment"
+              />
               <v-divider />
             </div>
           </div>
@@ -139,25 +144,33 @@ export default {
         return ''
       }
     },
-    targetTable: {
-      type: String,
+    isLogin: {
+      type: Boolean,
       default: () => {
-        return ''
+        return false
+      }
+    },
+    isAdmin: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
+    },
+    isAuthor: {
+      type: Boolean,
+      default: () => {
+        return false
       }
     },
   },
   mounted() {
-    this.checkLogin();
-    this.checkAuthor();
     this.commentCount = this.tableContent.comments.length;
     this.hasAttach = this.tableContent.attach.length > 0;
   },
   data: () => ({
     commentCount: 0,
     hasAttach: false,
-    isLogin: false,
     newComment: '',
-    isAuthor: false,
     isConfirmOpen: false,
   }),
   computed: {
@@ -169,70 +182,10 @@ export default {
       }
     },
     getPath () {
-      let pathArr = this.$route.path.split('/');
-      return `/${pathArr[pathArr.length - 2]}`;
-    }
+      return `/${this.path}`
+    },
   },
   methods: {
-    checkLogin () {
-      let params = {
-        "id" : localStorage.id
-      };
-      if (!params.id) {
-        this.isLogin = false;
-        return;
-      }
-      this.$store.dispatch('user/isLogin', params).then(
-          (isLogin) => {
-            this.isLogin = isLogin;
-          },
-          () => {
-            this.isLogin = false;
-          }
-      )
-    },
-    checkAuthor () {
-      let params = {
-        "id" : localStorage.id,
-        "idx" : this.$route.query.uid,
-        "table": this.targetTable
-      };
-      if (!params.id || !params.idx) {
-        this.isAuthor = false;
-        return;
-      }
-      //TODO 이것도.. news 랑 seminar만 할 꺼 아니니까
-      if (this.path.includes('news')) {
-        this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
-            (isAdmin) => {
-              this.isAuthor = isAdmin;
-            },
-            () => {
-              this.isAuthor = false;
-            }
-        )
-      }
-      else if (this.path.includes('seminar')) {
-        this.$store.dispatch('board/checkAuthor', params).then(
-            (isAuthor) => {
-              this.isAuthor = isAuthor;
-            },
-            () => {
-              this.isAuthor = false;
-            }
-        )
-      }
-      else if (this.path.includes('lecture')) {
-        this.$store.dispatch('lecture/checkAuthor', params).then(
-            (isAuthor) => {
-              this.isAuthor = isAuthor;
-            },
-            () => {
-              this.isAuthor = false;
-            }
-        )
-      }
-    },
     saveComment() {
       if (this.newComment.length > 0) {
         const params = {
@@ -241,36 +194,15 @@ export default {
           'comment': this.newComment
         }
 
-        //TODO 이것도 하드코딩
-        if (this.path.includes('seminar')) {
-          this.$store.dispatch("board/addComment", params).then(
-              () => {
-                this.newComment = ''
-                this.$router.go(0);
-              },
-              (err) => {
-                this.newComment = ''
-                alert(err)
-              }
-          )
-        }
-        else if (this.path.includes('lecture')) {
-          this.$store.dispatch("lecture/addComment", params).then(
-              () => {
-                this.newComment = ''
-                this.$router.go(0);
-              },
-              (err) => {
-                this.newComment = ''
-                alert(err)
-              }
-          )
-        }
+        this.$emit('addComment', params)
+        this.newComment = ''
+
       } else {
         alert('Please input comments')
         this.newComment = ''
       }
     },
+
     editItem(){
       this.$router.push({
         path: `/${this.path}/input`,
@@ -279,45 +211,16 @@ export default {
         }
       })
     },
+
     deleteItem(){
       let params = {
         "id" : localStorage.id,
-        "idx" : this.$route.query.uid,
-        "table": this.targetTable
+        "idx" : this.$route.query.uid
       };
-      if (this.path.includes('news')) {
-        this.$store.dispatch("news/deleteNewsContent", params).then(
-            () => {
-              this.$router.push(`/${this.path}`)
-            },
-            err => {
-              alert(err)
-              this.$router.push(`/${this.path}`)
-            }
-        )
-      }
-      else if (this.path.includes('seminar')) {
-        this.$store.dispatch("board/deleteBoardContent", params).then(
-            () => {
-              this.$router.push(`/${this.path}`)
-            },
-            err => {
-              alert(err)
-              this.$router.push(`/${this.path}`)
-            }
-        )
-      }
-      else if (this.path.includes('lecture')) {
-        this.$store.dispatch("lecture/deleteLectureContent", params).then(
-            () => {
-              this.$router.push(`/${this.path}`)
-            },
-            err => {
-              alert(err)
-              this.$router.push(`/${this.path}`)
-            }
-        )
-      }
+      this.$emit('delete', params)
+    },
+    deleteComment(params) {
+      this.$emit('deleteComment', params)
     }
   }
 }

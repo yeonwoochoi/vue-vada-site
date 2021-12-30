@@ -1,7 +1,7 @@
 <template>
   <v-row align="start" justify="space-around" class="mb-6 px-4" style="width: 100%;">
     <v-card class="elevation-0 px-12 py-12" style="background-color: #F5F5F5; width: 100%">
-      <v-card-title class="px-0 pt-0 pb-8" style="">
+      <v-card-title class="px-0 pt-0 pb-8">
         <v-text-field
             v-model="title"
             hide-details
@@ -173,7 +173,7 @@ export default {
         //TODO: seminar news 만 할거 아니니까 정확히 set 하기
         if (this.isUpdate) {
           if (this.path.includes('seminar')) {
-            this.$store.dispatch('board/updateSeminarContent', form).then(
+            this.$store.dispatch('seminar/updateSeminarContent', form).then(
                 () => {
                   this.$router.push(`/${this.path}`);
                 },
@@ -195,20 +195,12 @@ export default {
             )
           }
           else if (this.path.includes('lecture')) {
-            this.$store.dispatch('lecture/updateLectureContent', form).then(
-                () => {
-                  this.$router.push(`/${this.path}`);
-                },
-                (err) => {
-                  alert(err)
-                  this.$router.push(`/${this.path}`);
-                }
-            )
+            this.$emit("update", form)
           }
         }
         else {
           if (this.path.includes('seminar')) {
-            this.$store.dispatch('board/registerSeminarContent', form).then(
+            this.$store.dispatch('seminar/registerSeminarContent', form).then(
                 () => {
                   this.$router.push(`/${this.path}`);
                 },
@@ -228,14 +220,7 @@ export default {
             )
           }
           else if (this.path.includes('lecture')) {
-            this.$store.dispatch('lecture/registerLectureContent', form).then(
-                () => {
-                  this.$router.push(`/${this.path}`);
-                },
-                (err) => {
-                  alert(err)
-                }
-            )
+            this.$emit("create", form)
           }
         }
       }
