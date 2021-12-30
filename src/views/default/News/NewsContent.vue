@@ -5,10 +5,13 @@
         <main-card :header="header">
           <template v-slot:body>
             <board-content-card
-              v-if="isDataFetched"
+              v-if="isDataFetched && isAuthDataFetched"
               :table-content="tableData"
               :path="path"
-              :targetTable="table"
+              :is-login="isLogin"
+              :is-admin="isAdmin"
+              :is-author="isAdmin"
+              @delete="deleteContent"
             />
           </template>
         </main-card>
@@ -25,15 +28,8 @@ export default {
   name: "NewsContent",
   components: { MainCard, BoardContentCard },
   mounted() {
-    this.$store.dispatch("news/readNewsContent", this.$route.query.uid).then(
-      (result) => {
-        this.tableData = result.data.data
-        this.isDataFetched = true;
-      },
-      (err) => {
-        alert(err)
-      }
-    )
+    this.checkAuth();
+    this.fetchData();
 
     this.$store.dispatch("news/addViewCount", this.$route.query.uid).then(
       () => {},
@@ -44,11 +40,71 @@ export default {
   },
   data: () => ({
     isDataFetched: false,
+    isAuthDataFetched: false,
     tableData: {},
     header: 'News',
     path: 'news',
-    table: 'news'
-  })
+    table: 'news',
+    isLogin: false,
+    isAdmin: false,
+  }),
+  methods: {
+    checkAuth () {
+      let params = {
+        "id" : localStorage.id
+      };
+      if (!params.id) {
+        this.isLogin = false;
+        return;
+      }
+      this.$store.dispatch('user/isLogin', params).then(
+          (isLogin) => {
+            this.isLogin = isLogin;
+            if (isLogin) {
+              this.checkAdmin();
+            } else {
+              this.isAuthDataFetched = true;
+            }
+          },
+          () => { }
+      )
+    },
+    checkAdmin() {
+      let params = {
+        "id" : localStorage.id
+      };
+      this.$store.dispatch('user/isAdmin', params).then(
+          (isAdmin) => {
+            this.isAdmin = isAdmin
+            this.isAuthDataFetched = true;
+          },
+          () => { }
+      )
+    },
+    fetchData() {
+      this.$store.dispatch("news/readNewsContent", this.$route.query.uid).then(
+          (result) => {
+            this.tableData = result.data.data
+            this.isDataFetched = true;
+          },
+          (err) => {
+            alert(err)
+          }
+      )
+    },
+    deleteContent(params) {
+      params['table'] = this.table;
+      this.$store.dispatch("news/deleteNewsContent", params).then(
+          () => {
+            this.$router.push(`/news`)
+          },
+          err => {
+            alert(err)
+            this.$router.push(`/news`)
+          }
+      )
+    },
+  }
 }
 </script>
 

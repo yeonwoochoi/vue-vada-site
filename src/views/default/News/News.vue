@@ -5,12 +5,14 @@
         <main-card :header="header">
           <template v-slot:body>
             <board-card
-              v-if="isDataFetched"
-              :table-contents="tableData"
-              :total-page="totalPage"
-              :total-data-length="totalDataLength"
-              :current-path="path"
-              :admin-input="true"
+                v-if="isDataFetched && isAuthDataFetched"
+                :table-contents="tableData"
+                :total-page="totalPage"
+                :total-data-length="totalDataLength"
+                :current-path="path"
+                :is-login="isLogin"
+                :is-admin="isAdmin"
+                @goToInput="goToNewsInput"
             />
           </template>
         </main-card>
@@ -22,11 +24,13 @@
 <script>
 import MainCard from "@/components/MainCard";
 import BoardCard from "@/components/board/BoardCard";
+import VueCookies from "vue-cookies";
 
 export default {
   name: "News",
   components: {BoardCard, MainCard},
   mounted() {
+    this.checkAuth()
     this.fetchData();
   },
   watch: {
@@ -34,13 +38,55 @@ export default {
   },
   data: () => ({
     isDataFetched: false,
+    isAuthDataFetched: false,
     tableData: [],
     totalPage: 1,
     totalDataLength: 1,
     header: 'News',
-    path: 'news'
+    path: 'news',
+    isLogin: false,
+    isAdmin: false,
   }),
   methods: {
+    checkAuth () {
+      let params = {
+        "id" : localStorage.id
+      };
+      if (!params.id) {
+        this.isAuthDataFetched = true;
+        return;
+      }
+      this.$store.dispatch('user/isLogin', params).then(
+          (isLogin) => {
+            this.isLogin = isLogin;
+            if (isLogin) {
+              this.checkAdmin()
+            }
+            else {
+              this.isAuthDataFetched = true;
+            }
+          },
+          (err) => {
+            alert(err)
+          }
+      )
+    },
+    checkAdmin () {
+      if (localStorage.id && VueCookies.get("accessToken")) {
+        this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
+            (isAdmin) => {
+              this.isAdmin = isAdmin;
+              this.isAuthDataFetched = true;
+            },
+            (err) => {
+              alert(err)
+            }
+        )
+      }
+      else {
+        this.isAuthDataFetched = true;
+      }
+    },
     fetchData() {
       const currentPage = this.$route.query.page;
       if (!currentPage) {
@@ -91,6 +137,15 @@ export default {
             alert(err)
           }
       )
+    },
+    goToNewsInput() {
+      this.$router.push(`news/input`).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+        ) { throw err }
+      });
     }
   }
 }
