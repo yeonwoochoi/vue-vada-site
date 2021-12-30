@@ -5,11 +5,15 @@
         <main-card :header="header">
           <template v-slot:body>
             <board-card
-              v-if="isDataFetched"
+              v-if="isDataFetched && isAuthDataFetched"
               :table-contents="tableData"
               :total-page="totalPage"
               :total-data-length="totalDataLength"
-              :current-path="'seminar'"
+              :current-path="path"
+              :is-login="isLogin"
+              :is-admin="isAdmin"
+              :can-admin-input="false"
+              @goToInput="goToSeminarInput"
             />
           </template>
         </main-card>
@@ -26,6 +30,7 @@ export default {
   name: "Seminar",
   components: {BoardCard, MainCard},
   mounted() {
+    this.checkAuth()
     this.fetchData();
   },
   watch: {
@@ -33,12 +38,45 @@ export default {
   },
   data: () => ({
     isDataFetched: false,
+    isAuthDataFetched: false,
     tableData: [],
     totalPage: 1,
     totalDataLength: 1,
     header: 'Seminar',
+    isLogin: false,
+    isAdmin: false,
+    path: 'seminar',
   }),
   methods: {
+    checkAuth () {
+      let params = {
+        "id" : localStorage.id
+      };
+      if (!params.id) {
+        this.isAuthDataFetched = true;
+        return;
+      }
+      this.$store.dispatch('user/isLogin', params).then(
+          (isLogin) => {
+            this.isLogin = isLogin;
+            if (isLogin) {
+              this.checkAdmin()
+            }
+            else {
+              this.isAuthDataFetched = true;
+            }
+          },
+          (err) => {
+            alert(err)
+          }
+      )
+    },
+    checkAdmin () {
+      // 글쓰기 button 활성화 조건이 isAdmin && isLogin 인데
+      // admin이 아닌 user도 글쓰기가 허용되는 경우이므로 isAdmin이 아님에도 그냥 true로 해줌.
+      this.isAdmin = true;
+      this.isAuthDataFetched = true;
+    },
     fetchData() {
       const currentPage = this.$route.query.page;
       if (!currentPage) {
@@ -71,11 +109,11 @@ export default {
         keyword: keyword
       }
 
-      this.$store.dispatch('board/readTotalPage', payload).then(
+      this.$store.dispatch('seminar/readTotalPage', payload).then(
           (res) => {
             this.totalPage = res.data.data.totalPage
             this.totalDataLength = res.data.data.totalDataLength
-            this.$store.dispatch('board/readSeminarContentsByPage', payload).then(
+            this.$store.dispatch('seminar/readSeminarContentsByPage', payload).then(
                 (contents) => {
                   this.tableData = contents.data.data
                   this.isDataFetched = true;
@@ -89,6 +127,15 @@ export default {
             alert(err)
           }
       )
+    },
+    goToSeminarInput() {
+      this.$router.push(`seminar/input`).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+        ) { throw err }
+      });
     }
   }
 }

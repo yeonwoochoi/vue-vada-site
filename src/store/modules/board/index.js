@@ -106,6 +106,18 @@ const actions = {
     },
 
     // eslint-disable-next-line no-unused-vars
+    checkCommentAuthor: ({commit}, params) => {
+      return new Promise(((resolve, reject) => {
+          instanceWithAuth.post(user.state.host + '/board/checkCommentAuthor', params).then(res => {
+              resolve(res.data.data['isAuthor'])
+          }).catch(err => {
+              //console.log(`check board's comment author failure : ${err.response.data}`)
+              reject(err.response.data);
+          })
+      }))
+    },
+
+    // eslint-disable-next-line no-unused-vars
     deleteBoardContent: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
             instanceWithAuth.post(user.state.host + '/board/delete', params).then(res => {
@@ -132,6 +144,18 @@ const actions = {
                 reject(err.response.data);
             })
         })
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    deleteCommentContent: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/board/delete/comment', params).then(res => {
+                resolve(res.data.msg)
+            }).catch(err => {
+                //console.log(`delete board comment failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        }))
     },
 }
 

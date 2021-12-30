@@ -19,7 +19,7 @@ export default new Vuex.Store({
     app,
     user: user,
     research: research,
-    board: board,
+    seminar: board,
     lecture: lecture,
     project: project,
     news: news,

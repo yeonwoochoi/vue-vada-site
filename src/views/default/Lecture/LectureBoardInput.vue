@@ -4,11 +4,13 @@
       <v-card style="width: 1200px; height:fit-content;" class="elevation-0">
         <main-card :header="header">
           <template v-slot:body>
-            <board-input-card
+            <lecture-input-card
                 v-if="isDataFetched"
                 :table-content="tableData"
                 :path="path"
                 :is-admin="isAdmin"
+                @update="update"
+                @create="register"
             />
           </template>
         </main-card>
@@ -19,15 +21,15 @@
 
 <script>
 import MainCard from "@/components/MainCard";
-import BoardInputCard from "@/components/board/BoardInputCard";
+import LectureInputCard from "@/components/board/BoardInputCard";
 import VueCookies from "vue-cookies";
 
 export default {
-  name: "SeminarInput",
-  components: { MainCard, BoardInputCard },
+  name: "LectureBoardInput",
+  components: { MainCard, LectureInputCard },
   data: () => ({
-    header: 'Seminar',
-    path: 'seminar',
+    header: 'Lecture',
+    path: 'lecture',
     tableData: {},
     isDataFetched: false,
     isAdmin: false,
@@ -40,33 +42,21 @@ export default {
       const payload = {
         id: localStorage.id,
         idx: this.$route.query.uid,
-        table: 'board'
+        table: 'lecture'
       };
       // Update 인 경우
       if (this.$route.query.uid) {
         if (localStorage.id && VueCookies.get("accessToken")) {
-          this.$store.dispatch("seminar/checkAuthor", payload).then(
-              isAuthor => {
-                if(isAuthor) {
-                  this.$store.dispatch("user/isAdmin", payload).then(
-                      isAdmin => {
-                        this.isAdmin = isAdmin
-                        this.getSeminarContent();
-                      },
-                      err => {
-                        alert(err)
-                        this.$router.push('/seminar')
-                      }
-                  )
-                }
-                else {
-                  alert("접근 권한이 없습니다.")
-                  this.$router.push('/seminar')
+          this.$store.dispatch("user/isAdmin", payload).then(
+              isAdmin => {
+                this.isAdmin = isAdmin
+                if (isAdmin) {
+                  this.getLectureContent();
                 }
               },
-              err => {
-                alert(err)
-                this.$router.push('/seminar')
+              () => {
+                alert("접근 권한이 없습니다.")
+                this.$router.push('/lecture')
               }
           )
         }
@@ -80,14 +70,39 @@ export default {
         this.isDataFetched = true;
       }
     },
-    getSeminarContent() {
-      this.$store.dispatch("seminar/readSeminarContent", this.$route.query.uid).then(
+    getLectureContent() {
+      this.$store.dispatch("lecture/readLectureContent", this.$route.query.uid).then(
           (result) => {
             this.tableData = result.data.data
             this.isDataFetched = true;
           },
           (err) => {
             alert(err)
+          }
+      )
+    },
+    register(form) {
+      form.append("year", this.$route.query.year)
+      form.append("semester", this.$route.query.semester)
+      form.append("name", this.$route.query.name)
+      console.log(this.$route.query.name)
+      this.$store.dispatch('lecture/registerLectureContent', form).then(
+          () => {
+            this.$router.push(`/${this.path}`);
+          },
+          (err) => {
+            alert(err)
+          }
+      )
+    },
+    update(form) {
+      this.$store.dispatch('lecture/updateLectureContent', form).then(
+          () => {
+            this.$router.push(`/${this.path}`);
+          },
+          (err) => {
+            alert(err)
+            this.$router.push(`/${this.path}`);
           }
       )
     }
