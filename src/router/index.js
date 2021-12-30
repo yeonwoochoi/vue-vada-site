@@ -138,6 +138,13 @@ const routes = [
             )
       },
       {
+        path: '/lecture/input/board',
+        name: 'LectureBoardInput',
+        component: () => import(
+            '@/views/default/Lecture/LectureBoardInput'
+            )
+      },
+      {
         path: '/contact',
         name: 'Contact',
         component: () => import(
@@ -231,7 +238,18 @@ router.beforeEach(async (to, from, next) => {
   //console.log(`${from.name} => ${to.name}`)
 
   let accessToken = VueCookies.get('accessToken');
-  const authenticatedPages = ["Seminar", "SeminarContent", "SeminarInput", "MemberInput", "PublicationInput", "ProjectInput", "NewsInput", "ResetPassword", "LectureInput"];
+  const authenticatedPages = [
+      "Seminar",
+      "SeminarContent",
+      "SeminarInput",
+      "MemberInput",
+      "PublicationInput",
+      "ProjectInput",
+      "NewsInput",
+      "ResetPassword",
+      "LectureInput",
+      "LectureBoardInput"
+  ];
 
   if (accessToken === null) {
     //console.log("Routing : reissuing access token...")

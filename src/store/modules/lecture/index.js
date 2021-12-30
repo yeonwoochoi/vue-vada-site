@@ -18,7 +18,7 @@ const actions = {
     // eslint-disable-next-line no-unused-vars
     registerLectureContent: ({commit}, params) => {
         return new Promise((resolve, reject) => {
-            instance.post(user.state.host + '/lecture/register', params, {
+            instance.post(user.state.host + '/lecture/register/board', params, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'x-access-token': VueCookies.get("accessToken")
@@ -26,12 +26,36 @@ const actions = {
             }).then(res => {
                 resolve(res.data);
             }).catch(err => {
-                //console.log(`Lecture content register failure : ${err.response.data}`)
+                //console.log(`Lecture board content register failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         })
     },
 
+    // eslint-disable-next-line no-unused-vars
+    registerLecture: ({commit}, params) => {
+        return new Promise((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/lecture/register', params).then(res => {
+                resolve(res.data);
+            }).catch(err => {
+                //console.log(`Lecture register failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        })
+    },
+
+
+    // eslint-disable-next-line no-unused-vars
+    readAllLecture: ({commit}) => {
+        return new Promise(((resolve, reject) => {
+            instance.get(user.state.host + '/lecture/readAll').then(res => {
+                resolve(res.data.data);
+            }).catch(err => {
+                //console.log(`read all lectures failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        }))
+    },
 
     // eslint-disable-next-line no-unused-vars
     readLectureContentsByPage: ({commit}, params) => {
@@ -94,21 +118,9 @@ const actions = {
     },
 
     // eslint-disable-next-line no-unused-vars
-    checkAuthor: ({commit}, params) => {
+    deleteLectureBoardContent: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
-            instanceWithAuth.post(user.state.host + '/lecture/checkAuthor', params).then(res => {
-                resolve(res.data.data['isAuthor'])
-            }).catch(err => {
-                //console.log(`check lecture's author failure : ${err.response.data}`)
-                reject(err.response.data);
-            })
-        }))
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    deleteLectureContent: ({commit}, params) => {
-        return new Promise(((resolve, reject) => {
-            instanceWithAuth.post(user.state.host + '/lecture/delete', params).then(res => {
+            instanceWithAuth.post(user.state.host + '/lecture/delete/board', params).then(res => {
                 resolve(res.data.msg)
             }).catch(err => {
                 //console.log(`delete lecture content failure : ${err.response.data}`)
@@ -132,6 +144,31 @@ const actions = {
                 reject(err.response.data);
             })
         })
+    },
+
+
+    // eslint-disable-next-line no-unused-vars
+    deleteCommentContent: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/lecture/delete/comment', params).then(res => {
+                resolve(res.data.msg)
+            }).catch(err => {
+                //console.log(`delete lecture comment failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        }))
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    checkCommentAuthor: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/lecture/checkCommentAuthor', params).then(res => {
+                resolve(res.data.data['isAuthor'])
+            }).catch(err => {
+                //console.log(`check lecture's comment author failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        }))
     },
 }
 
