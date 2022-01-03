@@ -139,7 +139,7 @@ export default {
       )
     },
     goToNewsInput() {
-      this.$router.push(`news/input`).catch(err => {
+      this.$router.push(`news/content/input`).catch(err => {
         // Ignore the vuex err regarding  navigating to the page they are already on.
         if (
             err.name !== 'NavigationDuplicated' &&

@@ -129,7 +129,7 @@ export default {
       )
     },
     goToSeminarInput() {
-      this.$router.push(`seminar/input`).catch(err => {
+      this.$router.push(`seminar/content/input`).catch(err => {
         // Ignore the vuex err regarding  navigating to the page they are already on.
         if (
             err.name !== 'NavigationDuplicated' &&

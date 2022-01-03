@@ -17,7 +17,7 @@
                             v-model="year"
                             :items="yearItems"
                             :rules="[rules.required]"
-                            label="Type"
+                            label="Year"
                             required
                             menu-props="auto"
                             :single-line="!isMobile"
@@ -31,7 +31,7 @@
                             v-model="semester"
                             :items="semesterItems"
                             :rules="[rules.required]"
-                            label="Type"
+                            label="Semester"
                             required
                             menu-props="auto"
                             :single-line="!isMobile"
@@ -80,15 +80,16 @@ export default {
   name: "LectureInput",
   components: { MainCard },
   mounted() {
-    this.checkAccessRight();
-    this.reset()
+    this.fetchData();
   },
   data: () => ({
     header: 'Lecture',
     year: '',
     semester: '',
     name: '',
-    valid: false
+    idx: -1,
+    valid: false,
+    isUpdate: false,
   }),
   computed: {
     isMobile () {
@@ -125,15 +126,32 @@ export default {
           name: this.name,
           id: localStorage.id
         }
-        this.$store.dispatch('lecture/registerLecture', params).then(
-            () => {
-              this.goToMain();
-            },
-            (err) => {
-              alert(err)
-              this.goToMain();
-            }
-        )
+        if (this.isUpdate) {
+          const updateParams = {
+            ...params,
+            idx: this.idx
+          }
+          this.$store.dispatch('lecture/updateLecture', updateParams).then(
+              () => {
+                this.goToMain();
+              },
+              (err) => {
+                alert(err)
+                this.goToMain();
+              }
+          )
+        }
+        else {
+          this.$store.dispatch('lecture/registerLecture', params).then(
+              () => {
+                this.goToMain();
+              },
+              (err) => {
+                alert(err)
+                this.goToMain();
+              }
+          )
+        }
       }
       else {
         alert('모든 값을 입력해주세요.')
@@ -151,13 +169,44 @@ export default {
       this.semester = this.semesterItems[0]
       this.name = ''
     },
-    checkAccessRight () {
+    fetchData () {
       if (localStorage.id && VueCookies.get("accessToken")) {
         this.$store.dispatch('user/isAdmin', {id: localStorage.id}).then(
             (isAdmin) => {
               if (!isAdmin) {
                 alert('접근 권한이 없습니다.')
                 this.goToMain()
+              }
+              else {
+                const { year, semester, name } = this.$route.query
+                // Create 인 경우
+                if (!year || !semester || !name) {
+                  this.reset();
+                  this.isUpdate = false;
+                }
+                // Update 인 경우
+                else {
+                  this.isUpdate = true;
+
+                  this.year = year;
+                  this.semester = semester;
+                  this.name = name;
+
+                  const params = {
+                    year: year,
+                    semester: semester,
+                    name: name
+                  }
+                  this.$store.dispatch('lecture/readLecture', params).then(
+                      (result) => {
+                        this.idx = result;
+                      },
+                      (err) => {
+                        alert(err)
+                        this.goToMain()
+                      }
+                  )
+                }
               }
             },
             (err) => {

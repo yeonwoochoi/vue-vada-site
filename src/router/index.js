@@ -89,7 +89,7 @@ const routes = [
             )
       },
       {
-        path: '/news/input',
+        path: '/news/content/input',
         name: 'NewsInput',
         component: () => import(
             '@/views/default/News/NewsInput'
@@ -110,7 +110,7 @@ const routes = [
             )
       },
       {
-        path: '/seminar/input',
+        path: '/seminar/content/input',
         name: 'SeminarInput',
         component: () => import(
             '@/views/default/Seminar/SeminarInput'
@@ -138,7 +138,7 @@ const routes = [
             )
       },
       {
-        path: '/lecture/input/board',
+        path: '/lecture/content/input',
         name: 'LectureBoardInput',
         component: () => import(
             '@/views/default/Lecture/LectureBoardInput'

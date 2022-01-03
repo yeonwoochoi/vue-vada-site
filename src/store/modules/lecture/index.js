@@ -70,12 +70,24 @@ const actions = {
     },
 
     // eslint-disable-next-line no-unused-vars
+    readLecture: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instance.post(user.state.host + '/lecture/read', params).then(res => {
+                resolve(res.data.data);
+            }).catch(err => {
+                //console.log(`read lecture failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        }))
+    },
+
+    // eslint-disable-next-line no-unused-vars
     readLectureContent: ({commit}, params) => {
         return new Promise(((resolve, reject) => {
-            instance.get(user.state.host + '/lecture/read/' + params).then(res => {
+            instance.get(user.state.host + '/lecture/read/board/' + params).then(res => {
                 resolve(res);
             }).catch(err => {
-                //console.log(`read lecture content failure : ${err.response.data}`)
+                //console.log(`read lecture board content failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         }))
@@ -130,22 +142,45 @@ const actions = {
     },
 
     // eslint-disable-next-line no-unused-vars
+    updateLecture: ({commit}, params) => {
+        return new Promise((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/lecture/update', params).then(res => {
+                resolve(res.data.msg);
+            }).catch(err => {
+                //console.log(`lecture update failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        })
+    },
+    // eslint-disable-next-line no-unused-vars
     updateLectureContent: ({commit}, params) => {
         return new Promise((resolve, reject) => {
-            instance.post(user.state.host + '/lecture/update', params, {
+            instance.post(user.state.host + '/lecture/update/board', params, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'x-access-token': VueCookies.get("accessToken")
                 }
             }).then(res => {
-                resolve(res.data);
+                resolve(res.data.msg);
             }).catch(err => {
-                //console.log(`lecture content update failure : ${err.response.data}`)
+                //console.log(`lecture board content update failure : ${err.response.data}`)
                 reject(err.response.data);
             })
         })
     },
 
+
+    // eslint-disable-next-line no-unused-vars
+    deleteLecture: ({commit}, params) => {
+        return new Promise(((resolve, reject) => {
+            instanceWithAuth.post(user.state.host + '/lecture/delete', params).then(res => {
+                resolve(res.data.msg)
+            }).catch(err => {
+                //console.log(`delete lecture failure : ${err.response.data}`)
+                reject(err.response.data);
+            })
+        }))
+    },
 
     // eslint-disable-next-line no-unused-vars
     deleteCommentContent: ({commit}, params) => {

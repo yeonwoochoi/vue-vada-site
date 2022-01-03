@@ -32,6 +32,28 @@
                       mdi-book-open-page-variant
                     </v-icon>
                   </template>
+                  <template v-slot:append="{ item }">
+                    <v-icon v-if="isAdmin && !item.children" @click="updateLecture(item)" small>
+                      mdi-pencil
+                    </v-icon>
+                    <v-dialog
+                        v-if="isAdmin && !item.children"
+                        v-model="item.isOpen"
+                        max-width="350"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                            small
+                            class="mx-2"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                          mdi-delete
+                        </v-icon>
+                      </template>
+                      <confirmation-dialog-card @close="isConfirmOpen = false" @onClickOkButton="deleteLecture(item)"/>
+                    </v-dialog>
+                  </template>
                 </v-treeview>
               </v-col>
 
@@ -73,12 +95,13 @@ import MainCard from "@/components/MainCard";
 import LectureCard from "@/components/board/BoardCard";
 import _ from 'lodash'
 import VueCookies from "vue-cookies";
+import ConfirmationDialogCard from "@/components/dialog/ConfirmationDialogCard";
 
 //const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 export default {
   name: "Lecture",
-  components: {MainCard, LectureCard},
+  components: {MainCard, LectureCard, ConfirmationDialogCard},
   mounted() {
     this.checkAuth()
   },
@@ -97,6 +120,7 @@ export default {
     isLogin: false,
     isAdmin: false,
     path: 'lecture',
+    isConfirmOpen: false
   }),
   computed: {
     items () {
@@ -268,7 +292,8 @@ export default {
           let temp = {
             id: `${yearTemp}&${lecture}`,
             name: lecture,
-            year: yearTemp
+            year: yearTemp,
+            isOpen: false
           }
           itemTemp[itemTemp.length - 1].children.push(temp)
           if (!this.lectureDataRef.includes(temp)) {
@@ -290,7 +315,7 @@ export default {
     },
     goToLectureBoardInput() {
       this.$router.push({
-        path: 'lecture/input/board',
+        path: 'lecture/content/input',
         query: {
           year: this.getYear,
           semester: this.getSemester,
@@ -300,6 +325,45 @@ export default {
     },
     goToLectureInput() {
       this.$router.push('/lecture/input')
+    },
+
+    updateLecture(item) {
+      const target = item.year.split('-');
+      this.$router.push({
+        path: 'lecture/input',
+        query: {
+          year: target[0],
+          semester: target[1],
+          name: item.name
+        }
+      }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+        ) { throw err }
+      });
+    },
+    deleteLecture(item) {
+      const target = item.year.split('-');
+      const params = {
+        id: localStorage.id,
+        year: target[0],
+        semester: target[1],
+        name: item.name
+      }
+      console.log(params)
+      this.$store.dispatch("lecture/deleteLecture", params).then(
+          () => {
+            item.isOpen = false
+            this.$router.go(0)
+          },
+          (err) => {
+            item.isOpen = false
+            alert(err)
+            this.$router.go(0)
+          }
+      )
     }
   },
 }

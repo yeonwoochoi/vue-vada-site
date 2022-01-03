@@ -205,7 +205,7 @@ export default {
 
     editItem(){
       this.$router.push({
-        path: `/${this.path}/input`,
+        path: `/${this.path}/content/input`,
         query: {
           uid: this.$route.query.uid
         }
